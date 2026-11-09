@@ -1,0 +1,9 @@
+{
+  "extends": "klarity/tsconfig/app/node",
+  "compilerOptions": {
+    // Root config files run directly under Node: imports name real `.ts` files, and only strippable syntax is allowed.
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true
+  },
+  "include": ["*.config.ts"]
+}

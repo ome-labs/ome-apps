@@ -1,0 +1,23 @@
+{
+  "name": "ome-landing",
+  "private": true,
+  "description": "The Ome website and documentation",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "typecheck": "tsc -p tsconfig.json && turbo run typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "klarity": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@12.18.0"
+}

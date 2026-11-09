@@ -1,0 +1,9 @@
+packages:
+  - apps/*
+  - packages/*
+
+catalog:
+  "@types/node": 26.6.6
+  klarity: 0.3.0
+  turbo: 2.11.10
+  typescript: 7.0.2
