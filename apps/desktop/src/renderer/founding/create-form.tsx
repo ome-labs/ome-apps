@@ -5,24 +5,31 @@ import { useNavigate } from "@tanstack/react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Illustration } from "@ome-labs/brand/web";
 import { Banner, Button, NumberStepper, TextField } from "@ome-labs/ui-web";
-import { type Control, useController, useForm } from "react-hook-form";
+import { type Control, useController, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 import { callOme } from "../data/ome.ts";
 import { FlowPage } from "./flow-page.tsx";
+import { rememberPlanned } from "./planned.ts";
 import { LIMITS } from "./thresholds.ts";
 
-const schema = z.object({
-  name: z.string().trim().min(1, "Name the vault.").max(48, "Use at most 48 characters."),
-  approvals: z.number().int().min(LIMITS.approvals.min).max(LIMITS.approvals.max),
-  read: z.number().int().min(LIMITS.read.min).max(LIMITS.read.max),
-});
+const schema = z
+  .object({
+    name: z.string().trim().min(1, "Name the vault.").max(48, "Use at most 48 characters."),
+    members: z.number().int().min(LIMITS.members.min).max(LIMITS.members.max),
+    approvals: z.number().int().min(LIMITS.approvals.min).max(LIMITS.approvals.max),
+    read: z.number().int().min(LIMITS.read.min).max(LIMITS.read.max),
+  })
+  .refine((v) => v.approvals <= v.members && v.read <= v.members, {
+    path: ["members"],
+    message: "Thresholds can't be more than the members.",
+  });
 type Values = z.input<typeof schema>;
-const DEFAULTS: Values = { name: "", approvals: 2, read: 2 };
+const DEFAULTS: Values = { name: "", members: 3, approvals: 2, read: 2 };
 
 const NEXT = [
   { title: "Share the invite", text: "Send it to each co-founder." },
-  { title: "Co-founders join", text: "You see them arrive, then set the final thresholds." },
+  { title: "Co-founders join", text: "You see them arrive, then start once all are in." },
   {
     title: "Found it together",
     text: "Everyone's Ome generates the shared key and the vault is deployed.",
@@ -37,6 +44,8 @@ export function CreateForm() {
     register,
     control,
     handleSubmit,
+    getValues,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: DEFAULTS });
 
@@ -50,6 +59,7 @@ export function CreateForm() {
             threshold: values.approvals,
             viewingThreshold: values.read,
           });
+          rememberPlanned(lobby.lobby, values.members);
           await navigate({ to: "/create", search: { lobby: lobby.lobby } });
         } catch (failure) {
           setError(failure instanceof Error ? failure.message : String(failure));
@@ -58,6 +68,16 @@ export function CreateForm() {
     [handleSubmit, navigate],
   );
   const cancel = useCallback(() => void navigate({ to: "/home" }), [navigate]);
+  const members = useWatch({ control, name: "members" });
+  // Fewer members pulls the thresholds down with it, so the form never holds an impossible vault.
+  const setMembers = useCallback(
+    (next: number) => {
+      setValue("members", next);
+      if (getValues("approvals") > next) setValue("approvals", next);
+      if (getValues("read") > next) setValue("read", next);
+    },
+    [getValues, setValue],
+  );
 
   return (
     <FlowPage
@@ -78,14 +98,28 @@ export function CreateForm() {
             />
           </div>
 
+          <ThresholdRow title="Members" text="How many people the vault is for, you included.">
+            <NumberStepper
+              aria-label="Members"
+              value={members}
+              onValueChange={setMembers}
+              min={LIMITS.members.min}
+              max={LIMITS.members.max}
+            />
+          </ThresholdRow>
           <ThresholdRow title="Approvals to spend" text="How many members must approve a payment.">
-            <StepperField control={control} name="approvals" label="Approvals to spend" />
+            <StepperField
+              control={control}
+              name="approvals"
+              label="Approvals to spend"
+              max={members}
+            />
           </ThresholdRow>
           <ThresholdRow
             title="Members to read"
             text="How many members' keepers must answer to read balances."
           >
-            <StepperField control={control} name="read" label="Members to read" />
+            <StepperField control={control} name="read" label="Members to read" max={members} />
           </ThresholdRow>
 
           <div className="flex items-center justify-end gap-2 px-6 py-4">
@@ -150,10 +184,12 @@ function StepperField({
   control,
   name,
   label,
+  max,
 }: {
   control: Control<Values>;
   name: "approvals" | "read";
   label: string;
+  max: number;
 }) {
   const { field } = useController({ control, name });
   return (
@@ -161,7 +197,8 @@ function StepperField({
       aria-label={label}
       value={field.value}
       onValueChange={field.onChange}
-      {...LIMITS[name]}
+      min={LIMITS[name].min}
+      max={Math.min(LIMITS[name].max, max)}
     />
   );
 }

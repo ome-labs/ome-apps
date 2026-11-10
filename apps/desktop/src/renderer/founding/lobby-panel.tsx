@@ -16,28 +16,37 @@ import {
 
 import { callOme } from "../data/ome.ts";
 import { FlowPage } from "./flow-page.tsx";
+import { plannedFor } from "./planned.ts";
 import { blocker, networkName } from "./thresholds.ts";
 
-/** Stage 2: who has joined. The host shares the invite, sets the final thresholds and starts; a guest waits. */
+/** Stage 2: who has joined. The host shares the invite and starts once the planned members are in; a guest waits. */
 export function LobbyPanel({ lobby }: { lobby: LobbyView }) {
   const host = lobby.members.find((member) => member.index === 1);
   const isHost = lobby.role === "host";
+  // Only the host's app knows how many the vault is for.
+  const planned = isHost ? plannedFor(lobby.lobby) : undefined;
 
   return (
     <FlowPage
       title={lobby.name}
       lead={
         isHost
-          ? "Send the invite to each co-founder. Start once everyone has joined."
+          ? planned
+            ? `Send the invite to each co-founder. Start once ${planned === 2 ? "your co-founder has" : `all ${planned} have`} joined.`
+            : "Send the invite to each co-founder. Start once everyone has joined."
           : `You've joined. ${host?.name ?? "The host"} starts the founding once everyone is here.`
       }
     >
       <div className="grid grid-cols-1 items-start gap-6 @3xl:grid-cols-[minmax(0,1fr)_380px]">
         <div className="flex flex-col gap-6">
           {isHost && lobby.invite ? <Invite invite={lobby.invite} network={lobby.network} /> : null}
-          <Roster lobby={lobby} />
+          <Roster lobby={lobby} planned={planned} />
         </div>
-        {isHost ? <StartCard lobby={lobby} /> : <WaitingCard lobby={lobby} hostName={host?.name} />}
+        {isHost ? (
+          <StartCard lobby={lobby} planned={planned} />
+        ) : (
+          <WaitingCard lobby={lobby} hostName={host?.name} />
+        )}
       </div>
     </FlowPage>
   );
@@ -66,14 +75,19 @@ function Invite({ invite, network }: { invite: string; network: string }) {
   );
 }
 
-function Roster({ lobby }: { lobby: LobbyView }) {
-  const open = lobby.status === "open";
+function Roster({ lobby, planned }: { lobby: LobbyView; planned: number | undefined }) {
+  const joined = lobby.members.length;
+  const waiting = lobby.status === "open" && (planned === undefined || joined < planned);
   return (
     <section className="flex flex-col rounded-lg bg-surface shadow-1">
       <header className="flex items-center justify-between border-b border-line-subtle px-6 py-4">
         <h2 className="type-heading-s text-fg">Co-founders</h2>
         <span className="type-body-s text-fg-muted tabular-nums">
-          {lobby.members.length} joined
+          {planned === undefined
+            ? `${joined} joined`
+            : joined > planned
+              ? `${joined} joined · ${planned} planned`
+              : `${joined} of ${planned} joined`}
         </span>
       </header>
       <ul className="flex flex-col px-6 py-2">
@@ -84,16 +98,23 @@ function Roster({ lobby }: { lobby: LobbyView }) {
             <span className="flex-1 type-label-m text-fg">{member.name}</span>
             {member.you ? <Tag tone="accent">You</Tag> : null}
             {member.index === 1 && !member.you ? <Tag>Host</Tag> : null}
+            {planned !== undefined && member.index > planned ? (
+              <Tag tone="warning">Extra</Tag>
+            ) : null}
           </li>
         ))}
-        {open ? (
+        {waiting ? (
           <li className="flex items-center gap-3 py-2.5 text-fg-subtle">
             <span className="w-4" />
             <span className="relative grid size-6 place-items-center">
               <span className="absolute size-2 animate-ping rounded-full bg-accent opacity-40 motion-reduce:hidden" />
               <span className="size-2 rounded-full bg-accent" />
             </span>
-            <span className="type-body-s">Waiting for more to join…</span>
+            <span className="type-body-s">
+              {planned
+                ? `Waiting for ${planned - joined} more to join…`
+                : "Waiting for more to join…"}
+            </span>
           </li>
         ) : null}
       </ul>
@@ -101,12 +122,17 @@ function Roster({ lobby }: { lobby: LobbyView }) {
   );
 }
 
-function StartCard({ lobby }: { lobby: LobbyView }) {
+function StartCard({ lobby, planned }: { lobby: LobbyView; planned: number | undefined }) {
   const navigate = useNavigate();
-  const members = lobby.members.length;
+  const joined = lobby.members.length;
+  const members = planned ?? joined;
   const [pending, setPending] = useState<"start" | "cancel">();
   const [error, setError] = useState<string>();
-  const stop = blocker({ approvals: lobby.threshold, read: lobby.viewingThreshold }, members);
+  const stop = blocker(
+    { approvals: lobby.threshold, read: lobby.viewingThreshold },
+    joined,
+    planned,
+  );
 
   const start = useCallback(async () => {
     setPending("start");
@@ -134,7 +160,9 @@ function StartCard({ lobby }: { lobby: LobbyView }) {
       <header className="flex flex-col gap-3 border-b border-line-subtle px-6 py-4">
         <div className="flex flex-col gap-1">
           <h2 className="type-heading-s text-fg">Thresholds</h2>
-          <p className="type-body-s text-fg-muted">For the {members} who joined.</p>
+          <p className="type-body-s text-fg-muted">
+            {planned ? `A vault for ${planned} members.` : `For the ${joined} who joined.`}
+          </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <ThresholdChip kind="spend" threshold={lobby.threshold} members={members} />
