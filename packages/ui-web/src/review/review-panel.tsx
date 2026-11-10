@@ -2,7 +2,14 @@ import type { ReactNode } from "react";
 
 import { Collapsible } from "@base-ui/react/collapsible";
 import type { Review } from "@ome-labs/api";
-import { canApprove, feeLine, reviewChecks, shortProposalId, voteProgress } from "@ome-labs/format";
+import {
+  canApprove,
+  feeLine,
+  proposalSummary,
+  reviewChecks,
+  shortProposalId,
+  voteProgress,
+} from "@ome-labs/format";
 import { Icon } from "@ome-labs/icons/web";
 
 import { Button } from "../actions/button.tsx";
@@ -151,17 +158,13 @@ function WhatHappens({ review }: { review: Review }) {
   if (intent.kind === "cancel") {
     return (
       <p className="type-body-m text-fg">
-        Cancel proposal {shortProposalId(intent.cancels)}, so it can never execute.
+        {proposalSummary(review.proposal)}, so it can never execute.
       </p>
     );
   }
   if (intent.kind === "calls") {
     return (
-      <p className="type-body-m text-fg">
-        Make{" "}
-        {intent.calls.length === 1 ? "1 contract call" : `${intent.calls.length} contract calls`}{" "}
-        from the vault.
-      </p>
+      <p className="type-body-m text-fg">{proposalSummary(review.proposal)} from the vault.</p>
     );
   }
 

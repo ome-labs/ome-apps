@@ -38,8 +38,6 @@ export function Select<Value extends string>({
   className,
   ...props
 }: SelectProps<Value>) {
-  const selected = (current: Value | null) => options.find((option) => option.value === current);
-
   return (
     <BaseSelect.Root<Value>
       items={options}
@@ -62,7 +60,7 @@ export function Select<Value extends string>({
       >
         <BaseSelect.Value className="flex min-w-0 flex-1 items-center gap-2">
           {(current: Value | null) => {
-            const option = selected(current);
+            const option = options.find((item) => item.value === current);
             if (!option) return <span className="text-fg-subtle">{placeholder}</span>;
 
             return (

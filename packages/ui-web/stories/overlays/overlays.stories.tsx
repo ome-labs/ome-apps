@@ -13,7 +13,7 @@ import { Popover } from "../../src/overlays/popover.tsx";
 import { Sheet } from "../../src/overlays/sheet.tsx";
 import { Tooltip } from "../../src/overlays/tooltip.tsx";
 import { TypeToConfirm } from "../../src/overlays/type-to-confirm.tsx";
-import { omet, treasury } from "../sample.ts";
+import { omet, treasury, unlockOptions } from "../sample.ts";
 
 const meta = { title: "Overlays/Dialogs, sheets, menus" } satisfies Meta;
 export default meta;
@@ -33,11 +33,7 @@ function UnlockFields() {
           aria-label="Unlock for"
           value={minutes}
           onValueChange={setMinutes}
-          options={[
-            { value: "5", label: "5 min" },
-            { value: "15", label: "15 min" },
-            { value: "60", label: "1 h" },
-          ]}
+          options={unlockOptions}
         />
       </div>
     </>

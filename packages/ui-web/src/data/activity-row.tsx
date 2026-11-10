@@ -1,6 +1,7 @@
 import type { ActivityEntry } from "@ome-labs/api";
 import {
   formatAbsoluteTime,
+  formatCount,
   formatTokenAmount,
   proposalSummary,
   shortHex,
@@ -26,6 +27,7 @@ export type ActivityRowProps = {
  */
 export function ActivityRow({ entry, now, names, className }: ActivityRowProps) {
   const received = entry.kind === "received";
+  const sender = received ? names?.[entry.from.toLowerCase()] : undefined;
 
   return (
     <li className={cn("flex items-center gap-3 px-4 py-3", className)}>
@@ -50,11 +52,9 @@ export function ActivityRow({ entry, now, names, className }: ActivityRowProps) 
               {formatTokenAmount(entry.amount, entry.token)}
             </span>{" "}
             from {shortHex(entry.from)}
-            {names?.[entry.from.toLowerCase()] ? ` (${names[entry.from.toLowerCase()]})` : ""}
+            {sender ? ` (${sender})` : ""}
           </span>
-          <span className="type-mono-s text-fg-subtle">
-            block {new Intl.NumberFormat("en").format(entry.block)}
-          </span>
+          <span className="type-mono-s text-fg-subtle">block {formatCount(entry.block)}</span>
         </>
       ) : (
         <>

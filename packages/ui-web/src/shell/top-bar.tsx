@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import type { ServiceStatus } from "@ome-labs/api";
 import { Logo } from "@ome-labs/brand/web";
-import { formatDuration, serviceStatus } from "@ome-labs/format";
+import { formatCount, formatDuration, serviceStatus } from "@ome-labs/format";
 
 import { Button } from "../actions/button.tsx";
 import { IconButton } from "../actions/icon-button.tsx";
@@ -31,8 +31,6 @@ export type TopBarProps = {
   className?: string | undefined;
 };
 
-const blocks = new Intl.NumberFormat("en");
-
 /** Page 40's top bar: network and node, keeper, signer, profile. Write actions elsewhere follow these states. */
 export function TopBar({
   node,
@@ -49,8 +47,6 @@ export function TopBar({
 
   return (
     <header
-      // The desktop shell drags the window by this bar.
-      data-tauri-drag-region
       className={cn(
         "flex h-[52px] shrink-0 items-center justify-between gap-4 border-b border-line-subtle bg-surface px-4",
         windowControlsInset && "pl-20",
@@ -64,11 +60,11 @@ export function TopBar({
       <div className="flex items-center gap-2">
         {node.state === "ready" ? (
           <StatusChip>
-            {node.network} · block {blocks.format(node.block)}
+            {node.network} · block {formatCount(node.block)}
           </StatusChip>
         ) : node.state === "syncing" ? (
           <StatusChip icon="refresh" tone="info">
-            Syncing block {blocks.format(node.synced)} of {blocks.format(node.block)}
+            Syncing block {formatCount(node.synced)} of {formatCount(node.block)}
           </StatusChip>
         ) : (
           <StatusChip icon="alert-circle" tone="danger">

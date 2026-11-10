@@ -1,5 +1,5 @@
 import type { ActivityEntry, Review } from "@ome-labs/api";
-import { proposals } from "@ome-labs/format/sample";
+import { aliases, proposals } from "@ome-labs/format/sample";
 
 export { aliases, omet, peers, proposals, treasury } from "@ome-labs/format/sample";
 
@@ -7,7 +7,7 @@ export { aliases, omet, peers, proposals, treasury } from "@ome-labs/format/samp
 export const now = 1_794_228_000;
 
 export const daveAlias = {
-  address: "0xf461280a4b44f5e076c9b6126eb5151d1f0b2e960584b9a076a2ef18206e688d",
+  address: aliases.dave,
   label: "accounts:dave",
   source: "aztecWallet" as const,
 };
@@ -42,6 +42,8 @@ export const reviewOfAuditDeposit: Review = {
   },
 };
 
+export const aliceAccount = "0x51d85d773ad9865e0173d205de87e4dcb016caa9755277583b6815f8aa640d31";
+
 export const activity: ActivityEntry[] = [
   {
     kind: "proposal",
@@ -52,13 +54,19 @@ export const activity: ActivityEntry[] = [
     kind: "received",
     at: now - 2 * 3600,
     token: proposals.auditDeposit.token,
-    from: "0x51d85d773ad9865e0173d205de87e4dcb016caa9755277583b6815f8aa640d31",
+    from: aliceAccount,
     amount: "1000000000000000000000",
     txHash: "0xf1ac958104443f60cd437bf3c758411c6e2e01c5f70194d83735020805015338",
     block: 1182,
   },
 ];
 
-export const aliceAccount = "0x51d85d773ad9865e0173d205de87e4dcb016caa9755277583b6815f8aa640d31";
 export const executedTx = "0x1ddb736662524cc456ff38ad57cd64ceb0fbd4251d8ed55f27dbb76c5dbdd23c";
 export const inviteCode = "ome-invite-v0:0xcd043027c1d5f5df2bd9abdabc192fec";
+
+/** How long the signer stays unlocked: the choices the unlock sheet offers. */
+export const unlockOptions: { value: "5" | "15" | "60"; label: string }[] = [
+  { value: "5", label: "5 min" },
+  { value: "15", label: "15 min" },
+  { value: "60", label: "1 h" },
+];

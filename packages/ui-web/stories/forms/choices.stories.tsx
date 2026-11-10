@@ -6,6 +6,7 @@ import { Checkbox } from "../../src/forms/checkbox.tsx";
 import { RadioGroup } from "../../src/forms/radio-group.tsx";
 import { SegmentedControl } from "../../src/forms/segmented-control.tsx";
 import { Switch } from "../../src/forms/switch.tsx";
+import { unlockOptions } from "../sample.ts";
 
 const meta = { title: "Forms/Choices" } satisfies Meta;
 export default meta;
@@ -23,17 +24,7 @@ export const Checkboxes: Story = {
 };
 
 export const Radios: Story = {
-  render: () => (
-    <RadioGroup
-      aria-label="Unlock for"
-      defaultValue="15"
-      options={[
-        { value: "5", label: "5 min" },
-        { value: "15", label: "15 min" },
-        { value: "60", label: "1 h" },
-      ]}
-    />
-  ),
+  render: () => <RadioGroup aria-label="Unlock for" defaultValue="15" options={unlockOptions} />,
 };
 
 export const Switches: Story = {
@@ -54,11 +45,7 @@ function UnlockFor() {
       aria-label="Unlock for"
       value={value}
       onValueChange={setValue}
-      options={[
-        { value: "5", label: "5 min" },
-        { value: "15", label: "15 min" },
-        { value: "60", label: "1 h" },
-      ]}
+      options={unlockOptions}
     />
   );
 }

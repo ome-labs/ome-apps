@@ -2,8 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
 
-import { Button, CopyButton, Dialog, ReviewPanel, TypeToConfirm } from "../src/index.ts";
-import { Amount } from "../src/values/amount.tsx";
+import { Amount, Button, CopyButton, Dialog, ReviewPanel, TypeToConfirm } from "../src/index.ts";
 import { omet, reviewOfAuditDeposit, treasury } from "../stories/sample.ts";
 
 describe("Button", () => {
