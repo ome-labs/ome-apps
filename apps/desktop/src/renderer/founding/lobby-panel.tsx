@@ -79,8 +79,8 @@ function Roster({ lobby, planned }: { lobby: LobbyView; planned: number | undefi
   const joined = lobby.members.length;
   const waiting = lobby.status === "open" && (planned === undefined || joined < planned);
   return (
-    <section className="flex flex-col rounded-lg bg-surface shadow-1">
-      <header className="flex items-center justify-between border-b border-line-subtle px-6 py-4">
+    <section className="flex flex-col rounded-lg bg-surface px-6 shadow-1">
+      <header className="flex items-center justify-between border-b border-line-subtle py-4">
         <h2 className="type-heading-s text-fg">Co-founders</h2>
         <span className="type-body-s text-fg-muted tabular-nums">
           {planned === undefined
@@ -90,7 +90,7 @@ function Roster({ lobby, planned }: { lobby: LobbyView; planned: number | undefi
               : `${joined} of ${planned} joined`}
         </span>
       </header>
-      <ul className="flex flex-col px-6 py-2">
+      <ul className="flex flex-col py-2">
         {lobby.members.map((member) => (
           <li key={member.identity} className="flex items-center gap-3 py-2.5">
             <span className="w-4 type-mono-s text-fg-subtle tabular-nums">{member.index}</span>
@@ -156,8 +156,8 @@ function StartCard({ lobby, planned }: { lobby: LobbyView; planned: number | und
   }, [lobby.lobby, navigate]);
 
   return (
-    <section className="flex flex-col rounded-lg bg-surface shadow-1">
-      <header className="flex flex-col gap-3 border-b border-line-subtle px-6 py-4">
+    <section className="flex flex-col rounded-lg bg-surface px-6 shadow-1">
+      <header className="flex flex-col gap-3 border-b border-line-subtle py-4">
         <div className="flex flex-col gap-1">
           <h2 className="type-heading-s text-fg">Thresholds</h2>
           <p className="type-body-s text-fg-muted">
@@ -170,7 +170,7 @@ function StartCard({ lobby, planned }: { lobby: LobbyView; planned: number | und
         </div>
       </header>
 
-      <div className="flex flex-col gap-3 px-6 py-4">
+      <div className="flex flex-col gap-3 py-4">
         {error ? <Banner kind="alarm">{error}</Banner> : null}
         {stop ? <p className="type-body-s text-fg-subtle">{stop}</p> : null}
         <div className="flex items-center justify-end gap-2">

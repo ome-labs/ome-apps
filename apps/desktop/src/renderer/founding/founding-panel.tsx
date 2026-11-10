@@ -112,12 +112,12 @@ export function FoundingPanel({
       }
     >
       <div className="grid grid-cols-1 items-start gap-6 @3xl:grid-cols-[minmax(0,1fr)_380px]">
-        <section className="flex flex-col rounded-lg bg-surface shadow-1">
-          <header className="flex items-center justify-between border-b border-line-subtle px-6 py-4">
+        <section className="flex flex-col rounded-lg bg-surface px-6 shadow-1">
+          <header className="flex items-center justify-between border-b border-line-subtle py-4">
             <h2 className="type-heading-s text-fg">Steps</h2>
             <StatusBadge kind="step" status={failed ? "failed" : done ? "done" : "active"} />
           </header>
-          <StepList label={`Founding ${lobby.name}`} className="px-6 py-2">
+          <StepList label={`Founding ${lobby.name}`} className="py-2">
             {(founding?.steps ?? []).map((step) => (
               <StepRow
                 key={step.id}

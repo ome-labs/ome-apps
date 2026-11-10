@@ -3,10 +3,11 @@ import { useCallback, useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { NodeStatus } from "@ome-labs/api";
 import type { AvatarId } from "@ome-labs/brand/web";
-import { Avatar, Banner, Button, SegmentedControl, TextField } from "@ome-labs/ui-web";
+import { Banner, Button, Field, SegmentedControl, TextInput } from "@ome-labs/ui-web";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
+import { AvatarButton } from "../avatars/avatar-button.tsx";
 import { AvatarPicker } from "../avatars/avatar-picker.tsx";
 import { defaultProfileArt } from "../avatars/avatars.ts";
 import { unwrap } from "../data/session.ts";
@@ -120,24 +121,21 @@ export function ProfileStep({
         </Reveal>
       ) : null}
 
-      <Reveal className="flex items-start gap-4">
-        <button
-          type="button"
-          onClick={openPicker}
-          disabled={pending}
-          aria-label="Choose your picture"
-          className="focus-ring mt-[22px] rounded-full transition-opacity duration-fast ease-standard hover:opacity-80"
-        >
-          <Avatar name={member || "?"} source={source} size={48} />
-        </button>
-        <TextField
-          label="Your name"
-          className="flex-1"
-          error={errors.member?.message}
-          maxLength={48}
-          disabled={pending}
-          {...register("member")}
-        />
+      <Reveal>
+        {/* The picture is as tall as the field, beside it under the one label. */}
+        <Field label="Your name" error={errors.member?.message} disabled={pending}>
+          <div className="flex items-center gap-2.5">
+            <AvatarButton
+              name={member || "?"}
+              source={source}
+              size={32}
+              label="Choose your picture"
+              disabled={pending}
+              onClick={openPicker}
+            />
+            <TextInput maxLength={48} disabled={pending} {...register("member")} />
+          </div>
+        </Field>
       </Reveal>
       <AvatarPicker
         kind="profile"

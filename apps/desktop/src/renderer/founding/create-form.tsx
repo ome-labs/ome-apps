@@ -4,10 +4,11 @@ import { useNavigate } from "@tanstack/react-router";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type AvatarId, Scene } from "@ome-labs/brand/web";
-import { Avatar, Banner, Button, NumberStepper, TextField } from "@ome-labs/ui-web";
+import { Banner, Button, Field, NumberStepper, TextInput } from "@ome-labs/ui-web";
 import { type Control, useController, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
+import { AvatarButton } from "../avatars/avatar-button.tsx";
 import { AvatarPicker } from "../avatars/avatar-picker.tsx";
 import { VAULT_ART } from "../avatars/avatars.ts";
 import { callOme } from "../data/ome.ts";
@@ -96,29 +97,32 @@ export function CreateForm() {
       lead="You host the lobby. Co-founders join with your invite, then everyone founds the vault together."
     >
       <div className="grid grid-cols-1 items-start gap-6 @3xl:grid-cols-[minmax(0,1fr)_340px]">
-        <form className="flex flex-col rounded-lg bg-surface shadow-1" onSubmit={submit} noValidate>
-          <div className="flex flex-col gap-3 border-b border-line-subtle p-6">
+        <form
+          className="flex flex-col rounded-lg bg-surface px-6 shadow-1"
+          onSubmit={submit}
+          noValidate
+        >
+          <div className="flex flex-col gap-1 border-b border-line-subtle py-6">
             {error ? <Banner kind="alarm">{error}</Banner> : null}
-            <div className="flex items-start gap-4">
-              <button
-                type="button"
-                onClick={openPicker}
-                disabled={isSubmitting}
-                aria-label="Choose the vault's picture"
-                className="focus-ring mt-[22px] rounded-md transition-opacity duration-fast ease-standard hover:opacity-80"
-              >
-                <Avatar name={name || "?"} source={source} shape="square" size={48} />
-              </button>
-              <TextField
-                label="Vault name"
-                className="flex-1"
-                placeholder="Treasury"
-                error={errors.name?.message}
-                maxLength={48}
-                disabled={isSubmitting}
-                {...register("name")}
-              />
-            </div>
+            <Field label="Vault name" error={errors.name?.message} disabled={isSubmitting}>
+              <div className="flex items-center gap-2.5">
+                <AvatarButton
+                  name={name || "?"}
+                  source={source}
+                  shape="square"
+                  size={32}
+                  label="Choose the vault's picture"
+                  disabled={isSubmitting}
+                  onClick={openPicker}
+                />
+                <TextInput
+                  placeholder="Treasury"
+                  maxLength={48}
+                  disabled={isSubmitting}
+                  {...register("name")}
+                />
+              </div>
+            </Field>
             <AvatarPicker
               kind="vault"
               name={name || "?"}
@@ -153,7 +157,7 @@ export function CreateForm() {
             <StepperField control={control} name="read" label="Members to read" max={members} />
           </ThresholdRow>
 
-          <div className="flex items-center justify-end gap-2 px-6 py-4">
+          <div className="flex items-center justify-end gap-2 py-4">
             <Button variant="ghost" onClick={cancel} disabled={isSubmitting}>
               Cancel
             </Button>
@@ -201,7 +205,7 @@ function ThresholdRow({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between gap-6 border-b border-line-subtle px-6 py-5">
+    <div className="flex items-center justify-between gap-6 border-b border-line-subtle py-5">
       <div className="flex flex-col gap-0.5">
         <span className="type-label-m text-fg">{title}</span>
         <span className="type-body-s text-fg-muted">{text}</span>

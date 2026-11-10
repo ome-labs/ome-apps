@@ -2,8 +2,9 @@ import { useCallback, useState } from "react";
 
 import type { Profile as ProfileData } from "@ome-labs/api";
 import type { AvatarId } from "@ome-labs/brand/web";
-import { Address, Avatar, Button, QrButton } from "@ome-labs/ui-web";
+import { Address, Button, QrButton } from "@ome-labs/ui-web";
 
+import { AvatarButton } from "../../avatars/avatar-button.tsx";
 import { AvatarPicker } from "../../avatars/avatar-picker.tsx";
 import { useAvatars, useProfileAvatar } from "../../avatars/avatars.ts";
 import { unwrap } from "../../data/session.ts";
@@ -21,8 +22,13 @@ export function Profile({ profile }: { profile: ProfileData }) {
   return (
     <Section id="profile" title="Profile">
       <Row title="Picture" description="Only on this computer.">
-        <Avatar name={profile.name} source={picture} size={40} />
-        <Button onClick={openPicker}>Change</Button>
+        <AvatarButton
+          name={profile.name}
+          source={picture}
+          size={40}
+          label="Change your picture"
+          onClick={openPicker}
+        />
       </Row>
       <Row title="Name" description="What other members see.">
         <Value>{profile.name}</Value>

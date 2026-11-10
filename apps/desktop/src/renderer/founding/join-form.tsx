@@ -70,9 +70,9 @@ export function JoinForm() {
       lead="Paste the invite a co-founder sent you. You'll see the vault before you join."
     >
       <div className="grid grid-cols-1 items-start gap-6 @3xl:grid-cols-[minmax(0,1fr)_380px]">
-        <section className="flex flex-col rounded-lg bg-surface shadow-1">
+        <section className="flex flex-col rounded-lg bg-surface px-6 shadow-1">
           <form
-            className="flex items-start gap-2 border-b border-line-subtle p-6"
+            className="flex items-start gap-2 border-b border-line-subtle py-6"
             onSubmit={inspect}
             noValidate
           >
@@ -91,7 +91,7 @@ export function JoinForm() {
           </form>
 
           {error ? (
-            <div className="px-6 pt-5">
+            <div className="pt-5">
               <Banner kind="alarm">{error}</Banner>
             </div>
           ) : null}
@@ -99,12 +99,12 @@ export function JoinForm() {
           {preview ? (
             <Preview preview={preview} />
           ) : (
-            <p className="px-6 py-5 type-body-s text-fg-muted">
+            <p className="py-5 type-body-s text-fg-muted">
               The vault's name, host and thresholds show here.
             </p>
           )}
 
-          <div className="flex items-center justify-end gap-2 border-t border-line-subtle px-6 py-4">
+          <div className="flex items-center justify-end gap-2 border-t border-line-subtle py-4">
             <Button variant="ghost" onClick={cancel} disabled={pending === "join"}>
               Cancel
             </Button>
@@ -137,7 +137,7 @@ export function JoinForm() {
 
 function Preview({ preview }: { preview: InvitePreview }) {
   return (
-    <div className="flex flex-col gap-4 px-6 py-5">
+    <div className="flex flex-col gap-4 py-5">
       <div className="flex items-center justify-between gap-4">
         <div className="flex flex-col gap-0.5">
           <span className="type-heading-s text-fg">{preview.name}</span>
