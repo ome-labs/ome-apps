@@ -8,7 +8,7 @@ import { type Direction, Reveal, scene, step } from "./motion.tsx";
 
 /**
  * The first run's window: a scene on the left, anchored to its left edge as the kit draws it, and the step on the
- * right in a narrower column, set high rather than centred. `stepKey` changes when the step does, which crossfades the scene and moves the step in
+ * right in a narrower column, centred in its half. `stepKey` changes when the step does, which crossfades the scene and moves the step in
  * `direction`; `footer` sits in the bottom-right corner.
  */
 export function OnboardingLayout({
@@ -47,7 +47,9 @@ export function OnboardingLayout({
           </AnimatePresence>
         </div>
         <main className="relative flex min-h-0 flex-col overflow-x-hidden overflow-y-auto">
-          <div className="px-[clamp(32px,4.5vw,72px)] pt-[clamp(72px,13vh,140px)] pb-20">
+          {/* Centred both ways, the bottom padding a little larger so the block sits just above true centre (tall
+              headings and the pills below would otherwise make it look low). Text stays left-aligned inside. */}
+          <div className="m-auto w-full max-w-[524px] px-8 pt-16 pb-[calc(4rem+5vh)]">
             <AnimatePresence mode="wait" initial={false} custom={direction}>
               <motion.div
                 key={stepKey}
@@ -56,7 +58,7 @@ export function OnboardingLayout({
                 initial="enter"
                 animate="shown"
                 exit="leave"
-                className="flex max-w-[460px] flex-col gap-7"
+                className="flex flex-col gap-7"
               >
                 {children}
               </motion.div>
