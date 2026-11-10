@@ -6,8 +6,8 @@ const header =
 export function shadowCss(layers: Shadow[]): string {
   return layers
     .map(
-      ({ color, offsetX, offsetY, blur, spread }) =>
-        `${offsetX.value}px ${offsetY.value}px ${blur.value}px ${spread.value}px ${color}`,
+      ({ color, offsetX, offsetY, blur, spread, inset }) =>
+        `${inset ? "inset " : ""}${offsetX.value}px ${offsetY.value}px ${blur.value}px ${spread.value}px ${color}`,
     )
     .join(", ");
 }
@@ -22,7 +22,12 @@ const em = (value: number) => `${Number(value.toFixed(4))}em`;
  */
 export function webCss(theme: Theme): string {
   const variables = (mode: "light" | "dark", indent = "  ") =>
-    theme.semantic.map((color) => `${indent}${color.variable}: ${color[mode]};`).join("\n");
+    [
+      ...theme.semantic.map((color) => `${indent}${color.variable}: ${color[mode]};`),
+      ...theme.elevation.map(
+        (elevation) => `${indent}--ome-shadow-${elevation.name}: ${shadowCss(elevation[mode])};`,
+      ),
+    ].join("\n");
 
   const text = theme.text.flatMap((style) => [
     `  --text-${style.name}: ${style.size}px;`,
@@ -75,6 +80,11 @@ export function webCss(theme: Theme): string {
     "  --color-transparent: transparent;",
     "  --color-current: currentColor;",
     theme.semantic.map((color) => `  --color-${color.utility}: var(${color.variable});`).join("\n"),
+    // Shadows follow the theme too, so `shadow-1` is a cast shadow in light and a lit edge in dark.
+    "  --shadow-*: initial;",
+    theme.elevation
+      .map((elevation) => `  --shadow-${elevation.name}: var(--ome-shadow-${elevation.name});`)
+      .join("\n"),
     "}",
     "",
     "@theme {",
@@ -88,10 +98,6 @@ export function webCss(theme: Theme): string {
     "  --spacing: 0.25rem;",
     "  --radius-*: initial;",
     ...theme.radius.map((radius) => `  --radius-${radius.name}: ${radius.px}px;`),
-    "  --shadow-*: initial;",
-    ...theme.elevation.map(
-      (elevation) => `  --shadow-${elevation.name}: ${shadowCss(elevation.layers)};`,
-    ),
     ...theme.control.map((control) => `  --height-control-${control.name}: ${control.px}px;`),
     "  --ease-*: initial;",
     ...theme.easing.map(

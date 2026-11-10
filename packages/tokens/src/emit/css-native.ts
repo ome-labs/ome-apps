@@ -1,4 +1,5 @@
 import type { Theme } from "../source/theme.ts";
+import { shadowCss } from "./css-web.ts";
 import { nativeFamilies, nativeFamily, nativeMetrics } from "./native-fonts.ts";
 
 const header =
@@ -10,8 +11,14 @@ const header =
  * absolute line heights and letter spacing, and one font family per weight.
  */
 export function nativeCss(theme: Theme): string {
+  // Uniwind turns box-shadow into React Native's `boxShadow`, which takes inset and several layers.
   const colors = (mode: "light" | "dark") =>
-    theme.semantic.map((color) => `      --color-${color.utility}: ${color[mode]};`).join("\n");
+    [
+      ...theme.semantic.map((color) => `      --color-${color.utility}: ${color[mode]};`),
+      ...theme.elevation.map(
+        (elevation) => `      --shadow-${elevation.name}: ${shadowCss(elevation[mode])};`,
+      ),
+    ].join("\n");
 
   const typeUtilities = theme.text.map((style) => {
     const { lineHeight, letterSpacing } = nativeMetrics(style);

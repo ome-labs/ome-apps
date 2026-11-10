@@ -23,15 +23,21 @@ React Native (Uniwind), in the app's `global.css`:
 
 Both expose the same utility names, so a class reads the same on both platforms:
 
-| Role                        | Utilities                                                                          |
-| --------------------------- | ---------------------------------------------------------------------------------- |
-| Backgrounds                 | `bg-canvas` `bg-surface` `bg-raised` `bg-sunken` `bg-hover` `bg-selected`          |
-| Text                        | `text-fg` `text-fg-muted` `text-fg-subtle` `text-fg-disabled` `text-fg-inverse`    |
-| Borders                     | `border-line-subtle` `border-line` `border-line-strong`                            |
-| Accent                      | `bg-accent` `bg-accent-hover` `bg-accent-subtle` `text-accent-fg` `text-on-accent` |
-| Status (text on its tint)   | `text-success` on `bg-success-subtle`, and `warning`, `danger`, `info`, `neutral`  |
-| Text styles (Figma page 08) | `type-display-hero` … `type-numeric-m`: family, size, line height, tracking        |
-| Sizes                       | `h-control-sm` (28) `h-control-md` (32) `h-control-lg` (40), `rounded-md`, …       |
+| Role                        | Utilities                                                                                                             |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Backgrounds                 | `bg-canvas` `bg-surface` `bg-raised` `bg-sunken` `bg-hover` `bg-selected`                                             |
+| Text                        | `text-fg` `text-fg-muted` `text-fg-subtle` `text-fg-disabled` `text-fg-inverse`                                       |
+| Borders                     | `border-line-subtle` `border-line` `border-line-strong`                                                               |
+| Accent                      | `bg-accent` `bg-accent-hover` `bg-accent-subtle` `text-accent-fg` `text-on-accent`                                    |
+| Status (text on its tint)   | `text-success` on `bg-success-subtle`, and `warning`, `danger`, `info`, `neutral`                                     |
+| Text styles (Figma page 08) | `type-display-hero` … `type-numeric-m`: family, size, line height, tracking                                           |
+| Sizes                       | `h-control-sm` (28) `h-control-md` (32) `h-control-lg` (40), `rounded-md`, …                                          |
+| Depth                       | `shadow-1`…`shadow-4` (surfaces), `shadow-control`, `shadow-accent`, `shadow-pressed`, `shadow-field`, `shadow-focus` |
+
+Shadows follow the theme: in light they cast a soft shadow with a hairline ring; in dark, where a
+shadow on near-black barely reads, they show a faint lit top edge and ring instead. Controls use
+`shadow-control` (or `shadow-accent` on solid colour), `shadow-pressed` while held, and fields sit in
+`shadow-field`.
 
 The web theme switches on `data-theme="dark"` on any ancestor (the `dark:` variant follows it) and
 falls back to the system setting until a theme is set. Uniwind switches with `Uniwind.setTheme`.
@@ -43,7 +49,7 @@ Code that needs numbers (Motion and Reanimated durations, React Native shadows, 
 import { tokens } from "@ome-labs/tokens";
 
 tokens.motion.duration.base; // 200
-tokens.shadow["3"].native; // { shadowColor, shadowOpacity, shadowRadius, shadowOffset, elevation }
+tokens.shadow["3"].dark; // the box-shadow string for the dark theme (`.light` for light)
 tokens.layout.app.sidebar; // 240
 ```
 

@@ -38,26 +38,10 @@ export function tokensObject(theme: Theme) {
     radius: Object.fromEntries(theme.radius.map((radius) => [radius.name, radius.px])),
     control: Object.fromEntries(theme.control.map((control) => [control.name, control.px])),
     shadow: Object.fromEntries(
-      theme.elevation.map((elevation) => {
-        // React Native's classic shadow props take one layer; the larger, softer layer reads best.
-        const layer = elevation.layers[0];
-        return [
-          elevation.name,
-          {
-            css: shadowCss(elevation.layers),
-            native: layer && {
-              shadowColor: layer.color.replace(
-                /rgba\((\d+), (\d+), (\d+), [\d.]+\)/,
-                "rgb($1, $2, $3)",
-              ),
-              shadowOpacity: Number(/([\d.]+)\)$/.exec(layer.color)?.[1] ?? 0),
-              shadowRadius: layer.blur.value / 2,
-              shadowOffset: { width: layer.offsetX.value, height: layer.offsetY.value },
-              elevation: Math.round(layer.blur.value / 4),
-            },
-          },
-        ];
-      }),
+      theme.elevation.map((elevation) => [
+        elevation.name,
+        { light: shadowCss(elevation.light), dark: shadowCss(elevation.dark) },
+      ]),
     ),
     motion: {
       duration: Object.fromEntries(theme.duration.map((duration) => [duration.name, duration.ms])),

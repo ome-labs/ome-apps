@@ -4,7 +4,26 @@
       "$type": "shadow",
       "$value": [
         {
-          "color": "rgba(10, 22, 56, 0.06)",
+          "color": "rgba(16, 24, 48, 0.06)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "rgba(16, 24, 48, 0.05)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -23,42 +42,125 @@
           }
         },
         {
-          "color": "rgba(10, 22, 56, 0.04)",
+          "color": "rgba(16, 24, 48, 0.06)",
           "offsetX": {
             "value": 0,
             "unit": "px"
           },
           "offsetY": {
-            "value": 1,
+            "value": 2,
             "unit": "px"
           },
           "blur": {
-            "value": 1,
+            "value": 8,
             "unit": "px"
           },
           "spread": {
-            "value": 0,
+            "value": -2,
             "unit": "px"
           }
         }
       ],
-      "$description": "Cards at rest, inputs"
+      "$description": "Cards and panels at rest",
+      "$extensions": {
+        "network.ome": {
+          "dark": [
+            {
+              "color": "rgba(255, 255, 255, 0.05)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
+            },
+            {
+              "color": "rgba(255, 255, 255, 0.06)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 1,
+                "unit": "px"
+              }
+            },
+            {
+              "color": "rgba(0, 0, 0, 0.4)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 2,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              }
+            }
+          ]
+        }
+      }
     },
     "2": {
       "$type": "shadow",
       "$value": [
         {
-          "color": "rgba(10, 22, 56, 0.08)",
+          "color": "rgba(16, 24, 48, 0.06)",
           "offsetX": {
             "value": 0,
             "unit": "px"
           },
           "offsetY": {
-            "value": 4,
+            "value": 0,
             "unit": "px"
           },
           "blur": {
-            "value": 12,
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "rgba(16, 24, 48, 0.05)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 2,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 4,
             "unit": "px"
           },
           "spread": {
@@ -67,51 +169,115 @@
           }
         },
         {
-          "color": "rgba(10, 22, 56, 0.05)",
+          "color": "rgba(16, 24, 48, 0.14)",
           "offsetX": {
             "value": 0,
             "unit": "px"
           },
           "offsetY": {
-            "value": 1,
+            "value": 8,
             "unit": "px"
           },
           "blur": {
-            "value": 3,
+            "value": 24,
             "unit": "px"
           },
           "spread": {
-            "value": 0,
+            "value": -4,
             "unit": "px"
           }
         }
       ],
-      "$description": "Menus, popovers, tooltips"
+      "$description": "Menus, popovers, tooltips",
+      "$extensions": {
+        "network.ome": {
+          "dark": [
+            {
+              "color": "rgba(255, 255, 255, 0.06)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
+            },
+            {
+              "color": "rgba(255, 255, 255, 0.08)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 1,
+                "unit": "px"
+              }
+            },
+            {
+              "color": "rgba(0, 0, 0, 0.6)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 8,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 24,
+                "unit": "px"
+              },
+              "spread": {
+                "value": -4,
+                "unit": "px"
+              }
+            }
+          ]
+        }
+      }
     },
     "3": {
       "$type": "shadow",
       "$value": [
         {
-          "color": "rgba(10, 22, 56, 0.14)",
+          "color": "rgba(16, 24, 48, 0.06)",
           "offsetX": {
             "value": 0,
             "unit": "px"
           },
           "offsetY": {
-            "value": 16,
+            "value": 0,
             "unit": "px"
           },
           "blur": {
-            "value": 40,
+            "value": 0,
             "unit": "px"
           },
           "spread": {
-            "value": 0,
+            "value": 1,
             "unit": "px"
           }
         },
         {
-          "color": "rgba(10, 22, 56, 0.06)",
+          "color": "rgba(16, 24, 48, 0.06)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -128,34 +294,117 @@
             "value": 0,
             "unit": "px"
           }
-        }
-      ],
-      "$description": "Toasts, sticky bars, app icons"
-    },
-    "4": {
-      "$type": "shadow",
-      "$value": [
+        },
         {
-          "color": "rgba(10, 22, 56, 0.24)",
+          "color": "rgba(16, 24, 48, 0.18)",
           "offsetX": {
             "value": 0,
             "unit": "px"
           },
           "offsetY": {
-            "value": 30,
+            "value": 16,
             "unit": "px"
           },
           "blur": {
-            "value": 80,
+            "value": 40,
             "unit": "px"
           },
           "spread": {
+            "value": -8,
+            "unit": "px"
+          }
+        }
+      ],
+      "$description": "Toasts, sticky bars, app icons",
+      "$extensions": {
+        "network.ome": {
+          "dark": [
+            {
+              "color": "rgba(255, 255, 255, 0.06)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
+            },
+            {
+              "color": "rgba(255, 255, 255, 0.08)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 1,
+                "unit": "px"
+              }
+            },
+            {
+              "color": "rgba(0, 0, 0, 0.7)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 16,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 40,
+                "unit": "px"
+              },
+              "spread": {
+                "value": -8,
+                "unit": "px"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "4": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(16, 24, 48, 0.06)",
+          "offsetX": {
             "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
             "unit": "px"
           }
         },
         {
-          "color": "rgba(10, 22, 56, 0.1)",
+          "color": "rgba(16, 24, 48, 0.08)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -172,9 +421,492 @@
             "value": 0,
             "unit": "px"
           }
+        },
+        {
+          "color": "rgba(16, 24, 48, 0.3)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 30,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 80,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -12,
+            "unit": "px"
+          }
         }
       ],
-      "$description": "Dialogs, sheets"
+      "$description": "Dialogs, sheets",
+      "$extensions": {
+        "network.ome": {
+          "dark": [
+            {
+              "color": "rgba(255, 255, 255, 0.07)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
+            },
+            {
+              "color": "rgba(255, 255, 255, 0.08)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 1,
+                "unit": "px"
+              }
+            },
+            {
+              "color": "rgba(0, 0, 0, 0.8)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 30,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 80,
+                "unit": "px"
+              },
+              "spread": {
+                "value": -12,
+                "unit": "px"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "control": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(16, 24, 48, 0.12)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "rgba(16, 24, 48, 0.08)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "rgba(16, 24, 48, 0.04)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": -1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        }
+      ],
+      "$description": "Secondary controls on a surface: buttons, selects, the segmented control's thumb, the switch thumb",
+      "$extensions": {
+        "network.ome": {
+          "dark": [
+            {
+              "color": "rgba(255, 255, 255, 0.07)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
+            },
+            {
+              "color": "rgba(255, 255, 255, 0.09)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 1,
+                "unit": "px"
+              }
+            },
+            {
+              "color": "rgba(0, 0, 0, 0.5)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 2,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "accent": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(255, 255, 255, 0.2)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        },
+        {
+          "color": "rgba(0, 0, 0, 0.12)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
+            "unit": "px"
+          },
+          "inset": true
+        },
+        {
+          "color": "rgba(16, 24, 48, 0.24)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "rgba(16, 24, 48, 0.28)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 2,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 6,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -2,
+            "unit": "px"
+          }
+        }
+      ],
+      "$description": "Solid colour controls (primary and danger buttons): a lit top edge and a darker rim",
+      "$extensions": {
+        "network.ome": {
+          "dark": [
+            {
+              "color": "rgba(255, 255, 255, 0.18)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
+            },
+            {
+              "color": "rgba(0, 0, 0, 0.2)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 1,
+                "unit": "px"
+              },
+              "inset": true
+            },
+            {
+              "color": "rgba(0, 0, 0, 0.5)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 2,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              }
+            },
+            {
+              "color": "rgba(0, 0, 0, 0.5)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 2,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 6,
+                "unit": "px"
+              },
+              "spread": {
+                "value": -2,
+                "unit": "px"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "pressed": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(16, 24, 48, 0.18)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        }
+      ],
+      "$description": "A control held down: lit edge gone, shadow inside",
+      "$extensions": {
+        "network.ome": {
+          "dark": [
+            {
+              "color": "rgba(0, 0, 0, 0.5)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 2,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
+            }
+          ]
+        }
+      }
+    },
+    "field": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(16, 24, 48, 0.06)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        }
+      ],
+      "$description": "Sunken fields: text inputs, code boxes, tracks",
+      "$extensions": {
+        "network.ome": {
+          "dark": [
+            {
+              "color": "rgba(0, 0, 0, 0.35)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 2,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
+            }
+          ]
+        }
+      }
     },
     "focus": {
       "$type": "shadow",

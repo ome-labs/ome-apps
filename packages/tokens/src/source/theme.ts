@@ -10,7 +10,11 @@ export type Shadow = {
   offsetY: Dimension;
   blur: Dimension;
   spread: Dimension;
+  inset?: boolean;
 };
+
+/** A shadow per theme: dark themes show layers with light edges where light themes cast shadows. */
+export type Elevation = { name: string; light: Shadow[]; dark: Shadow[] };
 
 /** A semantic colour with both themes resolved to hex, and its code names. */
 export type SemanticColor = {
@@ -45,7 +49,7 @@ export type Theme = {
   space: { name: string; px: number }[];
   radius: { name: string; px: number }[];
   control: { name: string; px: number }[];
-  elevation: { name: string; layers: Shadow[] }[];
+  elevation: Elevation[];
   duration: { name: string; ms: number }[];
   easing: { name: string; curve: [number, number, number, number] }[];
   sceneSteps: number;
@@ -117,10 +121,11 @@ export function loadTheme(directory = join(import.meta.dirname, "../../tokens"))
     space: pixels("space"),
     radius: pixels("radius"),
     control: pixels("control"),
-    elevation: under("elevation").map((token) => ({
-      name: leaf(token, "elevation"),
-      layers: value<Shadow[]>(token),
-    })),
+    elevation: under("elevation").map((token) => {
+      const light = value<Shadow[]>(token);
+      const dark = ome(token).dark as Shadow[] | undefined;
+      return { name: leaf(token, "elevation"), light, dark: dark ?? light };
+    }),
     duration: under("duration").map((token) => ({
       name: leaf(token, "duration"),
       ms: value<Dimension>(token).value,
