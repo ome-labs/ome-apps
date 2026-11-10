@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import type { Profile as ProfileData } from "@ome-labs/api";
-import { Address, Button } from "@ome-labs/ui-web";
+import { Address, Button, QrButton } from "@ome-labs/ui-web";
 
 import { unwrap } from "../../data/session.ts";
 import { Row, Section, Value } from "../parts.tsx";
@@ -15,11 +15,19 @@ export function Profile({ profile }: { profile: ProfileData }) {
       <Row title="Name" description="What other members see.">
         <Value>{profile.name}</Value>
       </Row>
-      <Row title="Aztec account" description="Sends your transactions.">
+      <Row title="Aztec account" description="Your own address on Aztec. Fees are covered for you.">
         <Address address={profile.account} copy />
+        <QrButton
+          value={profile.account}
+          label="address"
+          title="Your Aztec account"
+          description="Scan it to get this address on another device."
+        />
       </Row>
       <Row title="Switch profile" description="Open another member on this computer.">
-        <Button onClick={switchProfile}>Switch…</Button>
+        <Button icon="user-switch" onClick={switchProfile}>
+          Switch
+        </Button>
       </Row>
     </Section>
   );

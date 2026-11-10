@@ -1,5 +1,6 @@
 // The app shows only its own pages. Every web contents runs sandboxed and isolated; nothing navigates away, opens
-// windows, embeds webviews or gets a permission. Links to https pages open in the member's browser.
+// windows, embeds webviews or gets a permission beyond writing to the clipboard. Links to https pages open in the
+// member's browser.
 import { app, session, shell } from "electron";
 
 /** Where the app's own pages come from: the `app://` protocol, or the dev server while developing. */
@@ -24,11 +25,17 @@ export function enforceSecurity(): void {
   });
 }
 
-/** Camera, microphone, notifications, geolocation…: the app asks for none, so every request is refused. Needs the
+/** The one permission the app's own pages get: writing to the clipboard, for copy buttons. Reading it never. */
+const ALLOWED = new Set(["clipboard-sanitized-write"]);
+
+/** Camera, microphone, notifications, geolocation…: refused, as is anything from a page that isn't the app's. Needs the
  * app to be ready. */
 export function denyPermissions(): void {
-  session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => {
-    callback(false);
+  session.defaultSession.setPermissionRequestHandler((contents, permission, callback) => {
+    callback(ALLOWED.has(permission) && isAppUrl(contents.getURL()));
   });
-  session.defaultSession.setPermissionCheckHandler(() => false);
+  session.defaultSession.setPermissionCheckHandler(
+    (_contents, permission, requestingOrigin) =>
+      ALLOWED.has(permission) && isAppUrl(`${requestingOrigin}/`),
+  );
 }

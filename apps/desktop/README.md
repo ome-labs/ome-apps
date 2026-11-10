@@ -88,7 +88,7 @@ renderer (React)  ──window.ome.call──▶  preload  ──ipc "ome:call"�
 - The renderer is served from `app://ome/` with a strict Content Security Policy: no inline or remote scripts, no
   remote connections.
 - Navigation away from the app, new windows and webviews are blocked; `https` links open in the browser.
-- Every permission request is refused.
+- Every permission request is refused, except writing to the clipboard from the app's own pages (copy buttons).
 - IPC accepts calls only from the app's own page, and only allowlisted methods.
 
 ## Not built yet

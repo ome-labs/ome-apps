@@ -1,7 +1,14 @@
 import { type FormEvent, useCallback, useState } from "react";
 
 import type { KeeperState, Settings } from "@ome-labs/api";
-import { Button, CopyButton, PasswordField, StatusBadge, TextField } from "@ome-labs/ui-web";
+import {
+  Button,
+  CopyButton,
+  PasswordField,
+  QrButton,
+  StatusBadge,
+  TextField,
+} from "@ome-labs/ui-web";
 
 import { callOme } from "../../data/ome.ts";
 import { Row, Section, Value } from "../parts.tsx";
@@ -38,6 +45,12 @@ export function Keeper({
         <Row title="Peer ID">
           <Value mono>{`${keeper.peerId.slice(0, 10)}…${keeper.peerId.slice(-6)}`}</Value>
           <CopyButton value={keeper.peerId} label="Copy peer ID" size="sm" />
+          <QrButton
+            value={keeper.peerId}
+            label="peer ID"
+            title="Your keeper's peer ID"
+            description="How other members' keepers find this one."
+          />
         </Row>
       ) : null}
       {keeper.addresses.length > 0 ? (

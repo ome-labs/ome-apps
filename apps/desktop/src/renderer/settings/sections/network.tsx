@@ -46,7 +46,7 @@ export function Network({ node }: { node: NodeStatus }) {
       ? node.syncedBlock >= node.blockNumber
         ? `Block ${node.blockNumber.toLocaleString("en-US")}, synced`
         : `Synced to ${node.syncedBlock.toLocaleString("en-US")} of ${node.blockNumber.toLocaleString("en-US")}`
-      : "No blocks yet";
+      : undefined;
 
   return (
     <Section id="network" title="Network & node" description="A profile stays on one network.">
