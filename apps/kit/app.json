@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "Ome Kit",
+    "slug": "ome-kit",
+    "scheme": "ome-kit",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "icon": "../../packages/brand/assets/app-icon/ios/testnet-1024.png",
+    "ios": {
+      "bundleIdentifier": "network.ome.kit",
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "network.ome.kit",
+      "adaptiveIcon": {
+        "foregroundImage": "../../packages/brand/assets/app-icon/android/testnet-foreground.png",
+        "backgroundImage": "../../packages/brand/assets/app-icon/android/testnet-background.png"
+      }
+    },
+    "plugins": ["expo-router"],
+    "experiments": { "typedRoutes": true }
+  }
+}

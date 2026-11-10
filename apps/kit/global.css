@@ -1,0 +1,9 @@
+/* Uniwind's entry: Tailwind, Uniwind's native variants, the token theme, and the classes the kit uses. */
+
+@import "tailwindcss";
+@import "uniwind";
+@import "@ome-labs/tokens/theme.native.css";
+
+@source "../../packages/ui-native/src";
+@source "./src";
+@source "./app";

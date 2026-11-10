@@ -1,0 +1,53 @@
+{
+  "name": "@ome-labs/kit",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A development build that shows every @ome-labs/ui-native component and state",
+  "license": "Apache-2.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "kit": "expo start --dev-client",
+    "lint": "oxlint --deny-warnings .",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@gorhom/bottom-sheet": "catalog:",
+    "@ome-labs/api": "catalog:",
+    "@ome-labs/brand": "workspace:*",
+    "@ome-labs/format": "workspace:*",
+    "@ome-labs/icons": "workspace:*",
+    "@ome-labs/tokens": "workspace:*",
+    "@ome-labs/ui-native": "workspace:*",
+    "@rn-primitives/portal": "catalog:",
+    "@shopify/flash-list": "catalog:",
+    "expo": "catalog:",
+    "expo-clipboard": "catalog:",
+    "expo-constants": "catalog:",
+    "expo-dev-client": "catalog:",
+    "expo-font": "catalog:",
+    "expo-linking": "catalog:",
+    "expo-router": "catalog:",
+    "expo-splash-screen": "catalog:",
+    "expo-status-bar": "catalog:",
+    "expo-system-ui": "catalog:",
+    "react": "catalog:",
+    "react-native": "catalog:",
+    "react-native-gesture-handler": "catalog:",
+    "react-native-reanimated": "catalog:",
+    "react-native-safe-area-context": "catalog:",
+    "react-native-screens": "catalog:",
+    "react-native-svg": "catalog:",
+    "react-native-worklets": "catalog:",
+    "sonner-native": "catalog:",
+    "tailwindcss": "catalog:",
+    "uniwind": "catalog:"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "klarity": "catalog:",
+    "oxlint": "catalog:",
+    "typescript": "catalog:"
+  }
+}
