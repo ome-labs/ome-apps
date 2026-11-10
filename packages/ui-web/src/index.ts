@@ -11,6 +11,7 @@ export {
   type SegmentedControlOption,
   type SegmentedControlProps,
 } from "./forms/segmented-control.tsx";
+export { PasswordField, type PasswordFieldProps } from "./forms/password-field.tsx";
 export { Select, type SelectOption, type SelectProps } from "./forms/select.tsx";
 export { Switch, type SwitchProps } from "./forms/switch.tsx";
 export {

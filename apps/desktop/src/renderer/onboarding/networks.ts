@@ -1,6 +1,4 @@
 // The networks a profile can start on, as `ome init` offers them.
-import type { NodeStatus } from "@ome-labs/api";
-
 export const LOCAL_NODE = "http://localhost:8080";
 export const TESTNET_NODE = "https://aztec-testnet.drpc.org";
 
@@ -18,19 +16,6 @@ export const NODE_URLS: Record<NetworkChoice, string> = {
 
 export function isLocal(url: string): boolean {
   return url.includes("localhost") || url.includes("127.0.0.1");
-}
-
-/** "Local network · block 1,210": what answered, by its L1 chain. */
-export function describeNode(node: NodeStatus): string {
-  const network =
-    node.l1ChainId === 31_337
-      ? "Local network"
-      : node.l1ChainId === 11_155_111
-        ? "Testnet"
-        : "Aztec node";
-  return node.blockNumber === null
-    ? network
-    : `${network} · block ${node.blockNumber.toLocaleString("en-US")}`;
 }
 
 /** What to do when the node doesn't answer. */

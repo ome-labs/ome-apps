@@ -42,7 +42,7 @@ export function ProfileStep({
 }: {
   draft: ProfileDraft | undefined;
   onBack: () => void;
-  onReady: (draft: ProfileDraft, node: NodeStatus) => void;
+  onReady: (draft: ProfileDraft) => void;
 }) {
   const defaultValues = useMemo(() => defaultsFrom(draft), [draft]);
   const {
@@ -69,7 +69,7 @@ export function ProfileStep({
         try {
           const next = { member: values.member.trim(), nodeUrl: NODE_URLS[values.network] };
           const node = await unwrap(window.ome.session.setup(next));
-          if (node.reachable) onReady(next, node);
+          if (node.reachable) onReady(next);
           else setUnreachable(node);
         } catch (failure) {
           setError(failure instanceof Error ? failure.message : String(failure));

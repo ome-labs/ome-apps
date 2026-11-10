@@ -1,8 +1,7 @@
 import { useMemo, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { NodeStatus } from "@ome-labs/api";
-import { Banner, Button, TextField } from "@ome-labs/ui-web";
+import { Banner, Button, PasswordField } from "@ome-labs/ui-web";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
@@ -10,7 +9,7 @@ import { callOme } from "../data/ome.ts";
 import { unwrap } from "../data/session.ts";
 import { StepHeading } from "./layout.tsx";
 import { Reveal } from "./motion.tsx";
-import { describeNode, isLocal } from "./networks.ts";
+import { isLocal } from "./networks.ts";
 import type { ProfileDraft } from "./profile-step.tsx";
 
 /** The daemon's only rule is the minimum length (`profile.create`). */
@@ -41,15 +40,7 @@ function strength(passphrase: string): string {
  * Step 2: the passphrase that seals the signing key. Creating the profile seals a new key under it, makes the keeper's
  * master key and the member's Aztec account; then the app opens the profile.
  */
-export function PassphraseStep({
-  draft,
-  node,
-  onBack,
-}: {
-  draft: ProfileDraft;
-  node: NodeStatus;
-  onBack: () => void;
-}) {
+export function PassphraseStep({ draft, onBack }: { draft: ProfileDraft; onBack: () => void }) {
   const {
     register,
     handleSubmit,
@@ -92,12 +83,6 @@ export function PassphraseStep({
         somewhere safe.
       </StepHeading>
 
-      <Reveal>
-        <p className="type-body-s text-fg-muted">
-          {draft.member} on {describeNode(node)}
-        </p>
-      </Reveal>
-
       {error ? (
         <Reveal>
           <Banner kind="alarm">{error}</Banner>
@@ -105,18 +90,16 @@ export function PassphraseStep({
       ) : null}
 
       <Reveal className="flex flex-col gap-6">
-        <TextField
+        <PasswordField
           label="Passphrase"
-          type="password"
           hint={strength(passphrase)}
           error={errors.passphrase?.message}
           autoComplete="new-password"
           disabled={pending}
           {...register("passphrase")}
         />
-        <TextField
+        <PasswordField
           label="Passphrase again"
-          type="password"
           error={errors.again?.message}
           autoComplete="new-password"
           disabled={pending}

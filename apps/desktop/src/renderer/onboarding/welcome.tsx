@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 
-import type { NodeStatus } from "@ome-labs/api";
-
 import type { Preflight } from "../../bridge/contract.ts";
 import { Intro } from "./intro.tsx";
 import { OnboardingLayout } from "./layout.tsx";
@@ -10,7 +8,7 @@ import { PassphraseStep } from "./passphrase-step.tsx";
 import { type ProfileDraft, ProfileStep } from "./profile-step.tsx";
 import { ServicePills } from "./service-pills.tsx";
 
-type Step = { name: "intro" } | { name: "profile" } | { name: "passphrase"; node: NodeStatus };
+type Step = { name: "intro" } | { name: "profile" } | { name: "passphrase" };
 
 const ORDER: Step["name"][] = ["intro", "profile", "passphrase"];
 
@@ -35,9 +33,9 @@ export function Welcome() {
   const toIntro = useCallback(() => setStep({ name: "intro" }), [setStep]);
   const toProfile = useCallback(() => setStep({ name: "profile" }), [setStep]);
   const ready = useCallback(
-    (next: ProfileDraft, node: NodeStatus) => {
+    (next: ProfileDraft) => {
       setDraft(next);
-      setStep({ name: "passphrase", node });
+      setStep({ name: "passphrase" });
     },
     [setStep],
   );
@@ -54,7 +52,7 @@ export function Welcome() {
         <ProfileStep draft={draft} onBack={toIntro} onReady={ready} />
       ) : null}
       {step.name === "passphrase" && draft ? (
-        <PassphraseStep draft={draft} node={step.node} onBack={toProfile} />
+        <PassphraseStep draft={draft} onBack={toProfile} />
       ) : null}
     </OnboardingLayout>
   );
