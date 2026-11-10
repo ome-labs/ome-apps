@@ -13,6 +13,19 @@ out/
 *.tsbuildinfo
 coverage/
 
+# Expo and React Native: generated native projects and local state
+.expo/
+expo-env.d.ts
+apps/*/ios/
+apps/*/android/
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+
+# Desktop (Tauri / Rust) build output
+target/
+
 # Environment and secrets
 .env
 .env.*
