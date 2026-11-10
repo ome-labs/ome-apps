@@ -25,7 +25,7 @@ export function AppShell({ topBar, sidebar, banner, children, className }: AppSh
         {/* Positioned, so absolutely placed descendants (form controls' hidden inputs) stay inside the scrolling panel;
             otherwise they stretch the window and focusing one scrolls the whole window. */}
         <main className="relative mr-2 mb-2 min-w-0 flex-1 overflow-y-auto rounded-lg bg-surface shadow-1">
-          <div className="mx-auto flex max-w-[1040px] flex-col gap-6 px-10 pt-7 pb-10">
+          <div className="flex flex-col gap-6 px-8 pt-6 pb-10">
             {banner}
             {children}
           </div>
