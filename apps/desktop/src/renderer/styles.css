@@ -1,0 +1,14 @@
+/* A neutral stand-in until @ome-labs/tokens and @ome-labs/ui-web exist; the shell and pages then switch to them. */
+@import "tailwindcss";
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-white text-neutral-900 antialiased;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+}

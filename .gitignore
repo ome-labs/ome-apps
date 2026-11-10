@@ -30,8 +30,10 @@ apps/*/android/
 *.p12
 *.mobileprovision
 
-# Desktop (Tauri / Rust) build output
-target/
+# Desktop (Electron): packaged apps, and Playwright results
+apps/desktop/release/
+test-results/
+playwright-report/
 
 # Environment and secrets
 .env

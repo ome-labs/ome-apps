@@ -1,0 +1,30 @@
+# Packaging. Unsigned for now: code signing, notarization and auto-update come with the release workflow, together with
+# bundling omed and ome-keeper from the core release.
+appId: network.ome.desktop
+productName: Ome
+copyright: Copyright © 2026 Ome Labs
+directories:
+  output: release
+  buildResources: build
+# Everything the app needs is bundled into out/ by electron-vite; no node_modules ship.
+files:
+  - out/**
+  - package.json
+  - "!out/smoke.png"
+asar: true
+electronLanguages: [en]
+mac:
+  category: public.app-category.finance
+  target:
+    - target: dmg
+      arch: [arm64]
+    - target: zip
+      arch: [arm64]
+linux:
+  category: Finance
+  target:
+    - target: AppImage
+      arch: [x64, arm64]
+    - target: deb
+      arch: [x64, arm64]
+  maintainer: Ome Labs

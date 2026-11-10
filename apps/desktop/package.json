@@ -1,0 +1,40 @@
+{
+  "name": "@ome-labs/desktop",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The Ome desktop app: a member's vaults, proposals and keeper, as a client of their daemon",
+  "license": "Apache-2.0",
+  "author": "Ome Labs",
+  "type": "module",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "build": "electron-vite build",
+    "dev": "electron-vite dev",
+    "package": "electron-vite build && electron-builder --dir",
+    "preview": "electron-vite preview",
+    "test": "vitest run",
+    "test:smoke": "electron-vite build && playwright test",
+    "typecheck": "tsc -p tsconfig.node.json && tsc -p tsconfig.web.json"
+  },
+  "devDependencies": {
+    "@ome-labs/api": "catalog:",
+    "@playwright/test": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "@tanstack/react-router": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "electron": "catalog:",
+    "electron-builder": "catalog:",
+    "electron-vite": "catalog:",
+    "klarity": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  }
+}
