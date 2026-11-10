@@ -26,9 +26,12 @@ const PROMISES: { icon: IconName; title: string; text: string }[] = [
 export function Intro({
   preflight,
   onStart,
+  onBack,
 }: {
   preflight: Preflight | undefined;
   onStart: () => void;
+  /** Back to the list of profiles, when this is another member being set up. */
+  onBack?: (() => void) | undefined;
 }) {
   const missing = preflight !== undefined && preflight.omed === null;
 
@@ -65,10 +68,15 @@ export function Intro({
           </Banner>
         </Reveal>
       ) : null}
-      <Reveal>
+      <Reveal className="flex items-center gap-2">
         <Button variant="primary" size="lg" disabled={!preflight || missing} onClick={onStart}>
           Set up Ome
         </Button>
+        {onBack ? (
+          <Button variant="ghost" size="lg" onClick={onBack}>
+            Back to profiles
+          </Button>
+        ) : null}
       </Reveal>
     </>
   );

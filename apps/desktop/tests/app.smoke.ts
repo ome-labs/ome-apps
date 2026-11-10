@@ -133,6 +133,34 @@ test("changes settings", async () => {
   await app.close();
 });
 
+test("goes back to the profiles from setting up another member", async () => {
+  const app = await electron.launch({
+    args: [join(import.meta.dirname, "..")],
+    env: {
+      ...process.env,
+      OME_DESKTOP_SOURCE: "fixtures",
+      OME_DESKTOP_USER_DATA: mkdtempSync(join(tmpdir(), "ome-desktop-smoke-")),
+    },
+  });
+  const page = await app.firstWindow();
+  await expect(page.getByRole("button", { name: /Alice/ })).toBeVisible();
+  await page.keyboard.press(`${process.platform === "darwin" ? "Meta" : "Control"}+,`);
+  await page.getByRole("button", { name: "Switch" }).click();
+  await page.getByRole("button", { name: "Set up another member" }).click();
+
+  // Past the profile step, the setup has started a daemon; going back leaves it.
+  await page.getByRole("button", { name: "Set up Ome" }).click();
+  await page.getByLabel("Your name").fill("Bob");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await page.getByRole("button", { name: "Back to profiles" }).click();
+  await expect(page.getByRole("heading", { name: "Who's using Ome?" })).toBeVisible();
+  await page.getByRole("button", { name: /Alice/ }).click();
+  await expect(page.getByRole("link", { name: "Overview" })).toBeVisible();
+  await app.close();
+});
+
 test("starts a member without a vault on Home", async () => {
   const app = await electron.launch({
     args: [join(import.meta.dirname, "..")],

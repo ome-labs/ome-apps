@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { useNavigate } from "@tanstack/react-router";
+
 import type { Preflight } from "../../bridge/contract.ts";
-import { openNewProfile } from "../data/session.ts";
+import { openNewProfile, unwrap, useSession } from "../data/session.ts";
 import { Intro } from "./intro.tsx";
 import { OnboardingLayout } from "./layout.tsx";
 import type { Direction } from "./motion.tsx";
@@ -46,6 +48,18 @@ export function Welcome() {
   }, []);
   const total = touchId ? 3 : 2;
 
+  // Setting up another member: there are profiles to go back to. Remembered, because starting the setup's daemon
+  // changes the session to `setup`, which no longer lists them.
+  const session = useSession();
+  const [others, setOthers] = useState(false);
+  if (!others && session?.phase === "choose" && session.profiles.length > 0) setOthers(true);
+  const navigate = useNavigate();
+  const toProfiles = useCallback(async () => {
+    // Leaving drops the daemon started for the profile not yet made.
+    if (session?.phase === "setup") await unwrap(window.ome.session.leave()).catch(() => undefined);
+    await navigate({ to: "/profiles" });
+  }, [navigate, session?.phase]);
+
   const toIntro = useCallback(() => setStep({ name: "intro" }), [setStep]);
   const toProfile = useCallback(() => setStep({ name: "profile" }), [setStep]);
   const ready = useCallback(
@@ -70,7 +84,9 @@ export function Welcome() {
       direction={direction}
       footer={<ServicePills preflight={preflight} />}
     >
-      {step.name === "intro" ? <Intro preflight={preflight} onStart={toProfile} /> : null}
+      {step.name === "intro" ? (
+        <Intro preflight={preflight} onStart={toProfile} onBack={others ? toProfiles : undefined} />
+      ) : null}
       {step.name === "profile" ? (
         <ProfileStep
           position={`Step 1 of ${total}`}
