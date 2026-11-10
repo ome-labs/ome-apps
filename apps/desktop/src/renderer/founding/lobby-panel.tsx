@@ -17,7 +17,7 @@ import {
 } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
-import { FlowPage } from "./stages.tsx";
+import { FlowPage } from "./flow-page.tsx";
 import { LIMITS, blocker, networkName, risks } from "./thresholds.ts";
 
 /** Stage 2: who has joined. The host shares the invite, sets the final thresholds and starts; a guest waits. */
@@ -27,8 +27,6 @@ export function LobbyPanel({ lobby }: { lobby: LobbyView }) {
 
   return (
     <FlowPage
-      stage="lobby"
-      joining={!isHost}
       title={lobby.name}
       lead={
         isHost

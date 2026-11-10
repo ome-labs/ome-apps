@@ -14,12 +14,6 @@ export interface Risk {
 
 export const LIMITS = { approvals: { min: 1, max: 8 }, read: { min: 2, max: 8 } } as const;
 
-/** Shapes worth recommending: each survives losing a member and still spends and reads. */
-export const PRESETS = [
-  { members: 3, approvals: 2, read: 2, survives: "Survives losing any one member." },
-  { members: 5, approvals: 3, read: 3, survives: "Survives losing any two." },
-] as const;
-
 /** What a choice risks, once the member count is known. */
 export function risks({ approvals, read }: Shape, members: number): Risk[] {
   const out: Risk[] = [];

@@ -8,7 +8,7 @@ import { Address, Banner, Button, StatusBadge, StepList, StepRow } from "@ome-la
 
 import { callOme } from "../data/ome.ts";
 import { useNow } from "../shell/now.ts";
-import { FlowPage } from "./stages.tsx";
+import { FlowPage } from "./flow-page.tsx";
 
 const LABELS: Record<FoundingStepId, string> = {
   agree: "Agree on the plan",
@@ -87,8 +87,6 @@ export function FoundingPanel({
 
   return (
     <FlowPage
-      stage={done ? "done" : "founding"}
-      joining={lobby.role === "guest"}
       title={done ? `${lobby.name} is ready` : `Founding ${lobby.name}`}
       lead={
         done
