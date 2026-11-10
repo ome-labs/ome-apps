@@ -6,7 +6,8 @@ import { cn } from "../styling/class-names.ts";
 export type ThresholdChipProps = {
   kind: "spend" | "read";
   threshold: number;
-  members: number;
+  /** Left out where the member count isn't known yet (an invite's proposal): "2 to approve". */
+  members?: number | undefined;
   className?: string | undefined;
 };
 
@@ -25,7 +26,11 @@ export function ThresholdChip({ kind, threshold, members, className }: Threshold
         tone="accent-fg"
         className="size-3.5"
       />
-      {kind === "spend" ? approvalsLabel(threshold, members) : toReadLabel(threshold, members)}
+      {members === undefined
+        ? `${threshold} to ${kind === "spend" ? "approve" : "read"}`
+        : kind === "spend"
+          ? approvalsLabel(threshold, members)
+          : toReadLabel(threshold, members)}
     </span>
   );
 }

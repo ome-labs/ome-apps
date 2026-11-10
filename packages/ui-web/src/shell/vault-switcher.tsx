@@ -23,7 +23,7 @@ export type VaultSwitcherProps = {
   className?: string | undefined;
 };
 
-/** Page 40's switcher at the top of the sidebar: the vault's name, its alias and threshold, and the others. */
+/** Page 40's switcher at the top of the sidebar: the vault's picture and name, and the others with their thresholds. */
 export function VaultSwitcher({ vaults, current, onSelect, className }: VaultSwitcherProps) {
   const vault = vaults.find((item) => item.address === current) ?? vaults[0];
   if (!vault) return null;
@@ -41,18 +41,13 @@ export function VaultSwitcher({ vaults, current, onSelect, className }: VaultSwi
         )}
       >
         {vault.avatar ? (
-          <Avatar name={vault.name} source={vault.avatar} shape="square" size={32} />
+          <Avatar name={vault.name} source={vault.avatar} shape="square" size={24} />
         ) : (
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent bg-linear-to-b from-brand-white/15 to-brand-white/0 text-on-accent shadow-accent">
-            <Logo variant="mark" tone="mono" title="" className="size-5" />
+          <span className="flex size-6 shrink-0 items-center justify-center rounded-sm bg-accent bg-linear-to-b from-brand-white/15 to-brand-white/0 text-on-accent shadow-accent">
+            <Logo variant="mark" tone="mono" title="" className="size-4" />
           </span>
         )}
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="truncate type-label-m text-fg">{vault.name}</span>
-          <span className="truncate type-mono-s text-fg-subtle">
-            {vault.alias} · {vault.threshold} of {vault.members}
-          </span>
-        </span>
+        <span className="min-w-0 flex-1 truncate type-label-m text-fg">{vault.name}</span>
         <Icon name="chevrons-up-down" size={16} tone="fg-subtle" className="size-3.5" />
       </BaseMenu.Trigger>
       <BaseMenu.Portal>
