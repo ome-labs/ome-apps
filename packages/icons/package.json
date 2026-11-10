@@ -6,15 +6,50 @@
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    "./web": "./src/web.tsx",
+    "./native": "./src/native.tsx",
+    "./registry": "./src/registry.ts"
   },
   "scripts": {
     "lint": "oxlint --deny-warnings .",
+    "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json"
   },
+  "dependencies": {
+    "@hugeicons/core-free-icons": "catalog:",
+    "@hugeicons/react": "catalog:",
+    "@hugeicons/react-native": "catalog:",
+    "@ome-labs/tokens": "workspace:*"
+  },
   "devDependencies": {
+    "@testing-library/react": "catalog:",
+    "@types/react": "catalog:",
+    "jsdom": "catalog:",
     "klarity": "catalog:",
     "oxlint": "catalog:",
-    "typescript": "catalog:"
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-native": "catalog:",
+    "react-native-svg": "catalog:",
+    "typescript": "catalog:",
+    "uniwind": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-native": "catalog:",
+    "react-native-svg": "catalog:",
+    "uniwind": "catalog:"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    },
+    "react-native-svg": {
+      "optional": true
+    },
+    "uniwind": {
+      "optional": true
+    }
   }
 }

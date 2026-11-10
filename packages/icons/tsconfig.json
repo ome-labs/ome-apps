@@ -1,4 +1,7 @@
 {
   "extends": "klarity/tsconfig/library/react",
-  "include": ["src"]
+  "compilerOptions": {
+    "allowImportingTsExtensions": true
+  },
+  "include": ["src", "*.config.ts"]
 }
