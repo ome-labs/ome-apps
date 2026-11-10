@@ -1,6 +1,6 @@
 import type { Theme } from "../source/theme.ts";
 import { shadowCss } from "./css-web.ts";
-import { nativeFamilies, nativeFamily } from "./native-fonts.ts";
+import { nativeFamilies, nativeFamily, nativeMetrics } from "./native-fonts.ts";
 
 /** The values code needs directly, as one plain object (no CSS involved). */
 export function tokensObject(theme: Theme) {
@@ -26,8 +26,7 @@ export function tokensObject(theme: Theme) {
         style.name,
         {
           fontSize: style.size,
-          lineHeight: Math.round(style.size * style.lineHeight),
-          letterSpacing: Number((style.size * style.letterSpacing).toFixed(2)),
+          ...nativeMetrics(style),
           fontWeight: style.weight,
           webFamily: style.family,
           nativeFamily: nativeFamily(style),

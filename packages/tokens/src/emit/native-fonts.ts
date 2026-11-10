@@ -12,9 +12,18 @@ export const nativeFamilies = {
 export function nativeFamily(style: Pick<TextStyle, "family" | "weight">): string {
   const weights: Record<number, string> = nativeFamilies[style.family];
   const family = weights[style.weight];
+
   if (!family) {
     throw new Error(`No native font file for ${style.family} at weight ${style.weight}`);
   }
 
   return family;
+}
+
+// React Native takes line height and letter spacing in points, not as multiples of the font size.
+export function nativeMetrics(style: Pick<TextStyle, "size" | "lineHeight" | "letterSpacing">) {
+  return {
+    lineHeight: Math.round(style.size * style.lineHeight),
+    letterSpacing: Number((style.size * style.letterSpacing).toFixed(2)),
+  };
 }

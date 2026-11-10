@@ -21,8 +21,8 @@ const em = (value: number) => `${Number(value.toFixed(4))}em`;
  * kit values exist.
  */
 export function webCss(theme: Theme): string {
-  const variables = (mode: "light" | "dark") =>
-    theme.semantic.map((color) => `  ${color.variable}: ${color[mode]};`).join("\n");
+  const variables = (mode: "light" | "dark", indent = "  ") =>
+    theme.semantic.map((color) => `${indent}${color.variable}: ${color[mode]};`).join("\n");
 
   const text = theme.text.flatMap((style) => [
     `  --text-${style.name}: ${style.size}px;`,
@@ -66,7 +66,7 @@ export function webCss(theme: Theme): string {
     "@media (prefers-color-scheme: dark) {",
     '  :root:not([data-theme="light"]) {',
     "    color-scheme: dark;",
-    theme.semantic.map((color) => `    ${color.variable}: ${color.dark};`).join("\n"),
+    variables("dark", "    "),
     "  }",
     "}",
     "",
