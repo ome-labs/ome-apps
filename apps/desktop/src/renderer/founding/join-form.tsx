@@ -151,8 +151,12 @@ function Preview({ preview }: { preview: InvitePreview }) {
       <div className="flex flex-col gap-2">
         <span className="type-caption text-fg-subtle">Proposed</span>
         <div className="flex flex-wrap gap-2">
-          <ThresholdChip kind="spend" threshold={preview.threshold} />
-          <ThresholdChip kind="read" threshold={preview.viewingThreshold} />
+          <ThresholdChip kind="spend" threshold={preview.threshold} members={preview.members} />
+          <ThresholdChip
+            kind="read"
+            threshold={preview.viewingThreshold}
+            members={preview.members}
+          />
         </div>
       </div>
       {preview.sameNetwork ? null : (
