@@ -126,8 +126,8 @@ export function ProfileStep({
         <Button variant="ghost" onClick={onBack} disabled={pending}>
           Back
         </Button>
-        <Button variant="primary" type="submit" disabled={pending}>
-          {pending ? "Starting your daemon…" : "Continue"}
+        <Button variant="primary" type="submit" pending={pending}>
+          {pending ? "Starting…" : "Continue"}
         </Button>
       </Reveal>
     </form>

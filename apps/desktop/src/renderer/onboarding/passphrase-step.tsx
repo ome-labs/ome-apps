@@ -111,8 +111,8 @@ export function PassphraseStep({ draft, onBack }: { draft: ProfileDraft; onBack:
         <Button variant="ghost" onClick={onBack} disabled={pending}>
           Back
         </Button>
-        <Button variant="primary" type="submit" disabled={pending}>
-          {pending ? "Sealing your key and creating your account…" : "Create profile"}
+        <Button variant="primary" type="submit" pending={pending}>
+          {pending ? "Creating…" : "Create profile"}
         </Button>
       </Reveal>
     </form>

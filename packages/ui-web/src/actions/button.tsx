@@ -48,13 +48,40 @@ const button = cva(
 export type ButtonProps = ComponentProps<typeof BaseButton> &
   VariantProps<typeof button> & {
     icon?: IconName | undefined;
+    /**
+     * Its action is running: a spinner replaces the icon and clicks are ignored, but the button keeps its colour
+     * (unlike `disabled`), so it reads as working rather than unavailable. Keep the label short: "Creating…".
+     */
+    pending?: boolean | undefined;
   };
 
-export function Button({ variant, size, wide, icon, className, children, ...props }: ButtonProps) {
+export function Button({
+  variant,
+  size,
+  wide,
+  icon,
+  pending,
+  className,
+  children,
+  onClick,
+  ...props
+}: ButtonProps) {
+  const iconClass = size === "sm" ? "size-3.5" : undefined;
   return (
-    <BaseButton className={cn(button({ variant, size, wide }), className)} {...props}>
-      {icon ? (
-        <Icon name={icon} size={16} className={size === "sm" ? "size-3.5" : undefined} />
+    <BaseButton
+      className={cn(
+        button({ variant, size, wide }),
+        pending && "cursor-progress active:scale-100",
+        className,
+      )}
+      aria-busy={pending ? true : undefined}
+      onClick={pending ? (event) => event.preventDefault() : onClick}
+      {...props}
+    >
+      {pending ? (
+        <Icon name="loader" size={16} className={cn("motion-safe:animate-spin", iconClass)} />
+      ) : icon ? (
+        <Icon name={icon} size={16} className={iconClass} />
       ) : null}
       {children}
     </BaseButton>
