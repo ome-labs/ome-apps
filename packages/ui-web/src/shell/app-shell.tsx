@@ -12,13 +12,17 @@ export type AppShellProps = {
 };
 
 /** Page 22's regions: top bar 52, sidebar 240, content up to 960 wide with 40 of padding. */
+/**
+ * The window: the top bar and sidebar sit on the canvas as chrome, and the page is one inset panel beside them, the
+ * way desktop apps separate where you are from what you're looking at.
+ */
 export function AppShell({ topBar, sidebar, banner, children, className }: AppShellProps) {
   return (
     <div className={cn("flex h-dvh min-h-0 flex-col bg-canvas text-fg", className)}>
       {topBar}
       <div className="flex min-h-0 flex-1">
         {sidebar}
-        <main className="min-w-0 flex-1 overflow-y-auto">
+        <main className="mr-2 mb-2 min-w-0 flex-1 overflow-y-auto rounded-lg bg-surface shadow-1">
           <div className="mx-auto flex max-w-[1040px] flex-col gap-6 px-10 pt-7 pb-10">
             {banner}
             {children}

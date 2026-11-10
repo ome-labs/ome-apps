@@ -18,7 +18,7 @@ export function Sidebar({ header, children, footer, className }: SidebarProps) {
     <nav
       aria-label="Main"
       className={cn(
-        "flex w-60 shrink-0 flex-col gap-1 border-r border-line-subtle bg-surface px-3 py-4",
+        "flex w-60 shrink-0 flex-col gap-1 bg-canvas px-3 pt-2 pb-4 select-none",
         className,
       )}
     >

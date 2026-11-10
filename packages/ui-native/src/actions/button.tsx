@@ -41,7 +41,7 @@ const label = cva("type-label-m", {
       primary: "text-on-accent",
       secondary: "text-fg",
       ghost: "text-fg",
-      danger: "text-fg-inverse",
+      danger: "text-on-accent",
     },
     disabled: { true: "text-fg-disabled" },
   },
@@ -52,7 +52,7 @@ const iconTone = {
   primary: "on-accent",
   secondary: "fg",
   ghost: "fg",
-  danger: "fg-inverse",
+  danger: "on-accent",
 } as const;
 
 export type ButtonProps = Omit<PressableProps, "children" | "className"> &

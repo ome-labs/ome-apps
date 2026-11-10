@@ -32,23 +32,21 @@ export function SidebarItem({
       "aria-current": active ? "page" : undefined,
       className: cn(
         "focus-ring flex h-control-md items-center gap-2.5 rounded-md px-2.5 type-label-m text-fg-muted",
-        "transition-[background-color,box-shadow,color] duration-fast ease-standard hover:bg-hover hover:text-fg",
-        // The current page is raised off the sidebar like a pressed-out tab, its icon in the accent, instead of a
-        // flat blue fill competing with the primary button.
-        active && "bg-raised text-fg shadow-control hover:bg-raised hover:text-fg",
+        "transition-[background-color,color] duration-fast ease-standard hover:bg-hover hover:text-fg",
+        // The current page takes a quiet tint of the brand, with its icon and label in the accent, so it reads as
+        // where you are without competing with the page's primary button.
+        active && "bg-accent-subtle text-accent-fg hover:bg-accent-subtle hover:text-accent-fg",
         className,
       ),
       children: (
         <>
-          <Icon name={icon} size={16} className={active ? "text-accent-fg" : undefined} />
+          <Icon name={icon} size={16} className={active ? "text-accent-fg" : "text-fg-subtle"} />
           <span className="flex-1 truncate">{label}</span>
           {count ? (
             <span
               className={cn(
                 "rounded-full px-1.5 type-label-s",
-                active
-                  ? "bg-accent text-on-accent shadow-accent"
-                  : "bg-sunken text-fg-muted shadow-field",
+                active ? "bg-accent text-on-accent" : "bg-hover text-fg-muted",
               )}
             >
               {count}

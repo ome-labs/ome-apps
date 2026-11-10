@@ -20,17 +20,17 @@ const button = cva(
     variants: {
       variant: {
         primary: [
-          "bg-accent bg-linear-to-b from-brand-white/12 to-brand-white/0 text-on-accent shadow-accent",
-          "hover:bg-[color-mix(in_oklab,var(--color-accent),white_10%)] active:bg-accent-pressed active:shadow-pressed",
+          "bg-accent bg-linear-to-b from-brand-white/6 to-brand-white/0 text-on-accent shadow-accent",
+          "hover:bg-[color-mix(in_oklab,var(--color-accent),white_6%)] active:bg-accent-pressed active:shadow-pressed",
         ],
         secondary: [
-          "bg-surface bg-linear-to-b from-brand-white/0 to-canvas/60 text-fg shadow-control",
-          "hover:bg-hover active:bg-sunken active:shadow-pressed active:ring-1 active:ring-line",
+          "bg-surface text-fg shadow-control",
+          "hover:bg-hover active:bg-sunken active:shadow-pressed",
         ],
         ghost: "text-fg hover:bg-hover active:bg-selected data-[disabled]:bg-transparent",
         danger: [
-          "bg-danger-solid bg-linear-to-b from-brand-white/12 to-brand-white/0 text-fg-inverse shadow-accent",
-          "hover:bg-[color-mix(in_oklab,var(--color-danger-solid),white_10%)]",
+          "bg-danger-solid bg-linear-to-b from-brand-white/6 to-brand-white/0 text-on-accent shadow-accent",
+          "hover:bg-[color-mix(in_oklab,var(--color-danger-solid),white_6%)]",
           "active:bg-[color-mix(in_oklab,var(--color-danger-solid),black_10%)] active:shadow-pressed",
         ],
       },
