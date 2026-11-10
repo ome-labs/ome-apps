@@ -12,7 +12,7 @@ import { AvatarButton } from "../avatars/avatar-button.tsx";
 import { AvatarPicker } from "../avatars/avatar-picker.tsx";
 import { VAULT_ART } from "../avatars/avatars.ts";
 import { callOme } from "../data/ome.ts";
-import { FlowPage } from "./flow-page.tsx";
+import { Page } from "../shell/page.tsx";
 import { rememberPicture, rememberPlanned } from "./planned.ts";
 import { LIMITS } from "./thresholds.ts";
 
@@ -92,7 +92,7 @@ export function CreateForm() {
   );
 
   return (
-    <FlowPage
+    <Page
       title="Create a vault"
       lead="You host the lobby. Co-founders join with your invite, then everyone founds the vault together."
     >
@@ -191,7 +191,7 @@ export function CreateForm() {
           </div>
         </aside>
       </div>
-    </FlowPage>
+    </Page>
   );
 }
 

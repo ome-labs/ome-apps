@@ -18,7 +18,7 @@ import { useAvatarsChanged } from "../avatars/avatars.ts";
 import { callOme } from "../data/ome.ts";
 import { unwrap } from "../data/session.ts";
 import { useNow } from "../shell/now.ts";
-import { FlowPage } from "./flow-page.tsx";
+import { Page } from "../shell/page.tsx";
 import { takePicture } from "./planned.ts";
 
 const LABELS: Record<FoundingStepId, string> = {
@@ -111,7 +111,7 @@ export function FoundingPanel({
   }, [changed, done, lobby.lobby, vault]);
 
   return (
-    <FlowPage
+    <Page
       title={done ? `${lobby.name} is ready` : `Founding ${lobby.name}`}
       lead={
         done
@@ -193,6 +193,6 @@ export function FoundingPanel({
           )}
         </aside>
       </div>
-    </FlowPage>
+    </Page>
   );
 }

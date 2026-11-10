@@ -15,7 +15,7 @@ import {
 } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
-import { FlowPage } from "./flow-page.tsx";
+import { Page } from "../shell/page.tsx";
 import { plannedFor } from "./planned.ts";
 import { blocker, networkName } from "./thresholds.ts";
 
@@ -27,7 +27,7 @@ export function LobbyPanel({ lobby }: { lobby: LobbyView }) {
   const planned = isHost ? plannedFor(lobby.lobby) : undefined;
 
   return (
-    <FlowPage
+    <Page
       title={lobby.name}
       lead={
         isHost
@@ -48,7 +48,7 @@ export function LobbyPanel({ lobby }: { lobby: LobbyView }) {
           <WaitingCard lobby={lobby} hostName={host?.name} />
         )}
       </div>
-    </FlowPage>
+    </Page>
   );
 }
 

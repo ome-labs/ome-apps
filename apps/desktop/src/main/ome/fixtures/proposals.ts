@@ -39,11 +39,43 @@ function served(name: keyof typeof AGE, now: number): ProposalView {
   };
 }
 
+/** Two that are done, so the list has a history: one paid out yesterday, one left to expire last week. */
+function finished(now: number): ProposalView[] {
+  const paid = served("auditDeposit", now - 26 * HOUR);
+  const lapsed = served("designWork", now - 7 * 24 * HOUR);
+  return [
+    {
+      ...paid,
+      id: sampleHex("proposal.hosting"),
+      intent: {
+        ...story.auditDeposit.intent,
+        amount: "12000000000000000000",
+        memo: "Hosting, October",
+      },
+      calls: transferCalls(story.auditDeposit.intent.to, "12000000000000000000"),
+      status: "executed",
+      approvals: [
+        { slot: 0, index: 1, name: "Alice", valid: true, reason: null },
+        { slot: 2, index: 3, name: "Carol", valid: true, reason: null },
+      ],
+      execution: { txHash: sampleHex("proposal.hosting.tx"), at: now - 25 * HOUR },
+    },
+    {
+      ...lapsed,
+      id: sampleHex("proposal.stickers"),
+      intent: { ...story.designWork.intent, amount: "5000000000000000000", memo: "Stickers" },
+      calls: transferCalls(story.designWork.intent.to, "5000000000000000000"),
+      status: "expired",
+    },
+  ];
+}
+
 /** Newest first, as `proposals.list` returns them. */
 export function proposals(now: number): ProposalView[] {
-  return (Object.keys(AGE) as (keyof typeof AGE)[])
-    .map((name) => served(name, now))
-    .toSorted((a, b) => b.expiresAt - a.expiresAt);
+  return [
+    ...(Object.keys(AGE) as (keyof typeof AGE)[]).map((name) => served(name, now)),
+    ...finished(now),
+  ].toSorted((a, b) => b.expiresAt - a.expiresAt);
 }
 
 /** When a proposal was made: its expiry minus the default 24-hour window. */

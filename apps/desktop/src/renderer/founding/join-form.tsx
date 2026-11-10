@@ -7,7 +7,7 @@ import { Scene } from "@ome-labs/brand/web";
 import { Banner, Button, MemberAvatar, Tag, TextField, ThresholdChip } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
-import { FlowPage } from "./flow-page.tsx";
+import { Page } from "../shell/page.tsx";
 import { networkName } from "./thresholds.ts";
 
 const message = (failure: unknown) =>
@@ -65,7 +65,7 @@ export function JoinForm() {
   const cancel = useCallback(() => void navigate({ to: "/home" }), [navigate]);
 
   return (
-    <FlowPage
+    <Page
       title="Join a vault"
       lead="Paste the invite a co-founder sent you. You'll see the vault before you join."
     >
@@ -131,7 +131,7 @@ export function JoinForm() {
           </p>
         </aside>
       </div>
-    </FlowPage>
+    </Page>
   );
 }
 
