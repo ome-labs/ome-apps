@@ -89,9 +89,13 @@ export function StepHeading({
     <Reveal>
       <header className="flex flex-col gap-3">
         {position ? <span className="type-overline text-fg-subtle">{position}</span> : null}
-        {/* The welcome is a title page; the steps after it are forms and take a smaller heading. */}
+        {/* The welcome is a title page; the steps after it are forms and take a smaller heading and lead. */}
         <h1 className={position ? "type-display-l text-fg" : "type-display-xl text-fg"}>{title}</h1>
-        {children ? <p className="type-body-l text-fg-muted">{children}</p> : null}
+        {children ? (
+          <p className={position ? "type-body-m text-fg-muted" : "type-body-l text-fg-muted"}>
+            {children}
+          </p>
+        ) : null}
       </header>
     </Reveal>
   );

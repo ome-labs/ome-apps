@@ -51,8 +51,7 @@ export function TouchIdStep({ position, passphrase }: { position: string; passph
   return (
     <>
       <StepHeading step={position} title="Unlock with Touch ID">
-        Approve and reject with your fingerprint instead of typing your passphrase. The key it
-        unlocks stays in this Mac's keychain, and your passphrase keeps working.
+        Approve with your fingerprint instead of your passphrase.
       </StepHeading>
 
       {error ? (
