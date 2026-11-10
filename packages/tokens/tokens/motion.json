@@ -1,0 +1,63 @@
+{
+  "duration": {
+    "instant": {
+      "$type": "duration",
+      "$value": {
+        "value": 0,
+        "unit": "ms"
+      },
+      "$description": "Reduced motion, focus rings"
+    },
+    "fast": {
+      "$type": "duration",
+      "$value": {
+        "value": 120,
+        "unit": "ms"
+      },
+      "$description": "Hover, press, toggles, pills (standard easing)"
+    },
+    "base": {
+      "$type": "duration",
+      "$value": {
+        "value": 200,
+        "unit": "ms"
+      },
+      "$description": "Menus, tooltips, tabs, toasts (standard easing)"
+    },
+    "slow": {
+      "$type": "duration",
+      "$value": {
+        "value": 320,
+        "unit": "ms"
+      },
+      "$description": "Sheets, dialogs, drawers (emphasized easing)"
+    },
+    "scene": {
+      "$type": "duration",
+      "$value": {
+        "value": 600,
+        "unit": "ms"
+      },
+      "$description": "Dither dissolve between illustration states: steps(6)"
+    }
+  },
+  "easing": {
+    "standard": {
+      "$type": "cubicBezier",
+      "$value": [0.2, 0, 0, 1],
+      "$description": "Hover, press, toggles, pills, menus, tooltips, tabs, toasts: quick to start, slow to stop."
+    },
+    "emphasized": {
+      "$type": "cubicBezier",
+      "$value": [0.16, 1, 0.3, 1],
+      "$description": "Sheets, dialogs, drawers."
+    }
+  },
+  "steps": {
+    "scene": {
+      "$type": "number",
+      "$value": 6,
+      "$description": "The dither dissolve switches pixels in six ordered-dither frames (CSS steps(6))."
+    }
+  }
+}

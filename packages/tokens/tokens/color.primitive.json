@@ -1,0 +1,232 @@
+{
+  "color": {
+    "lake": {
+      "50": {
+        "$type": "color",
+        "$value": "#F2F5FD"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#E3EAFB"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#C4D3F6"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#9DB4F2"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#7F9CF0"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#5B7FE0"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#3A5BD9"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#2C47B4"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#22378A"
+      },
+      "850": {
+        "$type": "color",
+        "$value": "#1A2A66"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#15224A"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#0F1F3D"
+      }
+    },
+    "ink": {
+      "1000": {
+        "$type": "color",
+        "$value": "#050505"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#0A0A0A"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#111111"
+      },
+      "850": {
+        "$type": "color",
+        "$value": "#141414"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#1A1A1A"
+      },
+      "750": {
+        "$type": "color",
+        "$value": "#222222"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#2B2B2B"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#3A3A3A"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#525252"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#6B6B6B"
+      },
+      "350": {
+        "$type": "color",
+        "$value": "#8A8A8A"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#A3A3A3"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#B8B8B8"
+      },
+      "150": {
+        "$type": "color",
+        "$value": "#D4D4D4"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#E5E5E5"
+      },
+      "75": {
+        "$type": "color",
+        "$value": "#EBEBEB"
+      },
+      "50": {
+        "$type": "color",
+        "$value": "#F2F2F2"
+      },
+      "25": {
+        "$type": "color",
+        "$value": "#F7F7F7"
+      },
+      "10": {
+        "$type": "color",
+        "$value": "#EDEDED"
+      },
+      "0": {
+        "$type": "color",
+        "$value": "#FFFFFF"
+      }
+    },
+    "sun": {
+      "100": {
+        "$type": "color",
+        "$value": "#FCF6EC"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#FCEFD6"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#F5C98A"
+      }
+    },
+    "green": {
+      "100": {
+        "$type": "color",
+        "$value": "#E3F4EC"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#4CC38A"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#1E7A52"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#0F2E24"
+      }
+    },
+    "amber": {
+      "100": {
+        "$type": "color",
+        "$value": "#FDF1DC"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#E8B04B"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#9A5B00"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#33260C"
+      }
+    },
+    "red": {
+      "100": {
+        "$type": "color",
+        "$value": "#FCE7E7"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#F07167"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#B42F2F"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#3A1418"
+      }
+    },
+    "$description": "Raw colours (Figma collection Primitives). Never used directly by components.",
+    "core": {
+      "night": {
+        "$type": "color",
+        "$value": "{color.ink.900}",
+        "$description": "Text, dark surfaces, the mark"
+      },
+      "lake": {
+        "$type": "color",
+        "$value": "{color.lake.600}",
+        "$description": "Primary actions, links, the reflection"
+      },
+      "haze": {
+        "$type": "color",
+        "$value": "{color.lake.400}",
+        "$description": "Accents on dark, illustration light"
+      },
+      "paper": {
+        "$type": "color",
+        "$value": "{color.ink.25}",
+        "$description": "Light canvas"
+      },
+      "sun": {
+        "$type": "color",
+        "$value": "{color.sun.200}",
+        "$description": "Warm highlight, sparingly"
+      }
+    }
+  }
+}

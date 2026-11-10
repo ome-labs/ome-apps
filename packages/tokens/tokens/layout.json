@@ -1,0 +1,174 @@
+{
+  "layout": {
+    "app": {
+      "topBar": {
+        "$type": "dimension",
+        "$value": {
+          "value": 52,
+          "unit": "px"
+        }
+      },
+      "sidebar": {
+        "$type": "dimension",
+        "$value": {
+          "value": 240,
+          "unit": "px"
+        }
+      },
+      "contentMax": {
+        "$type": "dimension",
+        "$value": {
+          "value": 960,
+          "unit": "px"
+        }
+      },
+      "contentPadding": {
+        "$type": "dimension",
+        "$value": {
+          "value": 40,
+          "unit": "px"
+        }
+      },
+      "dialog": {
+        "$type": "dimension",
+        "$value": {
+          "value": 480,
+          "unit": "px"
+        }
+      },
+      "dialogWide": {
+        "$type": "dimension",
+        "$value": {
+          "value": 640,
+          "unit": "px"
+        }
+      },
+      "sheet": {
+        "$type": "dimension",
+        "$value": {
+          "value": 440,
+          "unit": "px"
+        }
+      },
+      "windowMinWidth": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1080,
+          "unit": "px"
+        }
+      },
+      "windowMinHeight": {
+        "$type": "dimension",
+        "$value": {
+          "value": 720,
+          "unit": "px"
+        }
+      },
+      "windowWidth": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1280,
+          "unit": "px"
+        }
+      },
+      "windowHeight": {
+        "$type": "dimension",
+        "$value": {
+          "value": 800,
+          "unit": "px"
+        }
+      }
+    },
+    "breakpoint": {
+      "mobile": {
+        "$type": "dimension",
+        "$value": {
+          "value": 390,
+          "unit": "px"
+        }
+      },
+      "tablet": {
+        "$type": "dimension",
+        "$value": {
+          "value": 834,
+          "unit": "px"
+        }
+      },
+      "desktop": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1440,
+          "unit": "px"
+        }
+      },
+      "wide": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1920,
+          "unit": "px"
+        }
+      }
+    },
+    "grid": {
+      "mobile": {
+        "columns": {
+          "$type": "number",
+          "$value": 4
+        },
+        "margin": {
+          "$type": "dimension",
+          "$value": {
+            "value": 20,
+            "unit": "px"
+          }
+        }
+      },
+      "tablet": {
+        "columns": {
+          "$type": "number",
+          "$value": 8
+        },
+        "margin": {
+          "$type": "dimension",
+          "$value": {
+            "value": 40,
+            "unit": "px"
+          }
+        }
+      },
+      "desktop": {
+        "columns": {
+          "$type": "number",
+          "$value": 12
+        },
+        "margin": {
+          "$type": "dimension",
+          "$value": {
+            "value": 80,
+            "unit": "px"
+          }
+        },
+        "gutter": {
+          "$type": "dimension",
+          "$value": {
+            "value": 24,
+            "unit": "px"
+          }
+        }
+      },
+      "wide": {
+        "columns": {
+          "$type": "number",
+          "$value": 12
+        },
+        "max": {
+          "$type": "dimension",
+          "$value": {
+            "value": 1280,
+            "unit": "px"
+          }
+        }
+      }
+    }
+  }
+}

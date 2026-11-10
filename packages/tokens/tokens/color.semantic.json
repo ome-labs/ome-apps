@@ -1,0 +1,409 @@
+{
+  "$description": "Semantic colours (Figma collections Theme \u00b7 Light and Theme \u00b7 Dark). $value is light; the dark value and the Tailwind utility name live in $extensions.network.ome. CSS code name: --ome-<group>-<role>.",
+  "semantic": {
+    "bg": {
+      "canvas": {
+        "$type": "color",
+        "$value": "{color.ink.25}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.950}",
+            "utility": "canvas"
+          }
+        }
+      },
+      "surface": {
+        "$type": "color",
+        "$value": "{color.ink.0}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.850}",
+            "utility": "surface"
+          }
+        }
+      },
+      "raised": {
+        "$type": "color",
+        "$value": "{color.ink.0}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.800}",
+            "utility": "raised"
+          }
+        }
+      },
+      "sunken": {
+        "$type": "color",
+        "$value": "{color.ink.50}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.1000}",
+            "utility": "sunken"
+          }
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": "{color.lake.50}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.750}",
+            "utility": "hover"
+          }
+        }
+      },
+      "selected": {
+        "$type": "color",
+        "$value": "{color.lake.100}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.700}",
+            "utility": "selected"
+          }
+        }
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{color.ink.900}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.10}",
+            "utility": "inverse"
+          }
+        }
+      }
+    },
+    "border": {
+      "subtle": {
+        "$type": "color",
+        "$value": "{color.ink.75}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.750}",
+            "utility": "line-subtle"
+          }
+        }
+      },
+      "default": {
+        "$type": "color",
+        "$value": "{color.ink.100}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.700}",
+            "utility": "line"
+          }
+        }
+      },
+      "strong": {
+        "$type": "color",
+        "$value": "{color.ink.150}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.600}",
+            "utility": "line-strong"
+          }
+        }
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": "{color.ink.900}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.10}",
+            "utility": "fg"
+          }
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "{color.ink.500}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.200}",
+            "utility": "fg-muted"
+          }
+        }
+      },
+      "tertiary": {
+        "$type": "color",
+        "$value": "{color.ink.400}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.350}",
+            "utility": "fg-subtle"
+          }
+        }
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{color.ink.300}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.500}",
+            "utility": "fg-disabled"
+          }
+        }
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{color.ink.0}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.900}",
+            "utility": "fg-inverse"
+          }
+        }
+      }
+    },
+    "accent": {
+      "solid": {
+        "$type": "color",
+        "$value": "{color.lake.600}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.lake.600}",
+            "utility": "accent"
+          }
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": "{color.lake.700}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.lake.500}",
+            "utility": "accent-hover"
+          }
+        }
+      },
+      "pressed": {
+        "$type": "color",
+        "$value": "{color.lake.800}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.lake.700}",
+            "utility": "accent-pressed"
+          }
+        }
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": "{color.lake.100}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.lake.950}",
+            "utility": "accent-subtle"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": "{color.lake.700}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.lake.300}",
+            "utility": "accent-fg"
+          }
+        }
+      },
+      "on": {
+        "$type": "color",
+        "$value": "{color.ink.0}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.0}",
+            "utility": "on-accent"
+          }
+        }
+      }
+    },
+    "status": {
+      "success-text": {
+        "$type": "color",
+        "$value": "{color.green.700}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.green.400}",
+            "utility": "success"
+          }
+        }
+      },
+      "success-bg": {
+        "$type": "color",
+        "$value": "{color.green.100}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.green.900}",
+            "utility": "success-subtle"
+          }
+        }
+      },
+      "warning-text": {
+        "$type": "color",
+        "$value": "{color.amber.700}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.amber.400}",
+            "utility": "warning"
+          }
+        }
+      },
+      "warning-bg": {
+        "$type": "color",
+        "$value": "{color.amber.100}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.amber.900}",
+            "utility": "warning-subtle"
+          }
+        }
+      },
+      "danger-text": {
+        "$type": "color",
+        "$value": "{color.red.700}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.red.400}",
+            "utility": "danger"
+          }
+        }
+      },
+      "danger-bg": {
+        "$type": "color",
+        "$value": "{color.red.100}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.red.900}",
+            "utility": "danger-subtle"
+          }
+        }
+      },
+      "danger-solid": {
+        "$type": "color",
+        "$value": "{color.red.700}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.red.400}",
+            "utility": "danger-solid"
+          }
+        }
+      },
+      "info-text": {
+        "$type": "color",
+        "$value": "{color.lake.700}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.lake.300}",
+            "utility": "info"
+          }
+        }
+      },
+      "info-bg": {
+        "$type": "color",
+        "$value": "{color.lake.100}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.lake.950}",
+            "utility": "info-subtle"
+          }
+        }
+      },
+      "neutral-text": {
+        "$type": "color",
+        "$value": "{color.ink.500}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.200}",
+            "utility": "neutral"
+          }
+        }
+      },
+      "neutral-bg": {
+        "$type": "color",
+        "$value": "{color.ink.50}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.750}",
+            "utility": "neutral-subtle"
+          }
+        }
+      }
+    },
+    "focus": {
+      "ring": {
+        "$type": "color",
+        "$value": "{color.lake.500}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.lake.400}",
+            "utility": "focus"
+          }
+        }
+      }
+    },
+    "brand": {
+      "night": {
+        "$type": "color",
+        "$value": "{color.ink.900}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.900}",
+            "utility": "brand-night"
+          }
+        }
+      },
+      "lake": {
+        "$type": "color",
+        "$value": "{color.lake.600}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.lake.600}",
+            "utility": "brand-lake"
+          }
+        }
+      },
+      "haze": {
+        "$type": "color",
+        "$value": "{color.lake.400}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.lake.400}",
+            "utility": "brand-haze"
+          }
+        }
+      },
+      "paper": {
+        "$type": "color",
+        "$value": "{color.ink.25}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.25}",
+            "utility": "brand-paper"
+          }
+        }
+      },
+      "sun": {
+        "$type": "color",
+        "$value": "{color.sun.200}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.sun.200}",
+            "utility": "brand-sun"
+          }
+        }
+      },
+      "white": {
+        "$type": "color",
+        "$value": "{color.ink.0}",
+        "$extensions": {
+          "network.ome": {
+            "dark": "{color.ink.0}",
+            "utility": "brand-white"
+          }
+        }
+      }
+    }
+  }
+}

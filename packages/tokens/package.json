@@ -4,17 +4,31 @@
   "private": true,
   "description": "Design tokens for Ome: one DTCG source, generated into Tailwind 4 / Uniwind CSS and a typed TypeScript object",
   "license": "Apache-2.0",
+  "files": [
+    "dist",
+    "tokens"
+  ],
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/tokens.d.ts",
+      "default": "./dist/tokens.js"
+    },
+    "./theme.web.css": "./dist/theme.web.css",
+    "./theme.native.css": "./dist/theme.native.css",
+    "./tokens/*": "./tokens/*"
   },
   "scripts": {
+    "build": "node scripts/build.ts",
     "lint": "oxlint --deny-warnings .",
+    "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
     "klarity": "catalog:",
     "oxlint": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
