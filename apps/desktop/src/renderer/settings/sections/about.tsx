@@ -28,7 +28,7 @@ export function About({ info, keeper }: { info: DaemonInfo | undefined; keeper: 
       {info ? (
         <Row
           title="Daemon"
-          description={`Running since ${new Date(info.startedAt * 1000).toLocaleString()}, process ${info.pid}. API version ${info.apiVersion}.`}
+          description={`Running since ${new Date(info.startedAt * 1000).toLocaleString()}`}
         >
           <Value mono>{info.version}</Value>
         </Row>
@@ -36,17 +36,11 @@ export function About({ info, keeper }: { info: DaemonInfo | undefined; keeper: 
       <Row title="Keeper">
         <Value mono>{keeper.version ?? "Not running"}</Value>
       </Row>
-      <Row
-        title="Logs"
-        description="What the daemon and the keeper wrote, for when something goes wrong."
-      >
+      <Row title="Logs" description="For when something goes wrong.">
         <Button onClick={daemonLog}>Daemon log</Button>
         <Button onClick={keeperLog}>Keeper log</Button>
       </Row>
-      <Row
-        title="Restart the daemon"
-        description="Stops and starts it, with its keeper. Takes a few seconds."
-      >
+      <Row title="Restart the daemon" description="Takes a few seconds.">
         <Button icon="refresh" onClick={restart}>
           Restart
         </Button>

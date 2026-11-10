@@ -54,7 +54,7 @@ export function Navigation({
               key={page.path}
               icon={page.icon}
               label={page.title}
-              active={pathname === page.path}
+              active={pathname === page.path || pathname.startsWith(`${page.path}/`)}
               render={<Link to={page.path} />}
             />
           ))}

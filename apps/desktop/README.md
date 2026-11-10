@@ -6,10 +6,10 @@ with Electron, React, TanStack Router and Query, and Tailwind.
 The first run (welcome, profile, passphrase, Touch ID), the profile list and Settings are built and talk to a real
 daemon. The other pages are empty frames that become screens one at a time.
 
-Settings (⌘,) covers appearance, the profile, the signer (unlock window, Touch ID), the node (a new one must be on the
-profile's network; the daemon restarts to use it), relays, proving, and under Advanced a keeper on the member's own
-server, the fee payer and `aztec-wallet`. Proving and relays are read as the daemon starts, so the page offers a
-restart after changing them.
+Settings (⌘,) has a page per section: profile, signer (unlock window, Touch ID), network and node (a new node must be
+on the profile's network; the daemon restarts to use it), relays (read as the daemon starts, so the page offers a
+restart), keeper (local, or one on the member's own server), fees, `aztec-wallet`, and about. The theme is a menu in
+the top bar. Every profile proves on its own device, on every network.
 
 ## Run it
 

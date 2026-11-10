@@ -8,7 +8,6 @@ import { z } from "zod";
 import { callOme } from "../data/ome.ts";
 import { StepHeading } from "./layout.tsx";
 import { Reveal } from "./motion.tsx";
-import { isLocal } from "./networks.ts";
 import type { ProfileDraft } from "./profile-step.tsx";
 
 /** The daemon's only rule is the minimum length (`profile.create`). */
@@ -73,8 +72,8 @@ export function PassphraseStep({
             nodeUrl: draft.nodeUrl,
             passphrase: values.passphrase,
           });
-          // A local network has no prover worth running; Testnet proofs are real.
-          await callOme("config.set", { proverEnabled: !isLocal(draft.nodeUrl) });
+          // Ome proves on the member's device on every network, the local one included.
+          await callOme("config.set", { proverEnabled: true });
           setOpening(true);
           await onCreated(values.passphrase);
         } catch (failure) {

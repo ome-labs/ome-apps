@@ -102,17 +102,13 @@ export function Signer({ signer, settings }: { signer: SignerStatus; settings: S
   const open = !signer.locked && signer.unlockedUntil !== null && signer.unlockedUntil > now;
 
   return (
-    <Section
-      id="signer"
-      title="Signer"
-      description="Your signing key approves and rejects payments. It never leaves this computer."
-    >
+    <Section id="signer" title="Signer" description="Your signing key never leaves this computer.">
       <Row
         title={open ? "Unlocked" : "Locked"}
         description={
           open && signer.unlockedUntil !== null
             ? `Locks itself in ${remaining(signer.unlockedUntil, now)}.`
-            : "Unlock it to approve and reject without typing your passphrase each time."
+            : "Unlock to approve without typing your passphrase."
         }
       >
         {open ? (
@@ -125,10 +121,7 @@ export function Signer({ signer, settings }: { signer: SignerStatus; settings: S
           </Button>
         )}
       </Row>
-      <Row
-        title="Stay unlocked for at most"
-        description="The longest time you can pick when unlocking."
-      >
+      <Row title="Stay unlocked for at most" description="The longest choice when unlocking.">
         <Select
           aria-label="Longest unlock"
           options={options}
@@ -138,10 +131,7 @@ export function Signer({ signer, settings }: { signer: SignerStatus; settings: S
         />
       </Row>
       {touchId?.available ? (
-        <Row
-          title="Touch ID"
-          description="Unlock with your fingerprint. The key it opens stays in this Mac's keychain; your passphrase keeps working."
-        >
+        <Row title="Touch ID" description="Unlock with your fingerprint.">
           <Switch
             label={<span className="sr-only">Touch ID</span>}
             checked={touchId.enabled}
@@ -213,7 +203,7 @@ function TouchIdDialog({
   return (
     <Dialog
       title="Turn on Touch ID"
-      description="Enter your passphrase once. Ome derives the key it unseals and keeps it in the keychain, behind your fingerprint."
+      description="Enter your passphrase once to turn it on."
       open={open}
       onOpenChange={change}
     >

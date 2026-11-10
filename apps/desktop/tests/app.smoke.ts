@@ -116,17 +116,22 @@ test("changes settings", async () => {
   const page = await app.firstWindow();
   await expect(page.getByRole("button", { name: /Alice/ })).toBeVisible();
 
+  // ⌘, opens the first settings page.
   await page.keyboard.press(`${process.platform === "darwin" ? "Meta" : "Control"}+,`);
-  await expect(page.getByRole("heading", { name: "Settings", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Profile", exact: true })).toBeVisible();
 
-  // Proving is read as the daemon starts, so the page offers a restart.
-  await page.getByRole("switch", { name: "Prove on this device" }).click();
-  await expect(
-    page.getByText("Some changes take effect when Ome's daemon restarts."),
-  ).toBeVisible();
-
+  const settings = page.getByRole("navigation", { name: "Settings" });
+  await settings.getByRole("link", { name: "Signer" }).click();
   await page.getByRole("combobox", { name: "Longest unlock" }).click();
   await page.getByRole("option", { name: "4 hours", exact: true }).click();
   await expect(page.getByText("Unlocking now lasts up to 4 hours")).toBeVisible();
+
+  // Relays are read as the daemon starts, so adding one offers a restart.
+  await settings.getByRole("link", { name: "Relays" }).click();
+  await page
+    .getByLabel("Multiaddr")
+    .fill("/dns4/relay.example/udp/4001/quic-v1/p2p/12D3KooWEKh8XXYWo");
+  await page.getByRole("button", { name: "Add" }).click();
+  await expect(page.getByText(/take effect when Ome's daemon restarts/)).toBeVisible();
   await app.close();
 });

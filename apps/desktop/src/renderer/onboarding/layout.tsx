@@ -67,7 +67,7 @@ export function OnboardingLayout({
           </div>
           <div className="absolute right-6 bottom-5 flex items-center gap-3">
             {footer}
-            <ThemeSwitch side="top" />
+            <ThemeSwitch side="top" look="pill" />
           </div>
         </main>
       </div>

@@ -9,8 +9,17 @@ const CHOICES: { value: ThemePreference; label: string; icon: IconName }[] = [
   { value: "system", label: "Match the system", icon: "laptop" },
 ];
 
-/** One button showing the theme in use; its menu picks light, dark or the system's. The app remembers the choice. */
-export function ThemeSwitch({ side = "bottom" }: { side?: "top" | "bottom" }) {
+/**
+ * One button showing the theme in use; its menu picks light, dark or the system's. The app remembers the choice. `pill`
+ * sits among the first run's round pills; `toolbar` sits in the top bar.
+ */
+export function ThemeSwitch({
+  side = "bottom",
+  look = "toolbar",
+}: {
+  side?: "top" | "bottom";
+  look?: "pill" | "toolbar";
+}) {
   const { preference, resolved, setPreference } = useTheme();
 
   const items = useMemo(
@@ -33,9 +42,9 @@ export function ThemeSwitch({ side = "bottom" }: { side?: "top" | "bottom" }) {
         <IconButton
           icon={resolved === "dark" ? "moon" : "sun"}
           label="Theme"
-          variant="secondary"
+          variant={look === "pill" ? "secondary" : "ghost"}
           size="sm"
-          className="size-7 rounded-full shadow-1"
+          className={look === "pill" ? "size-7 rounded-full shadow-1" : undefined}
         />
       }
     />

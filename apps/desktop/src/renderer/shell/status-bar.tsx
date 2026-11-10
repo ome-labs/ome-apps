@@ -7,6 +7,7 @@ import { Menu, MemberAvatar, TopBar, type NodeState } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
 import { useNow } from "./now.ts";
+import { ThemeSwitch } from "./theme-switch.tsx";
 import { IS_MAC, WindowControls } from "./window-chrome.tsx";
 
 const LOCAL_CHAIN = 31_337;
@@ -66,21 +67,24 @@ export function StatusBar({ status, onUnlock }: { status: Status; onUnlock: () =
         onLock={lock}
         onUnlock={onUnlock}
         profile={
-          profile ? (
-            <Menu
-              align="end"
-              items={menu}
-              trigger={
-                <button
-                  type="button"
-                  className="flex items-center gap-2 rounded-md px-1.5 py-1 type-label-m text-fg"
-                >
-                  <MemberAvatar name={profile.name} index={1} size="sm" />
-                  {profile.name}
-                </button>
-              }
-            />
-          ) : null
+          <div className="flex items-center gap-1">
+            <ThemeSwitch />
+            {profile ? (
+              <Menu
+                align="end"
+                items={menu}
+                trigger={
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 rounded-md px-1.5 py-1 type-label-m text-fg"
+                  >
+                    <MemberAvatar name={profile.name} index={1} size="sm" />
+                    {profile.name}
+                  </button>
+                }
+              />
+            ) : null}
+          </div>
         }
       />
       <WindowControls />

@@ -49,11 +49,7 @@ export function Network({ node }: { node: NodeStatus }) {
       : "No blocks yet";
 
   return (
-    <Section
-      id="network"
-      title="Network & node"
-      description="A profile stays on one network. To use another, set up another profile."
-    >
+    <Section id="network" title="Network & node" description="A profile stays on one network.">
       <Row
         title="Network"
         description={node.reachable ? synced : (node.error ?? "The node doesn't answer.")}
@@ -63,7 +59,7 @@ export function Network({ node }: { node: NodeStatus }) {
       </Row>
       <Row
         title="Node"
-        description="Another node on the same network: your own, or another provider. The daemon restarts to use it."
+        description="Any node on the same network. The daemon restarts to use it."
         below={
           <form className="flex items-start gap-2" onSubmit={submit} noValidate>
             <TextField

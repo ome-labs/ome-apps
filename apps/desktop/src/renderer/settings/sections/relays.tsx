@@ -68,13 +68,10 @@ export function Relays({ relays }: { relays: string[] }) {
     <Section
       id="relays"
       title="Relays"
-      description="Members' keepers reach each other through relays when they can't connect directly. Relays see only encrypted messages."
+      description="How keepers reach each other when they can't connect directly. Relays see only encrypted messages."
     >
       {relays.length === 0 ? (
-        <Row
-          title="No relays"
-          description="Keepers connect directly. On a local network that's all they need."
-        />
+        <Row title="No relays" description="Keepers connect directly." />
       ) : (
         relays.map((relay) => <RelayRow key={relay} relay={relay} onRemove={remove} />)
       )}
