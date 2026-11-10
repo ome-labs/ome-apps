@@ -1085,11 +1085,11 @@ exports[`generated output > the web theme matches the snapshot 1`] = `
   --ease-*: initial;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
-  --duration-instant: 0ms;
-  --duration-fast: 120ms;
-  --duration-base: 200ms;
-  --duration-slow: 320ms;
-  --duration-scene: 600ms;
+  --transition-duration-instant: 0ms;
+  --transition-duration-fast: 120ms;
+  --transition-duration-base: 200ms;
+  --transition-duration-slow: 320ms;
+  --transition-duration-scene: 600ms;
   --breakpoint-*: initial;
   --breakpoint-tablet: 834px;
   --breakpoint-desktop: 1440px;

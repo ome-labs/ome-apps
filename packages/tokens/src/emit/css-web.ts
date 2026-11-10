@@ -97,7 +97,10 @@ export function webCss(theme: Theme): string {
     ...theme.easing.map(
       (easing) => `  --ease-${easing.name}: cubic-bezier(${easing.curve.join(", ")});`,
     ),
-    ...theme.duration.map((duration) => `  --duration-${duration.name}: ${duration.ms}ms;`),
+    // Tailwind's `duration-*` utility reads this namespace, so `duration-fast` is the kit's 120 ms.
+    ...theme.duration.map(
+      (duration) => `  --transition-duration-${duration.name}: ${duration.ms}ms;`,
+    ),
     "  --breakpoint-*: initial;",
     ...Object.entries(breakpoints)
       .filter(([name]) => name !== "mobile")
