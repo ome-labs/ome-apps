@@ -16,6 +16,7 @@ export {
   type TextInputProps,
 } from "./forms/text-field.tsx";
 
+export { Kbd, KbdCombo, type KbdComboProps, type KbdProps } from "./navigation/kbd.tsx";
 export { FilterChip, type FilterChipProps } from "./navigation/filter-chip.tsx";
 export { SidebarItem, type SidebarItemProps } from "./navigation/sidebar-item.tsx";
 export { Tabs, type TabsProps } from "./navigation/tabs.tsx";
@@ -47,12 +48,23 @@ export { QrCode, type QrCodeProps } from "./codes/qr-code.tsx";
 export { Banner, type BannerProps } from "./feedback/banner.tsx";
 export { Toaster, toast } from "./feedback/toaster.tsx";
 
+export {
+  CommandMenu,
+  type CommandGroup,
+  type CommandItem,
+  type CommandMenuProps,
+} from "./overlays/command-menu.tsx";
 export { Dialog, DialogClose, type DialogProps } from "./overlays/dialog.tsx";
 export { Menu, type MenuItem, type MenuProps } from "./overlays/menu.tsx";
 export { Popover, type PopoverProps } from "./overlays/popover.tsx";
 export { Sheet, type SheetProps } from "./overlays/sheet.tsx";
 export { Tooltip, TooltipProvider, type TooltipProps } from "./overlays/tooltip.tsx";
 export { TypeToConfirm, type TypeToConfirmProps } from "./overlays/type-to-confirm.tsx";
+export {
+  UnlockSheet,
+  type UnlockRequest,
+  type UnlockSheetProps,
+} from "./overlays/unlock-sheet.tsx";
 
 export { ActivityRow, type ActivityRowProps } from "./data/activity-row.tsx";
 export {

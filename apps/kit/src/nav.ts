@@ -91,7 +91,7 @@ export const nav = [
       {
         to: "/components/navigation",
         title: "Navigation",
-        description: "Sidebar items, tabs, filter chips",
+        description: "Sidebar items, tabs, filter chips, keys",
         icon: "sidebar",
       },
       {
@@ -145,7 +145,7 @@ export const nav = [
       {
         to: "/components/overlays",
         title: "Overlays",
-        description: "Dialog, sheet, menu, popover, tooltip",
+        description: "Dialog, unlock, command menu, menu, tooltip",
         icon: "more-horizontal",
       },
       {

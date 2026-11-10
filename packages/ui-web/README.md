@@ -30,24 +30,24 @@ Dark mode follows `data-theme` on `<html>` (set by `ThemeProvider`), or the syst
 
 Folders mirror the Figma pages:
 
-| Folder        | Components                                                                                                          |
-| ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `actions/`    | `Button` (primary, secondary, ghost, danger × sm, md, lg), `IconButton`                                             |
-| `forms/`      | `Field`, `TextField` / `TextInput` (sans or mono), `Select`, `Checkbox`, `RadioGroup`, `Switch`, `SegmentedControl` |
-| `navigation/` | `SidebarItem`, `Tabs`, `FilterChip`                                                                                 |
-| `status/`     | `StatusBadge` (proposal, service, step, connection), `Tag`                                                          |
-| `identity/`   | `MemberAvatar`, `TokenMonogram`                                                                                     |
-| `values/`     | `Address` (with the "alias, unverified" marker), `Hash`, `Amount`, `CopyButton`                                     |
-| `thresholds/` | `ThresholdChip`, `VoteProgress`, `HealthMeter`                                                                      |
-| `steps/`      | `StepRow`, `StepList`                                                                                               |
-| `review/`     | `CheckRow`, `ReviewPanel`                                                                                           |
-| `codes/`      | `CodeBox`, `QrCode`                                                                                                 |
-| `feedback/`   | `Banner` (alarm, warning, info, success), `Toaster` and `toast`                                                     |
-| `overlays/`   | `Dialog`, `Sheet`, `TypeToConfirm`, `Menu`, `Popover`, `Tooltip`                                                    |
-| `data/`       | `Table` parts, `ProposalRow` / `ProposalTable`, `ActivityRow`                                                       |
-| `surfaces/`   | `Card`, `CardHeader`, `DetailRow`, `EmptyState`, `Scene` (the dither dissolve)                                      |
-| `shell/`      | `AppShell`, `PageHeader`, `TopBar`, `Sidebar`, `SidebarGroup`, `VaultSwitcher`, `StatusChip`                        |
-| `styling/`    | `cn` (clsx + tailwind-merge), `ThemeProvider`, the tone → class map                                                 |
+| Folder        | Components                                                                                                            |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `actions/`    | `Button` (primary, secondary, ghost, danger × sm, md, lg), `IconButton`                                               |
+| `forms/`      | `Field`, `TextField` / `TextInput` (sans or mono), `Select`, `Checkbox`, `RadioGroup`, `Switch`, `SegmentedControl`   |
+| `navigation/` | `SidebarItem`, `Tabs`, `FilterChip`, `Kbd` / `KbdCombo` (keycaps)                                                     |
+| `status/`     | `StatusBadge` (proposal, service, step, connection), `Tag`                                                            |
+| `identity/`   | `MemberAvatar`, `TokenMonogram`                                                                                       |
+| `values/`     | `Address` (with the "alias, unverified" marker), `Hash`, `Amount`, `CopyButton`                                       |
+| `thresholds/` | `ThresholdChip`, `VoteProgress`, `HealthMeter`                                                                        |
+| `steps/`      | `StepRow`, `StepList`                                                                                                 |
+| `review/`     | `CheckRow`, `ReviewPanel`                                                                                             |
+| `codes/`      | `CodeBox`, `QrCode`                                                                                                   |
+| `feedback/`   | `Banner` (alarm, warning, info, success), `Toaster` and `toast`                                                       |
+| `overlays/`   | `Dialog`, `Sheet`, `TypeToConfirm`, `UnlockSheet`, `CommandMenu` (⌘K, bound by the app), `Menu`, `Popover`, `Tooltip` |
+| `data/`       | `Table` parts, `ProposalRow` / `ProposalTable`, `ActivityRow`                                                         |
+| `surfaces/`   | `Card`, `CardHeader`, `DetailRow`, `EmptyState`, `Scene` (the dither dissolve)                                        |
+| `shell/`      | `AppShell`, `PageHeader`, `TopBar`, `Sidebar`, `SidebarGroup`, `VaultSwitcher`, `StatusChip`                          |
+| `styling/`    | `cn` (clsx + tailwind-merge), `ThemeProvider`, the tone → class map                                                   |
 
 Components take data in `@ome-labs/api` and `@ome-labs/format` shapes (`StatusBadge` takes a `ProposalStatus`,
 `Amount` takes `{ amount, token }`, `HealthMeter` takes `readingHealth(…)`), so a screen can't show a status in the
@@ -69,6 +69,9 @@ proposals `3eb2`, `335c`, `868c`).
 
 - behaviour tests (`tests/controls.test.tsx`): keyboard activation, dialog focus and Escape, copy buttons,
   type-to-confirm, `Amount` never rounding, a failed review check disabling Approve;
+- the command menu and unlock sheet (`tests/command-and-unlock.test.tsx`): filtering on every word, arrow keys
+  wrapping and Enter running the active command, the passphrase submitted with the chosen duration, Unlock off
+  until a passphrase is typed, Touch ID, and durations above the ceiling left out;
 - an axe check over one representative render per component domain (`tests/axe.test.tsx`), including disabled and
   invalid controls, every proposal status, a failed review check and an open dialog, with colour contrast left to
   the tokens package, whose tests compute it (jsdom can't).
@@ -80,4 +83,5 @@ proposals `3eb2`, `335c`, `868c`).
   its registry. None keeps shadcn's default look.
 - Motion follows page 18: 120 ms for hover and press, 200 ms for menus and tooltips, 320 ms for dialogs and sheets,
   and `prefers-reduced-motion` turns transitions off (the tokens' stylesheet) and swaps scenes without the dissolve.
+  The command menu is the exception: it opens and closes instantly, because it is reached for from the keyboard.
 - Icons come from `@ome-labs/icons`, the logo, fonts and art from `@ome-labs/brand`.

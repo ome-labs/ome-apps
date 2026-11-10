@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import {
   Button,
+  CommandMenu,
   Dialog,
   DialogClose,
   IconButton,
@@ -13,7 +14,9 @@ import {
   TokenMonogram,
   Tooltip,
   TypeToConfirm,
+  UnlockSheet,
   toast,
+  type UnlockRequest,
 } from "@ome-labs/ui-web";
 
 import type { ExampleSet } from "../bench/examples-page.tsx";
@@ -51,6 +54,128 @@ export function Unlock() {
         />
       </div>
     </Dialog>
+  );
+}
+
+export function UnlockToSign() {
+  const [open, setOpen] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string>();
+
+  // Stands in for the daemon: a short wait, then "wrong" fails and anything else unlocks.
+  const unlock = async (request: UnlockRequest) => {
+    setPending(true);
+    setError(undefined);
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    setPending(false);
+
+    if (request.method === "passphrase" && request.passphrase === "wrong") {
+      setError("That passphrase doesn't unseal this profile.");
+      return;
+    }
+    setOpen(false);
+    toast.success(`Signer unlocked for ${request.ttlSecs / 60} minutes`);
+  };
+
+  return (
+    <>
+      <Button icon="unlock" onClick={() => setOpen(true)}>
+        Unlock
+      </Button>
+      <UnlockSheet
+        open={open}
+        onOpenChange={(next) => {
+          setOpen(next);
+          if (!next) setError(undefined);
+        }}
+        onUnlock={unlock}
+        touchId
+        pending={pending}
+        error={error}
+      />
+    </>
+  );
+}
+
+export function Commands() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button icon="command" onClick={() => setOpen(true)}>
+        Open command menu
+      </Button>
+      <CommandMenu
+        open={open}
+        onOpenChange={setOpen}
+        groups={[
+          {
+            title: "Go to",
+            items: [
+              {
+                id: "overview",
+                label: "Overview",
+                hint: treasury.name,
+                icon: "home",
+                onSelect: () => toast.info("Overview pressed"),
+              },
+              {
+                id: "proposals",
+                label: "Proposals",
+                hint: "2 waiting for you",
+                icon: "proposals",
+                onSelect: () => toast.info("Proposals pressed"),
+              },
+              {
+                id: "activity",
+                label: "Activity",
+                icon: "activity",
+                onSelect: () => toast.info("Activity pressed"),
+              },
+              {
+                id: "members",
+                label: "Members",
+                icon: "members",
+                onSelect: () => toast.info("Members pressed"),
+              },
+            ],
+          },
+          {
+            title: "Actions",
+            items: [
+              {
+                id: "transfer",
+                label: "New transfer",
+                icon: "send",
+                keywords: ["send", "pay"],
+                shortcut: ["⌘", "N"],
+                onSelect: () => toast.info("New transfer pressed"),
+              },
+              {
+                id: "add-token",
+                label: "Add token",
+                icon: "plus",
+                onSelect: () => toast.info("Add token pressed"),
+              },
+              {
+                id: "copy-address",
+                label: "Copy vault address",
+                hint: treasury.name,
+                icon: "copy",
+                onSelect: () => void navigator.clipboard.writeText(treasury.address),
+              },
+              {
+                id: "lock",
+                label: "Lock signer",
+                icon: "lock",
+                shortcut: ["⌘", "⇧", "L"],
+                onSelect: () => toast.info("Lock signer pressed"),
+              },
+            ],
+          },
+        ]}
+      />
+    </>
   );
 }
 
@@ -138,13 +263,26 @@ export function TooltipAndPopover() {
 export const overlays: ExampleSet = {
   title: "Overlays",
   description:
-    "Dialogs hold one decision, sheets hold a short form, and destructive changes ask for the vault's name. Escape closes all of them.",
+    "Dialogs hold one decision, sheets hold a short form, and destructive changes ask for the vault's name. The command menu reaches any page or action from the keyboard. Escape closes all of them.",
   examples: [
     {
       name: "Unlock",
       title: "Dialog",
-      description: "The unlock sheet, as a dialog.",
+      description: "One decision, with a field and a choice.",
       Component: Unlock,
+    },
+    {
+      name: "UnlockToSign",
+      title: "Unlock sheet",
+      description: "Type wrong to see the error. Unlock stays off until there is a passphrase.",
+      Component: UnlockToSign,
+    },
+    {
+      name: "Commands",
+      title: "Command menu",
+      description:
+        "Type to filter, arrows to move, Enter to run. The app binds ⌘K itself; this one opens from the button.",
+      Component: Commands,
     },
     {
       name: "RemoveMember",

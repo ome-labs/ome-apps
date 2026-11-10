@@ -16,6 +16,7 @@ import {
   CardHeader,
   Checkbox,
   CodeBox,
+  CommandMenu,
   DetailRow,
   EmptyState,
   Field,
@@ -23,6 +24,7 @@ import {
   Hash,
   HealthMeter,
   IconButton,
+  KbdCombo,
   MemberAvatar,
   ProposalTable,
   QrCode,
@@ -46,6 +48,7 @@ import {
   TooltipProvider,
   TopBar,
   TypeToConfirm,
+  UnlockSheet,
   VaultSwitcher,
   VoteProgress,
 } from "../src/index.ts";
@@ -102,6 +105,7 @@ const cases: [string, ReactElement][] = [
         ]}
       />
       <FilterChip label="Open" count={2} pressed onPressedChange={noop} />
+      <KbdCombo keys={["⌘", "K"]} />
     </>,
   ],
   [
@@ -216,6 +220,35 @@ const cases: [string, ReactElement][] = [
       phrase="Treasury"
       confirmLabel="Remove member"
       onConfirm={noop}
+    />,
+  ],
+  [
+    "an open command menu",
+    <CommandMenu
+      key="command-menu"
+      open
+      onOpenChange={noop}
+      groups={[
+        {
+          title: "Go to",
+          items: [{ id: "proposals", label: "Proposals", icon: "proposals", onSelect: noop }],
+        },
+        {
+          title: "Actions",
+          items: [{ id: "lock", label: "Lock signer", shortcut: ["⌘", "L"], onSelect: noop }],
+        },
+      ]}
+    />,
+  ],
+  [
+    "an open unlock sheet with an error",
+    <UnlockSheet
+      key="unlock-sheet"
+      open
+      onOpenChange={noop}
+      onUnlock={noop}
+      touchId
+      error="That passphrase doesn't unseal this profile."
     />,
   ],
 ];

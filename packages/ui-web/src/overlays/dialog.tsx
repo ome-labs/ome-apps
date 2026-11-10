@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement, ReactNode, RefObject } from "react";
 
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 
@@ -15,6 +15,8 @@ export type DialogProps = {
   /** Buttons, right-aligned at the bottom. */
   actions?: ReactNode | undefined;
   wide?: boolean | undefined;
+  /** What takes focus on open. By default the first focusable element, which is the close button. */
+  initialFocus?: RefObject<HTMLElement | null> | undefined;
   children?: ReactNode | undefined;
   className?: string | undefined;
 };
@@ -36,6 +38,7 @@ export function Dialog({
   onOpenChange,
   actions,
   wide,
+  initialFocus,
   children,
   className,
 }: DialogProps) {
@@ -45,6 +48,7 @@ export function Dialog({
       <BaseDialog.Portal>
         <BaseDialog.Backdrop className={overlayBackdrop} />
         <BaseDialog.Popup
+          {...(initialFocus ? { initialFocus } : {})}
           className={cn(
             "fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100dvh-4rem)] w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-[18px] overflow-y-auto",
             "rounded-xl bg-raised p-6 shadow-4 outline-none",

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { FilterChip, SidebarItem, Tabs } from "@ome-labs/ui-web";
+import { FilterChip, Kbd, KbdCombo, SidebarItem, Tabs } from "@ome-labs/ui-web";
 
 import type { ExampleSet } from "../bench/examples-page.tsx";
 
@@ -59,6 +59,22 @@ export function FilterChips() {
   );
 }
 
+export function Keys() {
+  return (
+    <div className="flex flex-col gap-3 type-body-s text-fg-muted">
+      <p className="flex items-center gap-2">
+        <KbdCombo keys={["⌘", "K"]} /> opens the command menu
+      </p>
+      <p className="flex items-center gap-2">
+        <KbdCombo keys={["⌘", "⇧", "L"]} /> locks the signer
+      </p>
+      <p className="flex items-center gap-2">
+        <Kbd>esc</Kbd> closes any overlay
+      </p>
+    </div>
+  );
+}
+
 export const navigation: ExampleSet = {
   title: "Navigation",
   description:
@@ -67,5 +83,12 @@ export const navigation: ExampleSet = {
     { name: "SidebarItems", title: "Sidebar items", Component: SidebarItems },
     { name: "ProposalTabs", title: "Tabs", Component: ProposalTabs },
     { name: "FilterChips", title: "Filter chips", Component: FilterChips },
+    {
+      name: "Keys",
+      title: "Keys",
+      description:
+        "One raised keycap per key; screen readers hear the modifier's name, not its glyph.",
+      Component: Keys,
+    },
   ],
 };
