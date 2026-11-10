@@ -4,4 +4,6 @@ export const grids = {
   illustrations: { width: 320, height: 200, scales: { "1x": 2, "2x": 4 } },
   textures: { width: 240, height: 150, scales: { "1x": 2, "2x": 4 } },
   objects: { width: 32, height: 32 },
+  scenes: { width: 320, height: 200, scales: { "1x": 2, "2x": 4 } },
+  avatars: { width: 64, height: 64 },
 } as const;

@@ -18,6 +18,8 @@ const listed = new Set<string>([
   ...manifest.illustrations.flatMap((item) => Object.values(item.files)),
   ...manifest.textures.flatMap((item) => Object.values(item.files)),
   ...manifest.objects.map((item) => item.file),
+  ...manifest.scenes.flatMap((item) => [item.files["1x"], item.files["2x"]]),
+  ...manifest.avatars.map((item) => item.file),
   ...manifest.logos.map((item) => item.file),
 ]);
 
@@ -28,7 +30,7 @@ describe("manifest", () => {
     expect(missing).toEqual([]);
   });
 
-  test.each(["illustrations", "textures", "objects", "logo"])(
+  test.each(["illustrations", "textures", "objects", "logo", "scenes", "avatars"])(
     "every file in assets/%s is listed",
     (folder) => {
       const unlisted = filesUnder(folder).filter((file) => !listed.has(file));
@@ -37,12 +39,22 @@ describe("manifest", () => {
     },
   );
 
-  test("the kit's counts: 67 illustrations, 73 objects, 12 textures", () => {
+  test("the kit's counts: 67 illustrations, 73 objects, 12 textures, 57 scenes, 30 + 30 avatars", () => {
     expect([
       manifest.illustrations.length,
       manifest.objects.length,
       manifest.textures.length,
-    ]).toEqual([67, 73, 12]);
+      manifest.scenes.length,
+      manifest.avatars.filter((item) => item.kind === "vault").length,
+      manifest.avatars.filter((item) => item.kind === "profile").length,
+    ]).toEqual([67, 73, 12, 57, 30, 30]);
+  });
+
+  test("scenes and avatars have alt text, and avatar ids are unique across both kinds", () => {
+    expect(manifest.scenes.filter((item) => item.alt.trim() === "")).toEqual([]);
+    expect(manifest.avatars.filter((item) => item.alt.trim() === "")).toEqual([]);
+    const ids = manifest.avatars.map((item) => item.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
   test("every illustration and object has alt text, and spot uses point at real illustrations", () => {

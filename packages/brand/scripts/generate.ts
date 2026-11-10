@@ -11,8 +11,10 @@ import { assetsDirectory, readCatalog } from "../src/catalog/catalog.ts";
 import { grids } from "../src/catalog/grid.ts";
 import {
   appIconVariants,
+  avatarFile,
   illustrationFile,
   objectFile,
+  sceneFile,
   textureFile,
 } from "../src/catalog/paths.ts";
 
@@ -116,6 +118,22 @@ const manifest = {
     height: grids.objects.height,
     file: objectFile(group, id),
   })),
+  scenes: catalog.scenes.map(({ id, title, alt }) => ({
+    id,
+    title,
+    alt,
+    ...scaled(grids.scenes),
+    files: { "1x": sceneFile(id, "1x"), "2x": sceneFile(id, "2x") },
+  })),
+  avatars: catalog.avatars.map(({ id, title, kind, alt }) => ({
+    id,
+    title,
+    kind,
+    alt,
+    width: grids.avatars.width,
+    height: grids.avatars.height,
+    file: avatarFile(kind, id),
+  })),
   logos: logos.map(({ file }) => ({
     id: file.replace(/\.svg$/, ""),
     alt: "Ome",
@@ -136,6 +154,10 @@ export type IllustrationId = (typeof manifest.illustrations)[number]["id"];
 export type TextureId = (typeof manifest.textures)[number]["id"];
 export type ObjectId = (typeof manifest.objects)[number]["id"];
 export type SpotId = (typeof manifest.spot)[number]["id"];
+export type SceneId = (typeof manifest.scenes)[number]["id"];
+export type AvatarId = (typeof manifest.avatars)[number]["id"];
+export type VaultAvatarId = Extract<(typeof manifest.avatars)[number], { kind: "vault" }>["id"];
+export type ProfileAvatarId = Extract<(typeof manifest.avatars)[number], { kind: "profile" }>["id"];
 `,
 );
 
@@ -153,6 +175,14 @@ ${manifest.textures.map((item) => `  "${item.id}": { "1x": ${url(item.files["1x"
 
 export const objectUrls = {
 ${manifest.objects.map((item) => `  "${item.id}": ${url(item.file)},`).join("\n")}
+} as const;
+
+export const sceneUrls = {
+${manifest.scenes.map((item) => `  "${item.id}": { "1x": ${url(item.files["1x"])}, "2x": ${url(item.files["2x"])} },`).join("\n")}
+} as const;
+
+export const avatarUrls = {
+${manifest.avatars.map((item) => `  "${item.id}": ${url(item.file)},`).join("\n")}
 } as const;
 `,
 );
@@ -177,9 +207,17 @@ ${manifest.textures.map((item) => `  "${item.id}": ${asset(item.files["1x"])},`)
 export const objectXml = {
 ${manifest.objects.map((item) => `  "${item.id}": ${JSON.stringify(readFileSync(join(assetsDirectory, item.file), "utf8").trim())},`).join("\n")}
 } as const;
+
+export const sceneSources = {
+${manifest.scenes.map((item) => `  "${item.id}": ${asset(item.files["1x"])},`).join("\n")}
+} as const;
+
+export const avatarXml = {
+${manifest.avatars.map((item) => `  "${item.id}": ${JSON.stringify(readFileSync(join(assetsDirectory, item.file), "utf8").trim())},`).join("\n")}
+} as const;
 `,
 );
 
 console.log(
-  `brand: ${logos.length} logo components per platform, manifest of ${manifest.illustrations.length + manifest.textures.length + manifest.objects.length} assets → src/generated/`,
+  `brand: ${logos.length} logo components per platform, manifest of ${manifest.illustrations.length + manifest.textures.length + manifest.objects.length + manifest.scenes.length + manifest.avatars.length} assets → src/generated/`,
 );

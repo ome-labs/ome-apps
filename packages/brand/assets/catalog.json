@@ -1010,5 +1010,654 @@
       "group": "craft",
       "alt": "Raised hand"
     }
+  ],
+  "scenes": [
+    {
+      "id": "no-vaults",
+      "title": "No vaults yet",
+      "alt": "An empty dock with an unlit lantern, a coiled rope and a moored canoe; the storehouse stands far off across the morning water."
+    },
+    {
+      "id": "profiles",
+      "title": "Choose a profile",
+      "alt": "Three small docks side by side along one shore at evening, each with its own lit lantern and moored canoe."
+    },
+    {
+      "id": "keeper-server",
+      "title": "Run your keeper on a server",
+      "alt": "A tall tiered lantern tower on its own island sends one beam across the night lake to a member's canoe."
+    },
+    {
+      "id": "create-vault",
+      "title": "Create a vault",
+      "alt": "On its island at morning, builders lay the first course of the storehouse beside a pile of cut stone, a supply canoe moored below."
+    },
+    {
+      "id": "invite",
+      "title": "Share an invite",
+      "alt": "A member in a canoe sets three paper boats on the water, each heading toward a different shore."
+    },
+    {
+      "id": "join-request",
+      "title": "Ask to join",
+      "alt": "At dusk a lone canoe sends a paper boat toward canoes gathered at the lit storehouse."
+    },
+    {
+      "id": "lobby",
+      "title": "Waiting for co-founders",
+      "alt": "Canoes gather around the storehouse island at dusk: two moored, a third arriving with its lantern lit, an hourglass on the steps."
+    },
+    {
+      "id": "wrong-network",
+      "title": "Invite for another network",
+      "alt": "A canoe waits where the lake meets pale, misty water of another colour; its paper boat is stopped at a line of stakes."
+    },
+    {
+      "id": "key-generation",
+      "title": "Generating the shared key",
+      "alt": "Three lantern towers around the night lake send beams that meet in one orb above the storehouse."
+    },
+    {
+      "id": "deploy",
+      "title": "Deploying the vault",
+      "alt": "At dawn the storehouse stands in scaffolding as its roof goes on, the orb of light settling onto it."
+    },
+    {
+      "id": "founding-failed",
+      "title": "Founding stopped",
+      "alt": "Rain falls on the half-built storehouse under a tarp; canoes shelter at its steps. A pause, not a ruin."
+    },
+    {
+      "id": "vault-founded",
+      "title": "Vault founded",
+      "alt": "A clear sunrise lights the finished storehouse; three canoes with lanterns wait at its steps and birds pass overhead."
+    },
+    {
+      "id": "balances",
+      "title": "Balances",
+      "alt": "Inside the storehouse, shelves hold jars, baskets and a chest, with the flowering gardens through the door."
+    },
+    {
+      "id": "no-tokens",
+      "title": "No tokens yet",
+      "alt": "Inside the storehouse the shelves stand empty; through the open door, mist over a bare garden plot."
+    },
+    {
+      "id": "receive",
+      "title": "Receive",
+      "alt": "Four paper boats arrive one behind another at the storehouse's steps on a bright day."
+    },
+    {
+      "id": "payment-received",
+      "title": "Payment received",
+      "alt": "At dawn a canoe heavy with goods glides in to the storehouse's steps, a basket set out to receive it."
+    },
+    {
+      "id": "new-proposal",
+      "title": "Make a proposal",
+      "alt": "On the dock a quill rests on an unrolled scroll beside a freshly folded paper boat, ready for the water."
+    },
+    {
+      "id": "review",
+      "title": "Reviewing a proposal",
+      "alt": "A heron leans over a paper boat on the dock, studying it, with a pale and a dark stone set beside."
+    },
+    {
+      "id": "collecting",
+      "title": "Waiting for approvals",
+      "alt": "At dusk, a stone voting box holds one of two stones between a lit lantern and a dark one."
+    },
+    {
+      "id": "ready",
+      "title": "Enough approvals",
+      "alt": "At dusk the stone voting box holds both stones; the lanterns on either side are lit, their light on the water."
+    },
+    {
+      "id": "proving",
+      "title": "Preparing the transaction",
+      "alt": "In the mist two lanterns pour light into a glowing orb above the water while a canoe waits; an hourglass stands on the ledge."
+    },
+    {
+      "id": "sending",
+      "title": "Sending",
+      "alt": "A canoe with its lantern lit cuts fast across the day lake, a long wake streaming behind it."
+    },
+    {
+      "id": "executed",
+      "title": "Done",
+      "alt": "Under a clear morning sun the canoe has reached a far chinampa, its paper boat delivered on the bank."
+    },
+    {
+      "id": "blocked",
+      "title": "Can't proceed",
+      "alt": "At dusk a canoe has stopped where the causeway is broken, dark stones heaped at the gap."
+    },
+    {
+      "id": "expired",
+      "title": "Expired",
+      "alt": "At sunset a paper boat lies stranded in the reeds, an emptied hourglass on the post above it."
+    },
+    {
+      "id": "cancelled",
+      "title": "Cancelled",
+      "alt": "A faded paper boat drifts in the mist past an unlit lantern."
+    },
+    {
+      "id": "stale",
+      "title": "Out of date",
+      "alt": "In the mist an empty canoe is tied to an unlit post, an old map left curling on the dock."
+    },
+    {
+      "id": "no-proposals",
+      "title": "Nothing waiting",
+      "alt": "Calm water on a clear day, birds over the lake, the storehouse at rest on its island."
+    },
+    {
+      "id": "no-activity",
+      "title": "No activity yet",
+      "alt": "Still morning water with large lily pads in the foreground and one quiet chinampa beyond."
+    },
+    {
+      "id": "counterparties",
+      "title": "Counterparties",
+      "alt": "Small canoes spread across the day lake from the storehouse, each on its own dotted route."
+    },
+    {
+      "id": "member-joining",
+      "title": "A member joining",
+      "alt": "Two canoes rest at the storehouse's steps as a third approaches across the day lake."
+    },
+    {
+      "id": "member-leaving",
+      "title": "A member leaving",
+      "alt": "At dusk two canoes stay at the storehouse's steps while a third paddles away."
+    },
+    {
+      "id": "reshare",
+      "title": "Resharing",
+      "alt": "Three canoes with lanterns float in a ring at night, light passing from one lantern to the next."
+    },
+    {
+      "id": "share-plan",
+      "title": "Sharing the membership plan",
+      "alt": "Paper boats fan out from one canoe across the day lake, each toward a different member."
+    },
+    {
+      "id": "new-committee",
+      "title": "A new set of keepers",
+      "alt": "At sunrise new lantern posts burn in a ring around the storehouse, the old ones dark behind them."
+    },
+    {
+      "id": "handshake",
+      "title": "Two members connecting",
+      "alt": "Two canoes meet bow to bow at dusk, their lanterns held close together."
+    },
+    {
+      "id": "health-good",
+      "title": "Vault health good",
+      "alt": "On a clear day three lit lanterns stand around the storehouse."
+    },
+    {
+      "id": "health-low",
+      "title": "Vault health low",
+      "alt": "At dusk three lanterns stand around the storehouse; two are lit, one dark."
+    },
+    {
+      "id": "health-unreadable",
+      "title": "Can't read the vault",
+      "alt": "In night fog one lantern still burns by the storehouse; the other two are dark."
+    },
+    {
+      "id": "keeper",
+      "title": "Your keeper",
+      "alt": "One tall lantern burns on its post at the water's edge at night."
+    },
+    {
+      "id": "relay",
+      "title": "Relays",
+      "alt": "At dusk a causeway links two chinampas; the lanterns at each end trade one steady beam."
+    },
+    {
+      "id": "peers",
+      "title": "Peers",
+      "alt": "Five lanterns across the night lake, joined by dotted beams of light."
+    },
+    {
+      "id": "peer-offline",
+      "title": "A member's keeper offline",
+      "alt": "In night fog two lanterns hold a beam between them while a third stands dark."
+    },
+    {
+      "id": "audit-log",
+      "title": "The keeper's audit log",
+      "alt": "A carved stela with rows of tally marks stands lit by a lantern at the water's edge at night."
+    },
+    {
+      "id": "devices",
+      "title": "Paired phones",
+      "alt": "Three small canoes at night, each carrying a little lantern linked by light to the lantern on the dock."
+    },
+    {
+      "id": "no-devices",
+      "title": "No paired phones",
+      "alt": "In the mist an empty dock with one unlit hand lantern left on its boards."
+    },
+    {
+      "id": "removed",
+      "title": "Removed from the vault",
+      "alt": "At dusk a lone canoe drifts away from the lit storehouse, its lantern dark."
+    },
+    {
+      "id": "starting",
+      "title": "Starting Ome",
+      "alt": "At first light beacon posts around the lake catch one after another, from bright to not yet lit."
+    },
+    {
+      "id": "daemon-failed",
+      "title": "Ome's daemon stopped",
+      "alt": "Rain at night: the dock's lantern tower is dark, and a figure with a small hand lantern looks up at it."
+    },
+    {
+      "id": "node-unreachable",
+      "title": "Can't reach the network",
+      "alt": "Thick fog hides the far shore; a causeway runs out from the foreground and vanishes into it."
+    },
+    {
+      "id": "syncing",
+      "title": "Catching up",
+      "alt": "On a clear day a long flock of birds crosses the sky above a canoe moving steadily across the lake."
+    },
+    {
+      "id": "alarm",
+      "title": "Vault alarm",
+      "alt": "At night a brick-red signal fire burns on a platform beside the storehouse, its light running across the water."
+    },
+    {
+      "id": "locked",
+      "title": "Signer locked",
+      "alt": "The storehouse door at night, shut with a carved stone seal, a lantern burning beside it."
+    },
+    {
+      "id": "unlocked",
+      "title": "Signer unlocked",
+      "alt": "At dawn the storehouse door stands open on warm light, a lit lantern beside it and a canoe tied up below."
+    },
+    {
+      "id": "not-found",
+      "title": "Not found",
+      "alt": "Fog over empty water, rings spreading where something used to be."
+    },
+    {
+      "id": "profile-not-set-up",
+      "title": "Profile not set up",
+      "alt": "In the mist an empty dock holds a coiled rope beside an unlit post; no canoe is tied there."
+    },
+    {
+      "id": "testnet",
+      "title": "Testnet",
+      "alt": "In the mist a small practice canoe floats near the shore beside two paper boats and a striped marker pole."
+    }
+  ],
+  "avatars": [
+    {
+      "id": "lantern-tower",
+      "title": "Lantern tower",
+      "kind": "vault",
+      "alt": "A square stone tower with lit windows standing in the lake at night."
+    },
+    {
+      "id": "stone-granary",
+      "title": "Stone granary",
+      "kind": "vault",
+      "alt": "A domed clay granary with a thatched cap on a stone base at dawn."
+    },
+    {
+      "id": "chinampa-garden",
+      "title": "Chinampa garden",
+      "kind": "vault",
+      "alt": "A floating garden plot with rows of crops and an ahuejote tree, seen over open water."
+    },
+    {
+      "id": "canoe-chest",
+      "title": "Canoe chest",
+      "kind": "vault",
+      "alt": "A dugout canoe carrying a lidded chest across the lake at dawn."
+    },
+    {
+      "id": "reed-basket",
+      "title": "Reed basket",
+      "kind": "vault",
+      "alt": "A round woven reed basket with a lid and a curved handle in the mist."
+    },
+    {
+      "id": "boathouse",
+      "title": "Boathouse",
+      "kind": "vault",
+      "alt": "A thatched boathouse on stilts over the water at dawn, its door open to the lake."
+    },
+    {
+      "id": "island-temple",
+      "title": "Island temple",
+      "kind": "vault",
+      "alt": "A stepped temple on a small island, dark against the setting sun."
+    },
+    {
+      "id": "woven-chest",
+      "title": "Woven chest",
+      "kind": "vault",
+      "alt": "A rectangular chest of woven palm with a domed lid and a bright clasp."
+    },
+    {
+      "id": "causeway-lighthouse",
+      "title": "Causeway lighthouse",
+      "kind": "vault",
+      "alt": "A slender lighthouse on a stone causeway, its lamp casting two beams across the night."
+    },
+    {
+      "id": "sealed-jar",
+      "title": "Sealed jar",
+      "kind": "vault",
+      "alt": "A clay storage jar with its mouth tied shut under cloth and a wax seal."
+    },
+    {
+      "id": "stone-well",
+      "title": "Stone well",
+      "kind": "vault",
+      "alt": "A round stone well under a little pitched roof, with a bucket on its rope."
+    },
+    {
+      "id": "beacon-fire",
+      "title": "Beacon fire",
+      "kind": "vault",
+      "alt": "A beacon fire burning in a stone brazier on a tall pillar at night."
+    },
+    {
+      "id": "stone-gate",
+      "title": "Stone gate",
+      "kind": "vault",
+      "alt": "A stone archway with a heavy wooden door, closed, in the morning mist."
+    },
+    {
+      "id": "reed-hut",
+      "title": "Reed hut",
+      "kind": "vault",
+      "alt": "A conical reed hut on a floating platform in open water at dusk."
+    },
+    {
+      "id": "hanging-bell",
+      "title": "Hanging bell",
+      "kind": "vault",
+      "alt": "A cast bell hanging from a wooden beam between two posts at dusk."
+    },
+    {
+      "id": "water-gourd",
+      "title": "Water gourd",
+      "kind": "vault",
+      "alt": "A double-bulbed water gourd stoppered with a plug and hung on a cord."
+    },
+    {
+      "id": "crate-raft",
+      "title": "Crate raft",
+      "kind": "vault",
+      "alt": "A log raft stacked with tied crates, drifting under a crescent moon."
+    },
+    {
+      "id": "paper-lantern",
+      "title": "Paper lantern",
+      "kind": "vault",
+      "alt": "A round paper lantern glowing on a cord in the dark."
+    },
+    {
+      "id": "ahuejote-island",
+      "title": "Ahuejote island",
+      "kind": "vault",
+      "alt": "A tall ahuejote tree on a small island, reflected in still morning water."
+    },
+    {
+      "id": "fish-trap",
+      "title": "Fish trap",
+      "kind": "vault",
+      "alt": "A conical woven fish trap resting underwater among bubbles."
+    },
+    {
+      "id": "mountain-cave",
+      "title": "Mountain cave",
+      "kind": "vault",
+      "alt": "A cave mouth glowing with stored light at the foot of a mountain at dawn."
+    },
+    {
+      "id": "seed-pouch",
+      "title": "Seed pouch",
+      "kind": "vault",
+      "alt": "A cloth pouch of seed cinched with a cord, a few seeds spilling out."
+    },
+    {
+      "id": "obsidian-mirror",
+      "title": "Obsidian mirror",
+      "kind": "vault",
+      "alt": "A round obsidian mirror on a carved stand, reflecting a sliver of dawn."
+    },
+    {
+      "id": "folded-codex",
+      "title": "Folded codex",
+      "kind": "vault",
+      "alt": "A screenfold codex half open, its painted pages catching lamplight."
+    },
+    {
+      "id": "pier-lantern",
+      "title": "Pier lantern",
+      "kind": "vault",
+      "alt": "A lantern hanging from a crooked post at the end of a pier at dusk."
+    },
+    {
+      "id": "aqueduct",
+      "title": "Aqueduct",
+      "kind": "vault",
+      "alt": "Stone aqueduct arches carrying water across the lake at dawn."
+    },
+    {
+      "id": "floating-pavilion",
+      "title": "Floating pavilion",
+      "kind": "vault",
+      "alt": "An open pavilion with a curved roof on a floating platform, lit from inside at night."
+    },
+    {
+      "id": "conch-shell",
+      "title": "Conch shell",
+      "kind": "vault",
+      "alt": "A spiralled conch shell with a knobbed shoulder resting on the lake bed."
+    },
+    {
+      "id": "tripod-bowl",
+      "title": "Tripod bowl",
+      "kind": "vault",
+      "alt": "A clay tripod bowl on three legs, holding a small store of glowing seed."
+    },
+    {
+      "id": "carved-key",
+      "title": "Carved key",
+      "kind": "vault",
+      "alt": "A large carved key of pale wood with a looped bow and two square teeth."
+    },
+    {
+      "id": "heron",
+      "title": "Heron",
+      "kind": "profile",
+      "alt": "A heron standing in the shallows among reeds at dusk."
+    },
+    {
+      "id": "axolotl",
+      "title": "Axolotl",
+      "kind": "profile",
+      "alt": "A pale axolotl face-on, smiling, with feathery gills spread underwater."
+    },
+    {
+      "id": "duck",
+      "title": "Duck",
+      "kind": "profile",
+      "alt": "A mallard drake swimming on bright morning water."
+    },
+    {
+      "id": "fox",
+      "title": "Fox",
+      "kind": "profile",
+      "alt": "A fox's face, ears up and eyes bright, against a dawn sky."
+    },
+    {
+      "id": "owl",
+      "title": "Owl",
+      "kind": "profile",
+      "alt": "A horned owl perched on a branch under a full moon, its eyes wide."
+    },
+    {
+      "id": "fish",
+      "title": "Fish",
+      "kind": "profile",
+      "alt": "A silver fish leaping clear of the water at dusk, scattering drops."
+    },
+    {
+      "id": "turtle",
+      "title": "Turtle",
+      "kind": "profile",
+      "alt": "A turtle swimming, seen from above, its shell patterned in plates."
+    },
+    {
+      "id": "dragonfly",
+      "title": "Dragonfly",
+      "kind": "profile",
+      "alt": "A dragonfly seen from above, four veined wings spread over pale water."
+    },
+    {
+      "id": "deer",
+      "title": "Deer",
+      "kind": "profile",
+      "alt": "A deer's head, face-on, with branching antlers in the morning mist."
+    },
+    {
+      "id": "coyote",
+      "title": "Coyote",
+      "kind": "profile",
+      "alt": "A coyote sitting with its head raised, howling at the full moon."
+    },
+    {
+      "id": "hummingbird",
+      "title": "Hummingbird",
+      "kind": "profile",
+      "alt": "A hummingbird hovering at a trumpet flower, wings a blur."
+    },
+    {
+      "id": "frog",
+      "title": "Frog",
+      "kind": "profile",
+      "alt": "A frog sitting on a lily pad, face-on, its eyes catching the light."
+    },
+    {
+      "id": "rower",
+      "title": "Rower",
+      "kind": "profile",
+      "alt": "A rower in a wide-brimmed hat pulling a paddle through the water at dawn."
+    },
+    {
+      "id": "fisher",
+      "title": "Fisher",
+      "kind": "profile",
+      "alt": "A fisher in a canoe raising a great butterfly net over the lake."
+    },
+    {
+      "id": "weaver",
+      "title": "Weaver",
+      "kind": "profile",
+      "alt": "A weaver at a backstrap loom, a band of patterned cloth across her lap."
+    },
+    {
+      "id": "moon-face",
+      "title": "Moon face",
+      "kind": "profile",
+      "alt": "A crescent moon in profile with a sleeping face, among the stars."
+    },
+    {
+      "id": "sun-face",
+      "title": "Sun face",
+      "kind": "profile",
+      "alt": "A round sun with a calm face and short rays, rising over the lake."
+    },
+    {
+      "id": "jaguar",
+      "title": "Jaguar",
+      "kind": "profile",
+      "alt": "A jaguar's face, front-on, spotted with rosettes, eyes steady."
+    },
+    {
+      "id": "rabbit",
+      "title": "Rabbit",
+      "kind": "profile",
+      "alt": "A rabbit sitting up with its long ears raised, in a meadow at dawn."
+    },
+    {
+      "id": "snail",
+      "title": "Snail",
+      "kind": "profile",
+      "alt": "A snail with a spiral shell gliding along a reed leaf in the evening."
+    },
+    {
+      "id": "butterfly",
+      "title": "Butterfly",
+      "kind": "profile",
+      "alt": "A monarch butterfly with open wings, veined and spotted, seen from above."
+    },
+    {
+      "id": "crayfish",
+      "title": "Crayfish",
+      "kind": "profile",
+      "alt": "A lake crayfish seen from above, claws forward, its tail fanned."
+    },
+    {
+      "id": "bat",
+      "title": "Bat",
+      "kind": "profile",
+      "alt": "A bat with wings spread wide against the dusk sky."
+    },
+    {
+      "id": "eagle",
+      "title": "Eagle",
+      "kind": "profile",
+      "alt": "An eagle with wings raised, perched on a prickly pear cactus by the lake."
+    },
+    {
+      "id": "water-snake",
+      "title": "Water snake",
+      "kind": "profile",
+      "alt": "A banded water snake swimming in S-curves across the lake, seen from above."
+    },
+    {
+      "id": "xolo-dog",
+      "title": "Xolo dog",
+      "kind": "profile",
+      "alt": "A hairless xoloitzcuintli standing in profile, its big ears pricked."
+    },
+    {
+      "id": "pelican",
+      "title": "Pelican",
+      "kind": "profile",
+      "alt": "A white pelican floating on the evening lake, its long bill tucked to its chest."
+    },
+    {
+      "id": "quail",
+      "title": "Quail",
+      "kind": "profile",
+      "alt": "A plump quail with a curled topknot, scaled breast and dotted flanks."
+    },
+    {
+      "id": "bee",
+      "title": "Bee",
+      "kind": "profile",
+      "alt": "A round, fuzzy bee hovering by a flower, its wings catching the light."
+    },
+    {
+      "id": "iguana",
+      "title": "Iguana",
+      "kind": "profile",
+      "alt": "An iguana basking on a rock, its spiny crest and banded tail in the sun."
+    }
   ]
 }
