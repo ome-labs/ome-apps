@@ -124,14 +124,14 @@ export const proposals = {
     intent: {
       kind: "transfer",
       token: omet.address,
-      // The guide leaves this one unlabelled and unspecified; any correctly shaped address will do.
-      to: "0x2a7f0c55e1d94b8a6c3e0f71b9d24c86e5a13f07d8b62c49e0a1f35d7c8b9e04",
+      // The guide leaves this one unlabelled; Figma (page 38) shows it as 0x7e0a…41d9.
+      to: "0x7e0a9c2b5d84f13e6a07b29c4d1e58f3a6b0c7d2e94f1a8b35c6d0e7f2a941d9",
       amount: "900000000000000000000",
       memo: null,
     },
     proposer: { index: 3, name: "Carol" },
     status: "blocked",
-    approvals: [{ slot: 2, index: 3, name: "Carol", valid: true, reason: null }],
+    approvals: [],
     rejections: [
       { slot: 0, index: 1, name: "Alice", valid: true, reason: "Too large" },
       { slot: 1, index: 2, name: "Bob", valid: true, reason: null },

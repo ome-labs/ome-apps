@@ -60,7 +60,7 @@ describe("thresholds and votes", () => {
   test.each([
     [proposals.designWork, "1 of 2 approvals", 0],
     [proposals.auditDeposit, "2 of 2 approvals", 0],
-    [proposals.tooLarge, "1 of 2 approvals", 2],
+    [proposals.tooLarge, "0 of 2 approvals", 2],
   ])("progress %#", (proposal, label, rejections) => {
     const progress = voteProgress(proposal);
 
