@@ -49,3 +49,6 @@ pnpm-debug.log*
 !.vscode/extensions.json
 !.vscode/settings.json
 *.swp
+
+# Local plans and research, never a build input
+research/
