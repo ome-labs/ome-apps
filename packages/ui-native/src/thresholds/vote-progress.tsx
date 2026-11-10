@@ -4,6 +4,7 @@ import { View } from "react-native";
 
 import { Tag } from "../status/tag.tsx";
 import { cn } from "../styling/class-names.ts";
+import { depth } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
 export type VoteProgressProps = {
@@ -34,7 +35,11 @@ export function VoteProgress({ proposal, className }: VoteProgressProps) {
         {segments.map(({ key, filled }) => (
           <View
             key={key}
-            className={cn("h-1.5 w-[18px] rounded-full", filled ? "bg-accent" : "bg-line")}
+            className={cn(
+              "h-1.5 w-[18px] rounded-full",
+              // Empty segments are wells the approvals fill.
+              filled ? "bg-accent" : ["bg-sunken", depth.field],
+            )}
           />
         ))}
       </View>

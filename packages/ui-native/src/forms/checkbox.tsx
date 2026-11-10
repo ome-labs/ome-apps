@@ -3,6 +3,7 @@ import { Root as CheckboxRoot, Indicator as CheckboxIndicator } from "@rn-primit
 import { Pressable } from "react-native";
 
 import { cn } from "../styling/class-names.ts";
+import { depth } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
 export type CheckboxProps = {
@@ -13,7 +14,10 @@ export type CheckboxProps = {
   className?: string | undefined;
 };
 
-/** Page 26's checkbox; the whole 44 pt row toggles it. */
+/**
+ * Page 26's checkbox; the whole 44 pt row toggles it. Unchecked it is a small well; checked it fills with the accent
+ * and lifts like a solid button. Disabled it lies flat.
+ */
 export function Checkbox({ label, checked, onCheckedChange, disabled, className }: CheckboxProps) {
   return (
     <Pressable
@@ -29,7 +33,9 @@ export function Checkbox({ label, checked, onCheckedChange, disabled, className 
         accessibilityLabel={label}
         className={cn(
           "size-5 items-center justify-center rounded-xs border",
-          checked ? "border-transparent bg-accent" : "border-line-strong bg-surface",
+          checked
+            ? ["border-transparent bg-accent", !disabled && depth.accent]
+            : ["border-line-strong bg-surface", !disabled && depth.field],
           disabled && "border-line bg-sunken",
         )}
       >

@@ -68,7 +68,8 @@ export function StepRow({ status, label, detail, time, className }: StepRowProps
         className={cn(
           "size-7 items-center justify-center rounded-full",
           tone.fill,
-          status === "active" && "border border-accent",
+          // The running step is ringed in the accent; the others carry their tone's hairline.
+          status === "active" ? "border border-accent" : tone.edge,
         )}
       >
         <Animated.View style={spin}>

@@ -2,6 +2,7 @@ import { tokens } from "@ome-labs/tokens";
 import { View } from "react-native";
 
 import { cn } from "../styling/class-names.ts";
+import { discBevel } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
 // Page 30: four fills that read in both themes, so they come from primitives rather than theme roles.
@@ -11,7 +12,7 @@ const palette = [
   [tokens.color.primitive["sun/200"], tokens.color.primitive["ink/900"]],
   [tokens.color.primitive["lake/200"], tokens.color.primitive["ink/900"]],
 ].map(([background, text]) => ({
-  circle: { backgroundColor: background },
+  circle: { ...discBevel, backgroundColor: background },
   initial: { color: text },
 }));
 
@@ -29,7 +30,7 @@ export type MemberAvatarProps = {
   className?: string | undefined;
 };
 
-/** A member's initial. Hidden from screen readers: the name always appears beside it. */
+/** A member's initial on a bevelled disc. Hidden from screen readers: the name always appears beside it. */
 export function MemberAvatar({ name, index, size = "md", className }: MemberAvatarProps) {
   const fill = palette[(index - 1 + palette.length) % palette.length];
   const [box, text] = sizes[size];

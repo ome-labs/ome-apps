@@ -29,8 +29,10 @@ export function StatusBadge(props: StatusBadgeProps) {
       accessible
       accessibilityLabel={`${display.label}: ${display.meaning}`}
       className={cn(
-        "flex-row items-center gap-1.5 self-start rounded-full py-1 pr-2.5 pl-2",
+        // Padding is 1 pt short of the 4/10/8 grid to make room for the tone's edge.
+        "flex-row items-center gap-1.5 self-start rounded-full py-[3px] pr-[9px] pl-[7px]",
         tone.fill,
+        tone.edge,
         props.className,
       )}
     >

@@ -11,6 +11,8 @@ import { View } from "react-native";
 import { ReduceMotion, useReducedMotion } from "react-native-reanimated";
 import { useResolveClassNames } from "uniwind";
 
+import { cn } from "../styling/class-names.ts";
+import { depth } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
 export type SheetProps = {
@@ -28,7 +30,8 @@ export type SheetProps = {
 export function Sheet({ title, description, open, onOpenChange, children }: SheetProps) {
   const ref = useRef<BottomSheetModal>(null);
   const reduceMotion = useReducedMotion();
-  const background = useResolveClassNames("bg-raised rounded-t-2xl");
+  // The dialog elevation: a soft shadow over the dimmed screen in light, a lit top edge in dark.
+  const background = useResolveClassNames(cn("bg-raised rounded-t-2xl", depth.dialog));
   const handle = useResolveClassNames("bg-line-strong");
 
   useEffect(() => {

@@ -32,7 +32,7 @@ export function Banner({ kind, children, action, className }: BannerProps) {
       className={cn(
         "gap-3 rounded-[10px] px-4 py-3",
         tone.fill,
-        kind === "alarm" && "border border-danger",
+        kind === "alarm" ? "border border-danger" : tone.edge,
         className,
       )}
     >

@@ -37,7 +37,9 @@ Both expose the same utility names, so a class reads the same on both platforms:
 Shadows follow the theme: in light they cast a soft shadow with a hairline ring; in dark, where a
 shadow on near-black barely reads, they show a faint lit top edge and ring instead. Controls use
 `shadow-control` (or `shadow-accent` on solid colour), `shadow-pressed` while held, and fields sit in
-`shadow-field`.
+`shadow-field`. On React Native, Uniwind can't resolve the `shadow-*` utilities against
+per-theme values, so `@ome-labs/ui-native` applies them as `[box-shadow:var(--shadow-1)]` from one
+module (`src/styling/depth.ts`).
 
 The web theme switches on `data-theme="dark"` on any ancestor (the `dark:` variant follows it) and
 falls back to the system setting until a theme is set. Uniwind switches with `Uniwind.setTheme`.

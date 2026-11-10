@@ -37,7 +37,7 @@ export function HexValue({
         accessibilityLabel={`${noun} ${complete}`}
         accessibilityHint={expanded ? "Shows the short form" : "Shows the full value"}
         onPress={() => setExpanded(!expanded)}
-        className="min-h-11 shrink justify-center"
+        className="min-h-11 shrink justify-center active:opacity-60"
       >
         <Text className={cn("type-mono-s", tone === "quiet" ? "text-fg-subtle" : "text-fg")}>
           {expanded ? complete : shortHex(complete)}

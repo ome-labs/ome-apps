@@ -14,6 +14,7 @@ import { Pressable, View } from "react-native";
 import { Button } from "../actions/button.tsx";
 import { MemberAvatar } from "../identity/member-avatar.tsx";
 import { cn } from "../styling/class-names.ts";
+import { depth } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 import { Address } from "../values/address.tsx";
 import { Amount } from "../values/amount.tsx";
@@ -55,7 +56,7 @@ export function ReviewPanel({ review, onApprove, onReject, className }: ReviewPa
       {calls.length > 0 ? (
         <Section title="Calls, as rebuilt">
           {calls.map(({ call, key }) => (
-            <View key={key} className="gap-1 rounded-md bg-sunken px-3 py-2.5">
+            <View key={key} className={cn("gap-1 rounded-md bg-sunken px-3 py-2.5", depth.field)}>
               <Text className="type-label-m">{call.toLabel ?? "Contract"}</Text>
               <Hash value={call.to} noun="contract" tone="quiet" />
               <Text className="type-mono-s text-fg-muted">{`${call.fn}(${call.args.join(", ")})${call.isStatic ? " · static" : ""}`}</Text>
@@ -160,12 +161,15 @@ function WhatYouSign({ review }: { review: Review }) {
   const state = useMemo(() => ({ expanded: open }), [open]);
 
   return (
-    <View className="rounded-md border border-line-subtle">
+    <View className={cn("rounded-md bg-surface", depth.card)}>
       <Pressable
         accessibilityRole="button"
         accessibilityState={state}
         onPress={() => setOpen(!open)}
-        className="min-h-11 flex-row items-center justify-between px-3"
+        className={cn(
+          "min-h-11 flex-row items-center justify-between px-3 active:bg-selected",
+          open ? "rounded-t-md" : "rounded-md",
+        )}
       >
         <Text className="type-label-m">What you sign</Text>
         <Text className="type-label-m text-fg-subtle">{open ? "Hide" : "Show"}</Text>

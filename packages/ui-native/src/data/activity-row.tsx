@@ -12,6 +12,7 @@ import { View } from "react-native";
 
 import { StatusBadge } from "../status/status-badge.tsx";
 import { cn } from "../styling/class-names.ts";
+import { discBevel } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
 export type ActivityRowProps = {
@@ -33,6 +34,7 @@ export function ActivityRow({ entry, now, names, className }: ActivityRowProps) 
   return (
     <View className={cn("min-h-11 flex-row items-center gap-3 px-4 py-3", className)}>
       <View
+        style={discBevel}
         className={cn(
           "size-8 items-center justify-center rounded-full",
           received ? "bg-success-subtle" : "bg-accent-subtle",

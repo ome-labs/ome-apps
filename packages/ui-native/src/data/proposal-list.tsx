@@ -35,6 +35,11 @@ export function ProposalList({ proposals, recipients, now, onOpen, empty }: Prop
   );
 }
 
+// Inset to the rows' text, as iOS lists are, so the hairline reads as dividing rows rather than cutting the list.
 function Separator() {
-  return <View className="h-px bg-line-subtle" />;
+  return (
+    <View className="bg-surface">
+      <View className="ml-4 h-px bg-line-subtle" />
+    </View>
+  );
 }

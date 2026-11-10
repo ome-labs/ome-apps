@@ -16,7 +16,15 @@ export function Tag({ tone = "neutral", children, className }: TagProps) {
   const colours = toneClasses[tone];
 
   return (
-    <View className={cn("self-start rounded-xs px-1.5 py-0.5", colours.fill, className)}>
+    <View
+      className={cn(
+        // Padding is 1 pt short of the 6/2 grid to make room for the tone's edge.
+        "self-start rounded-xs px-[5px] py-px",
+        colours.fill,
+        colours.edge,
+        className,
+      )}
+    >
       <Text className={cn("type-label-s", colours.text)}>{children}</Text>
     </View>
   );

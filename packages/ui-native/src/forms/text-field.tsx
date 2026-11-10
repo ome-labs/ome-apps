@@ -4,6 +4,7 @@ import { TextInput, View, type TextInputProps } from "react-native";
 import { useCSSVariable } from "uniwind";
 
 import { cn } from "../styling/class-names.ts";
+import { depth } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
 export type TextFieldProps = TextInputProps & {
@@ -15,7 +16,10 @@ export type TextFieldProps = TextInputProps & {
   className?: string | undefined;
 };
 
-/** Page 25's field for touch: label, a 44 pt input, then the hint or the error. */
+/**
+ * Page 25's field for touch: label, a 44 pt input sunk slightly into the surface, then the hint or the error. Focus
+ * draws the accent border, an error the danger border; a read-only field lies flat.
+ */
 export function TextField({
   label,
   hint,
@@ -52,6 +56,7 @@ export function TextField({
         }}
         className={cn(
           "h-11 rounded-md border border-line bg-surface px-3 text-fg",
+          editable && depth.field,
           mono ? "type-mono-m" : "type-body-m",
           focused && "border-accent",
           error && "border-danger",

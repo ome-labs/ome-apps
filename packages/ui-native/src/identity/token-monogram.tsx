@@ -2,6 +2,7 @@ import type { TokenInfo } from "@ome-labs/api";
 import { View } from "react-native";
 
 import { cn } from "../styling/class-names.ts";
+import { discBevel } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
 const sizes = {
@@ -16,7 +17,10 @@ export type TokenMonogramProps = {
   className?: string | undefined;
 };
 
-/** A token's mark: tokens carry no logo, so every token gets the same circle with its symbol's first two characters. */
+/**
+ * A token's mark: tokens carry no logo, so every token gets the same bevelled circle with its symbol's first two
+ * characters.
+ */
 export function TokenMonogram({ token, size = "md", className }: TokenMonogramProps) {
   const [box, text] = sizes[size];
 
@@ -24,8 +28,9 @@ export function TokenMonogram({ token, size = "md", className }: TokenMonogramPr
     <View
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
+      style={discBevel}
       className={cn(
-        "items-center justify-center rounded-full border border-line-subtle bg-accent-subtle",
+        "items-center justify-center rounded-full border border-accent/15 bg-accent-subtle",
         box,
         className,
       )}

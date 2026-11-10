@@ -3,18 +3,16 @@ import type { ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 
 import { cn } from "../styling/class-names.ts";
+import { depth } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
-/** Page 39's card: the surface every group of content sits on. */
+/** Page 39's card: the surface every group of content sits on, lifted off the canvas by the first elevation. */
 export function Card({
   className,
   ...props
 }: Omit<ViewProps, "className"> & { className?: string | undefined }) {
   return (
-    <View
-      className={cn("gap-4 rounded-lg border border-line-subtle bg-surface p-4", className)}
-      {...props}
-    />
+    <View className={cn("gap-4 rounded-lg bg-surface p-4", depth.card, className)} {...props} />
   );
 }
 

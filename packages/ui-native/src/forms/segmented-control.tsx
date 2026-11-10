@@ -1,6 +1,7 @@
 import { Item, Root } from "@rn-primitives/toggle-group";
 
 import { cn } from "../styling/class-names.ts";
+import { depth } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
 export type SegmentedControlProps<Value extends string> = {
@@ -11,7 +12,7 @@ export type SegmentedControlProps<Value extends string> = {
   className?: string | undefined;
 };
 
-/** Page 27's segmented control, full width with 40 pt segments. */
+/** Page 27's segmented control, full width with 40 pt segments: a sunken track with the chosen segment raised in it. */
 export function SegmentedControl<Value extends string>({
   options,
   value,
@@ -28,7 +29,7 @@ export function SegmentedControl<Value extends string>({
         if (next) onValueChange(next as Value);
       }}
       accessibilityLabel={label}
-      className={cn("flex-row gap-0.5 rounded-md bg-sunken p-0.5", className)}
+      className={cn("flex-row gap-0.5 rounded-md bg-sunken p-0.5", depth.field, className)}
     >
       {options.map((option) => {
         const selected = option.value === value;
@@ -40,7 +41,7 @@ export function SegmentedControl<Value extends string>({
             accessibilityLabel={option.label}
             className={cn(
               "h-10 flex-1 items-center justify-center rounded-sm",
-              selected && "bg-surface shadow-1",
+              selected ? ["bg-surface", depth.control] : "active:bg-line-subtle",
             )}
           >
             <Text className={cn("type-label-m", selected ? "text-fg" : "text-fg-muted")}>

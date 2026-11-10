@@ -46,6 +46,23 @@ describe("Button", () => {
     expect(onPress).toHaveBeenCalledTimes(1);
     expect(screen.getByRole("button", { name: "Execute" })).toBeDisabled();
   });
+
+  test("still calls the caller's press-in and press-out under its own press feedback", async () => {
+    const onPressIn = jest.fn();
+    const onPressOut = jest.fn();
+    await render(
+      <Button onPressIn={onPressIn} onPressOut={onPressOut}>
+        Approve
+      </Button>,
+    );
+
+    const button = screen.getByRole("button", { name: "Approve" });
+    await fireEvent(button, "pressIn");
+    await fireEvent(button, "pressOut");
+
+    expect(onPressIn).toHaveBeenCalledTimes(1);
+    expect(onPressOut).toHaveBeenCalledTimes(1);
+  });
 });
 
 test("Amount shows every digit, never rounded", async () => {

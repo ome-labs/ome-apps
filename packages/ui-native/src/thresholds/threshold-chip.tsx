@@ -3,6 +3,7 @@ import { Icon } from "@ome-labs/icons/native";
 import { View } from "react-native";
 
 import { cn } from "../styling/class-names.ts";
+import { depth } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
 export type ThresholdChipProps = {
@@ -17,7 +18,8 @@ export function ThresholdChip({ kind, threshold, members, className }: Threshold
   return (
     <View
       className={cn(
-        "flex-row items-center gap-1.5 self-start rounded-full border border-line bg-surface py-1 pr-2.5 pl-2",
+        "flex-row items-center gap-1.5 self-start rounded-full bg-surface py-1 pr-2.5 pl-2",
+        depth.card,
         className,
       )}
     >
