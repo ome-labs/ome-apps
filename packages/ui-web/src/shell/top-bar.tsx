@@ -17,11 +17,12 @@ export type NodeState =
 export type SignerState = { locked: true } | { locked: false; unlockedUntil: number };
 
 export type TopBarProps = {
-  node: NodeState;
-  keeper: ServiceStatus;
-  signer: SignerState;
+  /** The status chips, each shown only when given; an app can leave them to its own banners. */
+  node?: NodeState | undefined;
+  keeper?: ServiceStatus | undefined;
+  signer?: SignerState | undefined;
   /** Unix seconds, for the unlock countdown. */
-  now: number;
+  now?: number | undefined;
   onLock?: () => void | undefined;
   onUnlock?: () => void | undefined;
   /** The profile menu at the far right. */
@@ -43,7 +44,7 @@ export function TopBar({
   windowControlsInset,
   className,
 }: TopBarProps) {
-  const keeperDisplay = serviceStatus(keeper);
+  const keeperDisplay = keeper ? serviceStatus(keeper) : undefined;
 
   return (
     <header
@@ -58,7 +59,7 @@ export function TopBar({
       </div>
 
       <div className="flex items-center gap-2">
-        {node.state === "ready" ? (
+        {!node ? null : node.state === "ready" ? (
           <StatusChip>
             {node.network} · block {formatCount(node.block)}
           </StatusChip>
@@ -72,11 +73,13 @@ export function TopBar({
           </StatusChip>
         )}
 
-        <StatusChip icon="server" {...(keeper === "running" ? {} : { tone: keeperDisplay.tone })}>
-          Keeper · {keeperDisplay.label}
-        </StatusChip>
+        {keeperDisplay ? (
+          <StatusChip icon="server" {...(keeper === "running" ? {} : { tone: keeperDisplay.tone })}>
+            Keeper · {keeperDisplay.label}
+          </StatusChip>
+        ) : null}
 
-        {signer.locked ? (
+        {!signer ? null : signer.locked ? (
           <span className="flex items-center gap-1.5">
             <StatusChip icon="lock">Locked</StatusChip>
             <Button size="sm" icon="unlock" onClick={onUnlock}>
@@ -86,7 +89,7 @@ export function TopBar({
         ) : (
           <span className="flex items-center gap-1.5">
             <StatusChip icon="unlock" tone="accent">
-              Unlocked · {formatDuration(signer.unlockedUntil - now).replace(/\s?0m$/, "")}
+              Unlocked · {formatDuration(signer.unlockedUntil - (now ?? 0)).replace(/\s?0m$/, "")}
             </StatusChip>
             <IconButton icon="lock" label="Lock signer" size="sm" onClick={onLock} />
           </span>
