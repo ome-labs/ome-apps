@@ -6,7 +6,11 @@ export { IconButton, type IconButtonProps } from "./actions/icon-button.tsx";
 export { Checkbox, type CheckboxProps } from "./forms/checkbox.tsx";
 export { Field, type FieldProps } from "./forms/field.tsx";
 export { RadioGroup, type RadioGroupProps, type RadioOption } from "./forms/radio-group.tsx";
-export { SegmentedControl, type SegmentedControlProps } from "./forms/segmented-control.tsx";
+export {
+  SegmentedControl,
+  type SegmentedControlOption,
+  type SegmentedControlProps,
+} from "./forms/segmented-control.tsx";
 export { Select, type SelectOption, type SelectProps } from "./forms/select.tsx";
 export { Switch, type SwitchProps } from "./forms/switch.tsx";
 export {

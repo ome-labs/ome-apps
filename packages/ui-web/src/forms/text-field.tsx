@@ -19,7 +19,7 @@ export function TextInput({ mono, className, ...props }: TextInputProps) {
         "h-control-md w-full rounded-md border border-line bg-surface px-2.5 text-fg shadow-field placeholder:text-fg-subtle",
         "outline-none transition-[border-color,box-shadow] duration-fast ease-standard hover:border-line-strong",
         "focus:border-accent focus:shadow-focus",
-        "data-[invalid]:border-danger data-[disabled]:cursor-not-allowed data-[disabled]:border-line data-[disabled]:bg-sunken data-[disabled]:text-fg-disabled data-[disabled]:shadow-none",
+        "data-[invalid]:border-danger data-[invalid]:focus:shadow-[0_0_0_3px_color-mix(in_oklab,var(--color-danger)_25%,transparent)] data-[disabled]:cursor-not-allowed data-[disabled]:border-line data-[disabled]:bg-sunken data-[disabled]:text-fg-disabled data-[disabled]:shadow-none",
         mono ? "type-mono-m" : "type-body-s",
         className,
       )}
