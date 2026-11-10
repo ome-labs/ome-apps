@@ -22,6 +22,25 @@ export default defineConfig({
   rules: { "no-restricted-imports": ["error", restrictedImports] },
   overrides: [
     {
+      // Stories and tests render fixed sample data once; memoising their props would only obscure them.
+      files: ["**/stories/**", "**/*.stories.tsx", "**/tests/**", "**/*.test.tsx"],
+      rules: {
+        "react-perf/jsx-no-new-object-as-prop": "off",
+        "react-perf/jsx-no-new-array-as-prop": "off",
+        "react-perf/jsx-no-new-function-as-prop": "off",
+        "react-perf/jsx-no-jsx-as-prop": "off",
+      },
+    },
+    {
+      // Base UI composes through `render={<Element />}` and inline callbacks handed to primitives that aren't
+      // memoised; wrapping each in useMemo or useCallback would add code and save no renders.
+      files: ["packages/ui-web/**", "packages/ui-native/**", "apps/kit/**"],
+      rules: {
+        "react-perf/jsx-no-jsx-as-prop": "off",
+        "react-perf/jsx-no-new-function-as-prop": "off",
+      },
+    },
+    {
       // The icons package is the one place that wraps Hugeicons.
       files: ["packages/icons/**"],
       rules: {
