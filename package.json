@@ -18,14 +18,14 @@
     "typecheck": "tsc -p tsconfig.json && turbo run typecheck"
   },
   "devDependencies": {
-    "@commitlint/cli": "catalog:",
-    "@commitlint/config-conventional": "catalog:",
+    "@commitlint/cli": "21.2.4",
+    "@commitlint/config-conventional": "21.2.4",
     "@types/node": "catalog:",
     "klarity": "catalog:",
-    "lefthook": "catalog:",
-    "oxfmt": "catalog:",
+    "lefthook": "2.2.2",
+    "oxfmt": "0.78.0",
     "oxlint": "catalog:",
-    "turbo": "catalog:",
+    "turbo": "2.11.10",
     "typescript": "catalog:"
   },
   "engines": {

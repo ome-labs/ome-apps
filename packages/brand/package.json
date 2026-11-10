@@ -24,8 +24,8 @@
     "@ome-labs/tokens": "workspace:*"
   },
   "devDependencies": {
-    "@svgr/core": "catalog:",
-    "@svgr/plugin-jsx": "catalog:",
+    "@svgr/core": "8.1.0",
+    "@svgr/plugin-jsx": "8.1.0",
     "@testing-library/react": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
@@ -36,8 +36,8 @@
     "react-dom": "catalog:",
     "react-native": "catalog:",
     "react-native-svg": "catalog:",
-    "sharp": "catalog:",
-    "svgo": "catalog:",
+    "sharp": "0.35.5",
+    "svgo": "4.1.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
