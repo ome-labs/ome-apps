@@ -32,6 +32,6 @@ export function voteProgress(
     needed: proposal.threshold,
     rejections,
     rejectionsToBlock: proposal.members - proposal.threshold + 1,
-    label: `${approvals} of ${proposal.threshold} approvals`,
+    label: approvalsLabel(approvals, proposal.threshold),
   };
 }

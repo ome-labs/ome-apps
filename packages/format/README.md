@@ -9,6 +9,7 @@ the tones from the kit's pills (Figma page 31).
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `amount`    | `formatAmount` / `formatTokenAmount` (`250 OMET`) / `formatWithBaseUnits` for review screens; `parseAmount` for inputs, with `amountInputMessage` |
 | `address`   | `shortHex` (`0x103b…c2c0`), `fullHex`, `isHex32`, `isHex16`                                                                                       |
+| `count`     | `formatCount` (`1,182`) for block heights and gas                                                                                                 |
 | `time`      | `timeAgo` (`2h ago`), `formatDuration` (`5h 12m`), `formatExpiry` (`expires in 5h 12m`), `formatAbsoluteTime`                                     |
 | `threshold` | `approvalsLabel` (`2 of 3 approvals`), `toReadLabel` (`2 of 3 to read`), `voteProgress`                                                           |
 | `status`    | label, meaning and tone for `ProposalStatus`, `ServiceStatus`, `StepStatus` and member connections                                                |

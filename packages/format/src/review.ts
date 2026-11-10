@@ -1,5 +1,7 @@
 import type { Gas, Review } from "@ome-labs/api";
 
+import { formatCount } from "./count.ts";
+
 export type CheckState = "pass" | "fail" | "warning";
 
 export type ReviewCheck = {
@@ -66,6 +68,5 @@ export const feeLine = "Sponsored, not paid by the vault.";
 function simulationLabel(gas: Gas | null): string {
   if (!gas) return "Simulation ok";
 
-  const units = new Intl.NumberFormat("en");
-  return `Simulation ok (${units.format(gas.da)} DA gas, ${units.format(gas.l2)} L2 gas)`;
+  return `Simulation ok (${formatCount(gas.da)} DA gas, ${formatCount(gas.l2)} L2 gas)`;
 }

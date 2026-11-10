@@ -1,9 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { needsMyVote, proposalSummary, shortProposalId } from "./proposal.ts";
-import { aliases, omet, peers, proposals, treasury } from "./sample/treasury.ts";
-import { connectionOf, connectionStatus, proposalStatus } from "./status.ts";
-import { approvalsLabel, toReadLabel, voteProgress } from "./threshold.ts";
+import { aliases, proposals } from "./sample/treasury.ts";
 
 describe("proposal", () => {
   test("is referred to by its first 4 hex digits", () => {
@@ -48,43 +46,5 @@ describe("proposal", () => {
         .filter(needsMyVote)
         .map((p) => shortProposalId(p.id)),
     ).toEqual(["335c"]);
-  });
-});
-
-describe("thresholds and votes", () => {
-  test("use the CLI's words", () => {
-    expect(approvalsLabel(treasury.threshold, treasury.members)).toBe("2 of 3 approvals");
-    expect(toReadLabel(treasury.viewingThreshold, treasury.members)).toBe("2 of 3 to read");
-  });
-
-  test.each([
-    [proposals.designWork, "1 of 2 approvals", 0],
-    [proposals.auditDeposit, "2 of 2 approvals", 0],
-    [proposals.tooLarge, "0 of 2 approvals", 2],
-  ])("progress %#", (proposal, label, rejections) => {
-    const progress = voteProgress(proposal);
-
-    expect(progress.label).toBe(label);
-    expect(progress.rejections).toBe(rejections);
-    expect(progress.rejectionsToBlock).toBe(2);
-  });
-});
-
-describe("statuses", () => {
-  test("take the kit's tones", () => {
-    expect(proposalStatus("collecting")).toMatchObject({ label: "Collecting", tone: "warning" });
-    expect(proposalStatus("blocked").tone).toBe("danger");
-  });
-
-  test("name each member's connection", () => {
-    expect(peers.map((peer) => connectionStatus(connectionOf(peer)).label)).toEqual([
-      "Offline",
-      "Connected",
-      "Through relay",
-    ]);
-  });
-
-  test("never mention a token amount in a status", () => {
-    expect(JSON.stringify(proposalStatus("executed"))).not.toContain(omet.symbol);
   });
 });

@@ -22,12 +22,11 @@ export function formatAmount(
   const whole = units / scale;
   const fraction = (units % scale).toString().padStart(decimals, "0").replace(/0+$/, "");
 
-  const grouped = new Intl.NumberFormat(locale).format(whole);
+  const numbers = new Intl.NumberFormat(locale);
+  const grouped = numbers.format(whole);
   if (!fraction) return grouped;
 
-  const separator = new Intl.NumberFormat(locale)
-    .formatToParts(0.5)
-    .find((part) => part.type === "decimal")?.value;
+  const separator = numbers.formatToParts(0.5).find((part) => part.type === "decimal")?.value;
   return `${grouped}${separator ?? "."}${fraction}`;
 }
 

@@ -1,4 +1,4 @@
-import type { Intent, ProposalView, Recipient, TokenInfo } from "@ome-labs/api";
+import type { ProposalView, Recipient } from "@ome-labs/api";
 
 import { shortHex } from "./address.ts";
 import { formatTokenAmount } from "./amount.ts";
@@ -16,21 +16,20 @@ export function aliasName(label: string): string {
 }
 
 /** Who a transfer goes to, in a list row: `dave (alias)`, a member's name, or the short address. */
-export function recipientName(address: string, recipient?: Recipient | null): string {
+function recipientName(address: string, recipient?: Recipient | null): string {
   if (!recipient?.label) return shortHex(address);
   if (recipient.source === "aztecWallet") return `${aliasName(recipient.label)} (alias)`;
 
   return recipient.label;
 }
 
-type SummaryInput = {
-  intent: Intent;
-  token: TokenInfo | null;
-  recipient?: Recipient | null | undefined;
-};
-
 /** The one-line intent: "Transfer 250 OMET to dave (alias)", "Make 2 contract calls", "Cancel proposal 3eb2". */
-export function intentSummary({ intent, token, recipient }: SummaryInput): string {
+export function proposalSummary(
+  proposal: Pick<ProposalView, "intent" | "token">,
+  recipient?: Recipient | null,
+): string {
+  const { intent, token } = proposal;
+
   switch (intent.kind) {
     case "transfer": {
       // A token this member hasn't added has no known decimals, so the base units are the only honest number.
@@ -49,14 +48,6 @@ export function intentSummary({ intent, token, recipient }: SummaryInput): strin
       return `Cancel proposal ${shortProposalId(intent.cancels)}`;
     }
   }
-}
-
-/** A proposal's summary from its view. */
-export function proposalSummary(
-  proposal: Pick<ProposalView, "intent" | "token">,
-  recipient?: Recipient | null,
-): string {
-  return intentSummary({ intent: proposal.intent, token: proposal.token, recipient });
 }
 
 export type MyVote = "approved" | "rejected" | "none";
