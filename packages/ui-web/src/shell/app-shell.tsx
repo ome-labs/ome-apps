@@ -13,8 +13,8 @@ export type AppShellProps = {
 
 /** Page 22's regions: top bar 52, sidebar 240, content up to 960 wide with 40 of padding. */
 /**
- * The window, as the kit draws it: the top bar and sidebar are white chrome with hairline edges, and the page sits on
- * the grey canvas beside them, so its cards stand out.
+ * The window, as the kit draws it: the top bar and sidebar are one white L of chrome, and the page sits on the grey
+ * canvas inside it with a hairline along its top and left edges, so its cards stand out.
  */
 export function AppShell({ topBar, sidebar, banner, children, className }: AppShellProps) {
   return (
@@ -24,7 +24,7 @@ export function AppShell({ topBar, sidebar, banner, children, className }: AppSh
         {sidebar}
         {/* Positioned, so absolutely placed descendants (form controls' hidden inputs) stay inside the scrolling panel;
             otherwise they stretch the window and focusing one scrolls the whole window. */}
-        <main className="relative min-w-0 flex-1 overflow-y-auto bg-canvas">
+        <main className="relative min-w-0 flex-1 overflow-y-auto border-t border-line-subtle bg-canvas">
           <div className="flex flex-col gap-6 px-10 pt-8 pb-10">
             {banner}
             {children}

@@ -48,7 +48,7 @@ export function TopBar({
   return (
     <header
       className={cn(
-        "flex h-12 shrink-0 items-center justify-between gap-4 border-b border-line-subtle bg-surface px-4 select-none",
+        "flex h-12 shrink-0 items-center justify-between gap-4 bg-surface px-4 select-none",
         windowControlsInset && "pl-[92px]",
         className,
       )}
