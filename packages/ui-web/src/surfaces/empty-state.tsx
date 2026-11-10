@@ -1,6 +1,13 @@
 import type { ReactNode } from "react";
 
-import { Illustration, Scene, type IllustrationId, type SceneId } from "@ome-labs/brand/web";
+import {
+  Illustration,
+  PixelObject,
+  Scene,
+  type IllustrationId,
+  type ObjectId,
+  type SceneId,
+} from "@ome-labs/brand/web";
 
 import { cn } from "../styling/class-names.ts";
 
@@ -8,6 +15,8 @@ export type EmptyStateProps = {
   illustration?: IllustrationId | undefined;
   /** One of the app's scenes, in place of an illustration. */
   scene?: SceneId | undefined;
+  /** A single pixel object, for a quieter state than a scene. */
+  object?: ObjectId | undefined;
   title: string;
   children?: ReactNode | undefined;
   action?: ReactNode | undefined;
@@ -27,6 +36,7 @@ const PICTURE = {
 export function EmptyState({
   illustration,
   scene,
+  object,
   title,
   children,
   action,
@@ -41,6 +51,8 @@ export function EmptyState({
         <Scene id={scene} alt="" className={picture} />
       ) : illustration ? (
         <Illustration id={illustration} alt="" className={picture} />
+      ) : object ? (
+        <PixelObject id={object} size={96} alt="" className="mb-1" />
       ) : null}
       <h3 className="type-heading-s text-fg">{title}</h3>
       {children ? <div className="max-w-[360px] type-body-s text-fg-muted">{children}</div> : null}
