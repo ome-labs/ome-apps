@@ -42,7 +42,7 @@ export function ProposalsPage() {
   return (
     <Page
       title="Proposals"
-      lead="Funds move only when enough members approve."
+      lead="Every payment from the vault starts as a proposal. It goes through once enough members approve it."
       actions={
         <Button variant="primary" icon="plus" onClick={create}>
           New proposal
@@ -66,8 +66,8 @@ export function ProposalsPage() {
         {list.error ? <Banner kind="alarm">{list.error.message}</Banner> : null}
         {list.data && shown.length === 0 ? (
           <EmptyState
-            scene="no-proposals"
-            size="xl"
+            object="ballot"
+            className="pt-16"
             title={EMPTY[filter].title}
             action={
               filter === "open" || filter === "all" ? (

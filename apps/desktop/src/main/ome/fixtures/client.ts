@@ -1,12 +1,12 @@
-// Answers the renderer from the sample data, in the chosen scenario. Reads are simulated; the few writes the shell
-// needs (unlocking and locking the signer) change state; every other write fails with a clear message until a screen
-// needs it simulated.
+// Answers the renderer from the sample data, in the chosen scenario. Reads are simulated; the writes the screens built
+// so far need (the signer, settings, founding, proposals) change state; every other write fails with a clear message
+// until a screen needs it simulated.
 import type { DaemonEvent, DaemonParams, DaemonResult, Hex32, Settings } from "@ome-labs/api";
 
 import type { RendererMethod } from "../../../bridge/contract.ts";
 import { type OmeClient, OmeError } from "../client.ts";
 import { FixtureFounding } from "./founding.ts";
-import { proposals, review } from "./proposals.ts";
+import { FixtureProposals } from "./proposal-state.ts";
 import { ACCOUNTS, VAULT } from "./sample.ts";
 import type { Scenario } from "./scenarios.ts";
 import { keeper, node, settings, signer, status } from "./status.ts";
@@ -23,6 +23,11 @@ export class FixtureClient implements OmeClient {
   #settings: Settings = settings();
   readonly #listeners = new Set<(event: DaemonEvent) => void>();
   /** A founded vault makes this a profile with Treasury, as the sample story has it. */
+  readonly #proposals = new FixtureProposals(
+    (event) => this.#emit(event),
+    () =>
+      this.#unlockedUntil !== null && this.#unlockedUntil > now() && this.#scenario !== "locked",
+  );
   readonly #founding = new FixtureFounding(
     (event) => this.#emit(event),
     () => this.setScenario("normal"),
@@ -161,9 +166,16 @@ export class FixtureClient implements OmeClient {
     "vault.counterparties": ({ vault }) => (this.#vault(vault), counterparties(now())),
     "vault.audit": ({ vault, limit }) => (this.#vault(vault), audit(now()).slice(0, limit)),
     "tokens.list": ({ vault }) => (this.#vault(vault), tokens()),
-    "proposals.list": ({ vault }) => (this.#vault(vault), proposals(now())),
-    "proposals.get": ({ vault, id }) => (this.#vault(vault), this.#proposal(id)),
-    "proposals.review": ({ vault, id }) => (this.#vault(vault), review(this.#proposal(id))),
+    "proposals.list": ({ vault }) => (this.#vault(vault), this.#proposals.list()),
+    "proposals.get": ({ vault, id }) => (this.#vault(vault), this.#proposals.get(id)),
+    "proposals.review": ({ vault, id }) => (this.#vault(vault), this.#proposals.review(id)),
+    "proposals.approve": ({ vault, id }) => (this.#vault(vault), this.#proposals.approve(id)),
+    "proposals.reject": ({ vault, id, reason }) => (
+      this.#vault(vault),
+      this.#proposals.reject(id, reason)
+    ),
+    "proposals.execute": ({ vault, id }) => (this.#vault(vault), this.#proposals.execute(id)),
+    "proposals.cancel": ({ vault, id }) => (this.#vault(vault), this.#proposals.cancel(id)),
     "aztec.aliases": () => [
       { key: "accounts:alice", value: ACCOUNTS.alice },
       { key: "accounts:bob", value: ACCOUNTS.bob },
@@ -181,10 +193,4 @@ export class FixtureClient implements OmeClient {
     "founding.get": ({ lobby }) => this.#founding.founding(lobby),
     "membership.list": ({ vault }) => (this.#vault(vault), []),
   };
-
-  #proposal(id: Hex32) {
-    const found = proposals(now()).find((p) => p.id === id);
-    if (!found) throw new OmeError("not-found", "No such proposal.");
-    return found;
-  }
 }

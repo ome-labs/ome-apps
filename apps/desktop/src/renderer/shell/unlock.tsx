@@ -12,10 +12,13 @@ import { unwrap } from "../data/session.ts";
 export function Unlock({
   open,
   onOpenChange,
+  onUnlocked,
   maxSeconds,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Runs before the sheet closes, so a waiting action knows the signer is open. */
+  onUnlocked?: (() => void) | undefined;
   maxSeconds: number;
 }) {
   const [pending, setPending] = useState(false);
@@ -57,6 +60,7 @@ export function Unlock({
             ttlSecs: request.ttlSecs,
           });
         }
+        onUnlocked?.();
         change(false);
       } catch (failure) {
         setError(failure instanceof Error ? failure.message : String(failure));
@@ -64,7 +68,7 @@ export function Unlock({
         setPending(false);
       }
     },
-    [change],
+    [change, onUnlocked],
   );
 
   return (
