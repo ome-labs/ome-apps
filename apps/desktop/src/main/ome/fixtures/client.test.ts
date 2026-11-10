@@ -59,9 +59,33 @@ describe("FixtureClient", () => {
 
   it("says which methods it doesn't simulate yet", async () => {
     await expect(
-      new FixtureClient("normal").call("lobby.inspect", { invite: "x" }),
+      new FixtureClient("normal").call("devices.pair", {} as never),
     ).rejects.toMatchObject({
       kind: "failed",
+    });
+  });
+
+  it("opens a lobby, and refuses an invite for another network", async () => {
+    const client = new FixtureClient("no-vaults");
+    const lobby = await client.call("lobby.create", {
+      name: "Treasury",
+      threshold: 2,
+      viewingThreshold: 2,
+    });
+    expect(lobby).toMatchObject({
+      role: "host",
+      status: "open",
+      members: [{ name: "Alice", you: true }],
+    });
+    expect(lobby.invite).toMatch(/^ome-invite:/u);
+
+    await expect(
+      client.call("lobby.inspect", { invite: "ome-invite:wrong" }),
+    ).resolves.toMatchObject({
+      sameNetwork: false,
+    });
+    await expect(client.call("lobby.join", { invite: "ome-invite:wrong" })).rejects.toMatchObject({
+      kind: "invalid",
     });
   });
 });

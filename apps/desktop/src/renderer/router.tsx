@@ -7,6 +7,7 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 
+import { CreatePage, JoinPage, validateLobbySearch } from "./founding/pages.tsx";
 import { HomePage } from "./home/home-page.tsx";
 import { Profiles } from "./onboarding/profiles.tsx";
 import { Welcome } from "./onboarding/welcome.tsx";
@@ -33,13 +34,29 @@ const shell = createRoute({ getParentRoute: () => root, id: "shell", component: 
 /** App pages whose screens are built; the others stay empty frames for now. */
 const SCREENS: Partial<Record<string, () => React.ReactNode>> = { "/home": HomePage };
 
-const appPages = APP_PAGES.filter((page) => page.path !== "/settings").map((page) => {
+/** Pages with routes of their own below (search params, child pages). */
+const OWN_ROUTES = new Set(["/settings", "/create", "/join"]);
+
+const appPages = APP_PAGES.filter((page) => !OWN_ROUTES.has(page.path)).map((page) => {
   const component = SCREENS[page.path];
   return createRoute({
     getParentRoute: () => shell,
     path: page.path,
     ...(component ? { component } : {}),
   });
+});
+
+const create = createRoute({
+  getParentRoute: () => shell,
+  path: "/create",
+  validateSearch: validateLobbySearch,
+  component: CreatePage,
+});
+const join = createRoute({
+  getParentRoute: () => shell,
+  path: "/join",
+  validateSearch: validateLobbySearch,
+  component: JoinPage,
 });
 
 const settings = createRoute({
@@ -70,6 +87,8 @@ const tree = root.addChildren([
   profiles,
   shell.addChildren([
     ...appPages,
+    create,
+    join,
     settings.addChildren([settingsIndex, ...settingsPages]),
     vault.addChildren(vaultPages),
   ]),

@@ -5,6 +5,7 @@ import type { DaemonEvent, DaemonParams, DaemonResult, Hex32, Settings } from "@
 
 import type { RendererMethod } from "../../../bridge/contract.ts";
 import { type OmeClient, OmeError } from "../client.ts";
+import { FixtureFounding } from "./founding.ts";
 import { proposals, review } from "./proposals.ts";
 import { ACCOUNTS, VAULT } from "./sample.ts";
 import type { Scenario } from "./scenarios.ts";
@@ -21,6 +22,11 @@ export class FixtureClient implements OmeClient {
   /** Settings changes stay for the session, so the settings page can be tried on the sample data. */
   #settings: Settings = settings();
   readonly #listeners = new Set<(event: DaemonEvent) => void>();
+  /** A founded vault makes this a profile with Treasury, as the sample story has it. */
+  readonly #founding = new FixtureFounding(
+    (event) => this.#emit(event),
+    () => this.setScenario("normal"),
+  );
 
   constructor(scenario: Scenario) {
     this.#scenario = scenario;
@@ -164,7 +170,15 @@ export class FixtureClient implements OmeClient {
       { key: "accounts:dave", value: ACCOUNTS.dave },
     ],
     "devices.list": () => [],
-    "lobby.list": () => [],
+    "lobby.list": () => this.#founding.list(),
+    "lobby.create": (params) => this.#founding.create(params),
+    "lobby.inspect": ({ invite }) => this.#founding.inspect(invite),
+    "lobby.join": ({ invite }) => this.#founding.join(invite),
+    "lobby.get": ({ lobby }) => this.#founding.get(lobby),
+    "lobby.start": (params) => this.#founding.start(params),
+    "lobby.leave": ({ lobby }) => (this.#founding.leave(lobby), null),
+    "founding.begin": ({ lobby }) => this.#founding.begin(lobby),
+    "founding.get": ({ lobby }) => this.#founding.founding(lobby),
     "membership.list": ({ vault }) => (this.#vault(vault), []),
   };
 

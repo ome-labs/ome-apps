@@ -149,3 +149,31 @@ test("starts a member without a vault on Home", async () => {
   await expect(page.getByRole("button", { name: "Create vault" })).toBeVisible();
   await app.close();
 });
+
+test("creates a vault: lobby, start and founding", async () => {
+  const app = await electron.launch({
+    args: [join(import.meta.dirname, "..")],
+    env: {
+      ...process.env,
+      OME_DESKTOP_SOURCE: "fixtures",
+      OME_DESKTOP_SCENARIO: "no-vaults",
+      OME_DESKTOP_USER_DATA: mkdtempSync(join(tmpdir(), "ome-desktop-smoke-")),
+    },
+  });
+  const page = await app.firstWindow();
+  await page.getByRole("button", { name: "Create vault" }).click();
+  await page.getByRole("button", { name: "Open lobby" }).click();
+  await expect(page.getByText("Name the vault.")).toBeVisible();
+  await page.getByLabel("Vault name").fill("Treasury");
+  await page.getByRole("button", { name: "Open lobby" }).click();
+
+  // The sample co-founders join on their own; Start waits for them.
+  await expect(page.getByText("Carol")).toBeVisible({ timeout: 10_000 });
+  await page.getByRole("button", { name: "Start" }).click();
+  await expect(page.getByRole("heading", { name: "Founding Treasury" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Treasury is ready" })).toBeVisible({
+    timeout: 20_000,
+  });
+  await expect(page.getByRole("button", { name: "Open Treasury" })).toBeVisible();
+  await app.close();
+});
