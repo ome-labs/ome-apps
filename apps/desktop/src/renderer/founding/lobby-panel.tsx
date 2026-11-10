@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { useNavigate } from "@tanstack/react-router";
 
@@ -7,18 +7,16 @@ import { Illustration } from "@ome-labs/brand/web";
 import {
   Banner,
   Button,
-  Checkbox,
   CopyButton,
   MemberAvatar,
-  NumberStepper,
-  QrButton,
+  QrCode,
   Tag,
   ThresholdChip,
 } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
 import { FlowPage } from "./flow-page.tsx";
-import { LIMITS, blocker, networkName, risks } from "./thresholds.ts";
+import { blocker, networkName } from "./thresholds.ts";
 
 /** Stage 2: who has joined. The host shares the invite, sets the final thresholds and starts; a guest waits. */
 export function LobbyPanel({ lobby }: { lobby: LobbyView }) {
@@ -52,7 +50,7 @@ function Invite({ invite, network }: { invite: string; network: string }) {
         <div className="flex flex-col gap-1">
           <h2 className="type-heading-s text-fg">Invite</h2>
           <p className="type-body-s text-fg-muted">
-            Send it to each co-founder. It only opens on the same network.
+            Send it to each co-founder, or let them scan it. It only opens on the same network.
           </p>
         </div>
         <Tag>{networkName(network)}</Tag>
@@ -62,14 +60,8 @@ function Invite({ invite, network }: { invite: string; network: string }) {
           {invite}
         </code>
         <CopyButton value={invite} label="Copy invite" size="md" />
-        <QrButton
-          value={invite}
-          label="invite"
-          title="Invite"
-          description="A co-founder scans it to join."
-          size="md"
-        />
       </div>
+      <QrCode value={invite} label="Invite, to scan" size={184} className="self-start" />
     </section>
   );
 }
@@ -112,27 +104,9 @@ function Roster({ lobby }: { lobby: LobbyView }) {
 function StartCard({ lobby }: { lobby: LobbyView }) {
   const navigate = useNavigate();
   const members = lobby.members.length;
-  const [approvals, setApprovals] = useState(lobby.threshold);
-  const [read, setRead] = useState(lobby.viewingThreshold);
-  const [confirmed, setConfirmed] = useState<ReadonlySet<string>>(new Set());
   const [pending, setPending] = useState<"start" | "cancel">();
   const [error, setError] = useState<string>();
-
-  const shape = useMemo(() => ({ approvals, read }), [approvals, read]);
-  const found = risks(shape, members);
-  const stop = blocker(shape, members);
-  const unconfirmed = found.some((risk) => risk.confirm && !confirmed.has(risk.id));
-
-  const confirm = useCallback(
-    (id: string, yes: boolean) =>
-      setConfirmed((current) => {
-        const next = new Set(current);
-        if (yes) next.add(id);
-        else next.delete(id);
-        return next;
-      }),
-    [],
-  );
+  const stop = blocker({ approvals: lobby.threshold, read: lobby.viewingThreshold }, members);
 
   const start = useCallback(async () => {
     setPending("start");
@@ -140,15 +114,15 @@ function StartCard({ lobby }: { lobby: LobbyView }) {
     try {
       await callOme("lobby.start", {
         lobby: lobby.lobby,
-        threshold: approvals,
-        viewingThreshold: read,
+        threshold: lobby.threshold,
+        viewingThreshold: lobby.viewingThreshold,
       });
       await callOme("founding.begin", { lobby: lobby.lobby });
     } catch (failure) {
       setError(failure instanceof Error ? failure.message : String(failure));
       setPending(undefined);
     }
-  }, [approvals, lobby.lobby, read]);
+  }, [lobby.lobby, lobby.threshold, lobby.viewingThreshold]);
   const cancel = useCallback(async () => {
     setPending("cancel");
     await callOme("lobby.leave", { lobby: lobby.lobby }).catch(() => undefined);
@@ -157,58 +131,18 @@ function StartCard({ lobby }: { lobby: LobbyView }) {
 
   return (
     <section className="flex flex-col rounded-lg bg-surface shadow-1">
-      <header className="flex flex-col gap-1 border-b border-line-subtle px-6 py-4">
-        <h2 className="type-heading-s text-fg">Final thresholds</h2>
-        <p className="type-body-s text-fg-muted">Set them for the {members} who joined.</p>
+      <header className="flex flex-col gap-3 border-b border-line-subtle px-6 py-4">
+        <div className="flex flex-col gap-1">
+          <h2 className="type-heading-s text-fg">Thresholds</h2>
+          <p className="type-body-s text-fg-muted">For the {members} who joined.</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <ThresholdChip kind="spend" threshold={lobby.threshold} members={members} />
+          <ThresholdChip kind="read" threshold={lobby.viewingThreshold} members={members} />
+        </div>
       </header>
 
-      <div className="flex flex-col divide-y divide-line-subtle px-6">
-        <div className="flex items-center justify-between gap-4 py-4">
-          <span className="type-label-m text-fg">Approvals to spend</span>
-          <NumberStepper
-            aria-label="Approvals to spend"
-            value={approvals}
-            onValueChange={setApprovals}
-            min={LIMITS.approvals.min}
-            max={Math.max(LIMITS.approvals.min, Math.min(LIMITS.approvals.max, members))}
-          />
-        </div>
-        <div className="flex items-center justify-between gap-4 py-4">
-          <span className="type-label-m text-fg">Members to read</span>
-          <NumberStepper
-            aria-label="Members to read"
-            value={read}
-            onValueChange={setRead}
-            min={LIMITS.read.min}
-            max={Math.max(LIMITS.read.min, Math.min(LIMITS.read.max, members))}
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-wrap gap-2 px-6 pb-4">
-        <ThresholdChip kind="spend" threshold={approvals} members={members} />
-        <ThresholdChip kind="read" threshold={read} members={members} />
-      </div>
-
-      <div className="flex flex-col gap-3 border-t border-line-subtle px-6 py-4">
-        {found.map((risk) =>
-          risk.confirm ? (
-            <RiskConfirm
-              key={risk.id}
-              id={risk.id}
-              text={risk.text}
-              checked={confirmed.has(risk.id)}
-              onChange={confirm}
-            />
-          ) : (
-            <p key={risk.id} className="type-body-s text-fg-muted">
-              {risk.text}
-            </p>
-          ),
-        )}
-      </div>
-
-      <div className="flex flex-col gap-3 border-t border-line-subtle px-6 py-4">
+      <div className="flex flex-col gap-3 px-6 py-4">
         {error ? <Banner kind="alarm">{error}</Banner> : null}
         {stop ? <p className="type-body-s text-fg-subtle">{stop}</p> : null}
         <div className="flex items-center justify-end gap-2">
@@ -220,33 +154,13 @@ function StartCard({ lobby }: { lobby: LobbyView }) {
             icon="play"
             onClick={start}
             pending={pending === "start"}
-            disabled={pending === "cancel" || Boolean(stop) || unconfirmed}
+            disabled={pending === "cancel" || Boolean(stop)}
           >
             {pending === "start" ? "Starting…" : "Start"}
           </Button>
         </div>
       </div>
     </section>
-  );
-}
-
-function RiskConfirm({
-  id,
-  text,
-  checked,
-  onChange,
-}: {
-  id: string;
-  text: string;
-  checked: boolean;
-  onChange: (id: string, yes: boolean) => void;
-}) {
-  const change = useCallback((yes: boolean) => onChange(id, yes), [id, onChange]);
-  return (
-    <div className="flex flex-col gap-2 rounded-md bg-warning-subtle px-3 py-2.5">
-      <p className="type-body-s text-warning">{text}</p>
-      <Checkbox label="I understand" checked={checked} onCheckedChange={change} />
-    </div>
   );
 }
 
