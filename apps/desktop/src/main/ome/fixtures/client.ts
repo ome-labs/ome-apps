@@ -176,6 +176,11 @@ export class FixtureClient implements OmeClient {
     ),
     "proposals.execute": ({ vault, id }) => (this.#vault(vault), this.#proposals.execute(id)),
     "proposals.cancel": ({ vault, id }) => (this.#vault(vault), this.#proposals.cancel(id)),
+    "proposals.preview": ({ vault, intent }) => (
+      this.#vault(vault),
+      this.#proposals.preview(intent)
+    ),
+    "proposals.create": (params) => (this.#vault(params.vault), this.#proposals.create(params)),
     "aztec.aliases": () => [
       { key: "accounts:alice", value: ACCOUNTS.alice },
       { key: "accounts:bob", value: ACCOUNTS.bob },

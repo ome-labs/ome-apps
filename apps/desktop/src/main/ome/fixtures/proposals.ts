@@ -11,7 +11,7 @@ const HOUR = 3600;
 const AGE = { auditDeposit: 90, designWork: 30, tooLarge: 50 } as const;
 
 /** A private token transfer as the payload encodes it, followed by the fee payer's call (the vault never pays). */
-function transferCalls(to: Hex32, amount: string): DecodedCall[] {
+export function transferCalls(to: Hex32, amount: string): DecodedCall[] {
   return [
     { to: OMET.address, toLabel: "OMET", fn: "transfer", args: [to, amount], isStatic: false },
     {

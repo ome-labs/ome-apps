@@ -1,10 +1,20 @@
 // The proposals as they change in a session: votes, an execution that walks its phases, and cancels. The sample
 // member is Alice in slot 0; her votes need the signer unlocked, as the daemon's do.
-import type { DaemonEvent, ExecutionPhase, Hex32, ProposalView, Review } from "@ome-labs/api";
+import type {
+  DaemonEvent,
+  ExecutionPhase,
+  Hex32,
+  Intent,
+  ProposalPreview,
+  ProposalView,
+  ProposeParams,
+  Review,
+} from "@ome-labs/api";
 
 import { OmeError } from "../client.ts";
-import { proposals, review } from "./proposals.ts";
-import { VAULT, sampleHex } from "./sample.ts";
+import { proposals, review, transferCalls } from "./proposals.ts";
+import { OMET, VAULT, sampleHex } from "./sample.ts";
+import { tokens } from "./vault.ts";
 
 const ME = { slot: 0, index: 1, name: "Alice", valid: true, reason: null };
 const OPEN = new Set(["collecting", "ready", "blocked"]);
@@ -48,6 +58,63 @@ export class FixtureProposals {
 
   review(id: Hex32): Review {
     return review(this.get(id));
+  }
+
+  /** A dry run: a transfer of more than the vault holds fails, as the simulation would. */
+  preview(intent: Intent): ProposalPreview {
+    if (intent.kind !== "transfer") {
+      return { ok: true, calls: [], gas: { da: 1_024, l2: 280_000 }, error: null };
+    }
+    const held = tokens().find((entry) => entry.token.address === intent.token)?.balance;
+    if (held === undefined || held === null) {
+      return { ok: false, calls: [], gas: null, error: "The vault holds none of this token." };
+    }
+    if (BigInt(intent.amount) > BigInt(held)) {
+      return {
+        ok: false,
+        calls: transferCalls(intent.to, intent.amount),
+        gas: null,
+        error: "The vault doesn't hold that much: the transfer would fail.",
+      };
+    }
+    return {
+      ok: true,
+      calls: transferCalls(intent.to, intent.amount),
+      gas: { da: 1_536, l2: 412_000 },
+      error: null,
+    };
+  }
+
+  /** A new proposal, with the proposer's approval already on it. */
+  create({ intent, expiresInHours }: ProposeParams): ProposalView {
+    this.#signer();
+    const preview = this.preview(intent);
+    if (!preview.ok) throw new OmeError("failed", preview.error ?? "The simulation failed.");
+    const template = this.#list[0] as ProposalView;
+    const made = now();
+    const id = sampleHex(`proposal:${made}:${JSON.stringify(intent)}`);
+    const proposal: ProposalView = settle({
+      ...template,
+      id,
+      intent,
+      proposer: { index: ME.index, name: ME.name },
+      status: "collecting",
+      approvals: [ME],
+      rejections: [],
+      approvedByMe: true,
+      rejectedByMe: false,
+      expiresAt: made + expiresInHours * 3600,
+      txNonce: sampleHex(`${id}.nonce`),
+      outerHash: sampleHex(`${id}.outer-hash`),
+      approvalMessage: sampleHex(`${id}.approval-message`),
+      calls: preview.calls,
+      token: intent.kind === "transfer" && intent.token === OMET.address ? OMET : null,
+      execution: null,
+      cancelledBy: null,
+    });
+    this.#list = [proposal, ...this.#list];
+    this.#changed();
+    return proposal;
   }
 
   approve(id: Hex32): ProposalView {

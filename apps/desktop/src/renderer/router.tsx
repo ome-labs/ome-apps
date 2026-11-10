@@ -11,6 +11,7 @@ import { CreatePage, JoinPage, validateLobbySearch } from "./founding/pages.tsx"
 import { HomePage } from "./home/home-page.tsx";
 import { Profiles } from "./onboarding/profiles.tsx";
 import { Welcome } from "./onboarding/welcome.tsx";
+import { NewProposalPage } from "./proposals/new-proposal-page.tsx";
 import { ProposalPage } from "./proposals/proposal-page.tsx";
 import { ProposalsPage } from "./proposals/proposals-page.tsx";
 import { APP_PAGES, VAULT_PAGES } from "./routes/pages.ts";
@@ -80,6 +81,7 @@ const vault = createRoute({ getParentRoute: () => shell, path: "/vaults/$vault" 
 const VAULT_SCREENS: Partial<Record<string, () => React.ReactNode>> = {
   "/proposals": ProposalsPage,
   "/proposals/$id": ProposalPage,
+  "/new": NewProposalPage,
 };
 const vaultPages = VAULT_PAGES.map((page) => {
   const component = VAULT_SCREENS[page.path];
