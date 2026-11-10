@@ -12,6 +12,8 @@ export function tokensObject(theme: Theme) {
       light: byUtility("light"),
       dark: byUtility("dark"),
       primitive: Object.fromEntries(theme.primitives.map((color) => [color.name, color.hex])),
+      // The CSS custom property behind each utility name, for inline styles and SVG attributes.
+      variable: Object.fromEntries(theme.semantic.map((color) => [color.utility, color.variable])),
     },
     font: {
       web: Object.fromEntries(
