@@ -5,5 +5,5 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "types": ["vite/client"]
   },
-  "include": ["src", "stories", "tests", ".storybook", "*.config.ts", "vitest.setup.ts"]
+  "include": ["src", "tests", "*.config.ts", "vitest.setup.ts"]
 }

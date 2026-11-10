@@ -5,14 +5,15 @@
   "description": "Ome UI components for React DOM: shadcn on Base UI, Tailwind 4, Motion",
   "license": "Apache-2.0",
   "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": "./src/index.ts",
     "./styles.css": "./src/styles.css"
   },
   "scripts": {
-    "build-storybook": "storybook build -o storybook-static",
     "lint": "oxlint --deny-warnings .",
-    "storybook": "storybook dev -p 6006",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json"
   },
@@ -31,12 +32,6 @@
     "uqr": "catalog:"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "10.6.6",
-    "@storybook/addon-docs": "10.6.6",
-    "@storybook/addon-themes": "10.6.6",
-    "@storybook/react": "10.6.6",
-    "@storybook/react-vite": "10.6.6",
-    "@tailwindcss/vite": "catalog:",
     "@testing-library/react": "catalog:",
     "@testing-library/user-event": "14.6.9",
     "@types/react": "catalog:",
@@ -48,7 +43,6 @@
     "oxlint": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "storybook": "10.6.6",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",

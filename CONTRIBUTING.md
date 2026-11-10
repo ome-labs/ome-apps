@@ -9,12 +9,12 @@ TypeScript UI repo.
 - `pnpm install` also installs the git hooks (lefthook): staged files are formatted and linted on commit, the message
   is checked by commitlint, and `pnpm check` runs before a push.
 - `pnpm build` generates what other packages import: the token theme (`packages/tokens/dist`) and the brand
-  components (`packages/brand/src/generated`). Turbo runs it before `typecheck`, `test`, `storybook` and `dev`.
+  components (`packages/brand/src/generated`). Turbo runs it before `typecheck`, `test` and `dev`.
 
 ## Workflow
 
 - Commit after each coherent change with a [Conventional Commit](https://www.conventionalcommits.org/). Scopes:
-  `desktop`, `tokens`, `brand`, `icons`, `format`, `ui-web`, `ui-native`, `repo`. Body lines are at most 100 characters.
+  `desktop`, `kit`, `tokens`, `brand`, `icons`, `format`, `ui-web`, `ui-native`, `repo`. Body lines are at most 100 characters.
 - Run the narrowest check first (`pnpm --filter @ome-labs/format test`), then `pnpm check`, which formats, lints,
   typechecks and tests everything.
 - Stop and ask before adding a dependency that duplicates one already chosen, changing a token value away from Figma,
@@ -67,5 +67,6 @@ code and no tests of what types already guarantee.
 | `brand`     | Vitest                         | the manifest matches the files, every component renders                                             |
 | `icons`     | Vitest                         | every registry name renders a distinct Hugeicons icon                                               |
 | `format`    | Vitest                         | table-driven: amounts (to u128 max, bad input), ids, times, thresholds, statuses, risks, checks     |
-| `ui-web`    | Vitest + Testing Library       | keyboard, focus, copying, type-to-confirm, review gating, amounts; axe on every story               |
+| `ui-web`    | Vitest + Testing Library       | keyboard, focus, copying, type-to-confirm, review gating, amounts; axe on each component domain     |
 | `ui-native` | jest-expo + RN Testing Library | presses, disabled states, copying, type-to-confirm, review gating, amounts                          |
+| `kit`       | Vitest                         | every example's code snippet is found in its source; search matching; contrast grading              |

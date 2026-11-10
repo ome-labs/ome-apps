@@ -53,14 +53,15 @@ Components take data in `@ome-labs/api` and `@ome-labs/format` shapes (`StatusBa
 `Amount` takes `{ amount, token }`, `HealthMeter` takes `readingHealth(…)`), so a screen can't show a status in the
 wrong colour or a rounded amount.
 
-## Storybook
+## The kit
 
 ```sh
-pnpm --filter @ome-labs/ui-web storybook   # http://localhost:6006
+pnpm kit   # http://localhost:3001
 ```
 
-Every component has stories with each variant and state, in light and dark (toolbar), using the guide's sample data
-(`stories/sample.ts`: Alice, Bob and Carol; Treasury; OMET; proposals `3eb2`, `335c`, `868c`).
+The kit app ([`apps/kit`](../../apps/kit)) shows every component with each variant and state, in light, dark or both
+side by side, with the code for each example, using the guide's sample data (Alice, Bob and Carol; Treasury; OMET;
+proposals `3eb2`, `335c`, `868c`).
 
 ## Tests
 
@@ -68,8 +69,9 @@ Every component has stories with each variant and state, in light and dark (tool
 
 - behaviour tests (`tests/controls.test.tsx`): keyboard activation, dialog focus and Escape, copy buttons,
   type-to-confirm, `Amount` never rounding, a failed review check disabling Approve;
-- an axe check over every story (`tests/stories.test.tsx`), with colour contrast left to the tokens package, whose
-  tests compute it (jsdom can't).
+- an axe check over one representative render per component domain (`tests/axe.test.tsx`), including disabled and
+  invalid controls, every proposal status, a failed review check and an open dialog, with colour contrast left to
+  the tokens package, whose tests compute it (jsdom can't).
 
 ## Notes
 

@@ -6,6 +6,7 @@ packages:
 catalog:
   "@ome-labs/api": 0.1.0
   "@tailwindcss/vite": 4.3.5
+  "@tanstack/react-router": 1.170.46
   "@testing-library/react": 16.3.3
   "@types/node": 26.6.6
   "@types/react": 19.3.0
@@ -35,7 +36,7 @@ allowBuilds:
   electron: true
   # electron-builder's Windows installer; no Windows builds.
   electron-winstaller: false
-  # esbuild checks its platform binary after install; Storybook bundles with it.
+  # esbuild checks its platform binary after install; Vite pulls it in.
   esbuild: true
   lefthook: true
   # sharp downloads its prebuilt libvips for the brand export script.

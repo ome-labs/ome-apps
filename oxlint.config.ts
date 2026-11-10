@@ -22,8 +22,9 @@ export default defineConfig({
   rules: { "no-restricted-imports": ["error", restrictedImports] },
   overrides: [
     {
-      // Stories and tests render fixed sample data; memoising their props would only obscure them.
-      files: ["**/stories/**", "**/*.stories.tsx", "**/tests/**", "**/*.test.tsx"],
+      // The kit app and the tests render fixed reference pages and sample data; memoising their props would only
+      // obscure them.
+      files: ["apps/kit/**", "**/tests/**", "**/*.test.tsx"],
       rules: {
         "react-perf/jsx-no-new-object-as-prop": "off",
         "react-perf/jsx-no-new-array-as-prop": "off",
