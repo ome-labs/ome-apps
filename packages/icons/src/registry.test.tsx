@@ -5,8 +5,8 @@ import { registry } from "./registry.ts";
 import { Icon, iconNames } from "./web.tsx";
 
 describe("registry", () => {
-  test("holds the kit's 85 icons", () => {
-    expect(iconNames).toHaveLength(85);
+  test("holds the kit's 86 icons", () => {
+    expect(iconNames).toHaveLength(86);
   });
 
   test.each(iconNames)("%s resolves to a Hugeicons icon that renders", (name) => {

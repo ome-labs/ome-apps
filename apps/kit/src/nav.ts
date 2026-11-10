@@ -56,7 +56,7 @@ export const nav = [
       {
         to: "/brand/icons",
         title: "Icons",
-        description: "The 85 interface icons under Ome names",
+        description: "The 86 interface icons under Ome names",
         icon: "grid",
       },
       {

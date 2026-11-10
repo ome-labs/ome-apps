@@ -1,6 +1,6 @@
 # @ome-labs/icons
 
-The kit's 85 icons (Figma page 11), drawn by [Hugeicons](https://hugeicons.com) and named for what they mean in Ome.
+The kit's 86 icons (Figma page 11), drawn by [Hugeicons](https://hugeicons.com) and named for what they mean in Ome.
 Apps import icons only from here; oxlint rejects direct `@hugeicons/*` imports elsewhere, so swapping an icon is a
 one-line change in `src/registry.ts`.
 

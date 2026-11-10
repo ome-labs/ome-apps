@@ -81,6 +81,7 @@ import UserGroupIcon from "@hugeicons/core-free-icons/UserGroupIcon";
 import UserIcon from "@hugeicons/core-free-icons/UserIcon";
 import UserMultipleIcon from "@hugeicons/core-free-icons/UserMultipleIcon";
 import UserRemove01Icon from "@hugeicons/core-free-icons/UserRemove01Icon";
+import UserSwitchIcon from "@hugeicons/core-free-icons/UserSwitchIcon";
 import VaultIcon from "@hugeicons/core-free-icons/VaultIcon";
 import ViewIcon from "@hugeicons/core-free-icons/ViewIcon";
 import ViewOffIcon from "@hugeicons/core-free-icons/ViewOffIcon";
@@ -128,6 +129,7 @@ export const registry = {
   user: UserIcon,
   "user-plus": UserAdd01Icon,
   "user-minus": UserRemove01Icon,
+  "user-switch": UserSwitchIcon,
   clock: Clock01Icon,
   hourglass: HourglassIcon,
   calendar: Calendar03Icon,
