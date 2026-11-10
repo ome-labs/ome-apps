@@ -56,9 +56,9 @@ export function StatusBar({ status, onUnlock }: { status: Status; onUnlock: () =
   );
 
   return (
-    <div className="app-drag flex shrink-0 items-center border-b border-line-subtle bg-surface pr-2">
+    <div className="app-drag flex shrink-0 items-center bg-surface pr-2">
       <TopBar
-        className="min-w-0 flex-1 border-b-0"
+        className="min-w-0 flex-1"
         windowControlsInset={IS_MAC}
         node={nodeState(node)}
         keeper={keeper.status}

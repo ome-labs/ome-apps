@@ -1,22 +1,27 @@
-import { useCallback } from "react";
+import { type ReactNode, useCallback } from "react";
 
 import { useNavigate } from "@tanstack/react-router";
 
-import { Illustration, type IllustrationId } from "@ome-labs/brand/web";
-import { Button, ThresholdChip } from "@ome-labs/ui-web";
+import { Button } from "@ome-labs/ui-web";
 
 import { useOme } from "../data/ome.ts";
+import { type Placed, WayScene } from "./way-scene.tsx";
 
-/** The vault shapes worth recommending: each survives losing a member and still spends and reads. */
-const SHAPES = [
-  {
-    members: 3,
-    approvals: 2,
-    read: 2,
-    survives: "Lose any one member and you can still spend and read.",
-  },
-  { members: 5, approvals: 3, read: 3, survives: "Lose any two and you can still spend and read." },
-] as const;
+// Each way in, as a small still life: what you do, drawn with the kit's objects.
+const CREATE: Placed[] = [
+  { id: "vault", size: 96, x: 50, y: 56 },
+  { id: "key", size: 48, x: 82, y: 72 },
+  { id: "star", size: 48, x: 17, y: 30 },
+];
+const JOIN: Placed[] = [
+  { id: "paper-boat", size: 96, x: 42, y: 58 },
+  { id: "envelope", size: 48, x: 82, y: 32 },
+];
+const REQUEST: Placed[] = [
+  { id: "bridge", size: 96, x: 50, y: 60 },
+  { id: "lantern", size: 48, x: 15, y: 40 },
+  { id: "heron", size: 48, x: 85, y: 42 },
+];
 
 /** `/home`: where a member without a vault starts. Create one, join one by invite, or ask to join an existing one. */
 export function HomePage() {
@@ -26,7 +31,7 @@ export function HomePage() {
   const name = status.data?.profile?.name;
 
   return (
-    <div className="flex max-w-[1040px] flex-col gap-8">
+    <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-1.5">
         <h1 className="type-heading-xl text-fg">{name ? `Welcome, ${name}` : "Welcome"}</h1>
         <p className="type-body-m text-fg-muted">
@@ -36,7 +41,7 @@ export function HomePage() {
 
       <div className="grid grid-cols-3 gap-5">
         <Way
-          illustration="create-vault"
+          scene={<WayScene texture="glow" objects={CREATE} />}
           title="Create a vault"
           text="Start a vault and invite co-founders."
           action={
@@ -46,7 +51,7 @@ export function HomePage() {
           }
         />
         <Way
-          illustration="invite"
+          scene={<WayScene texture="water" objects={JOIN} />}
           title="Join a vault"
           text="Paste an invite from a co-founder."
           action={
@@ -56,7 +61,7 @@ export function HomePage() {
           }
         />
         <Way
-          illustration="join-request"
+          scene={<WayScene texture="stars" objects={REQUEST} />}
           title="Join an existing vault"
           text="Send a join request to one of its members."
           action={
@@ -66,52 +71,24 @@ export function HomePage() {
           }
         />
       </div>
-
-      <section className="flex flex-col gap-4 rounded-lg bg-surface p-6 shadow-1">
-        <header className="flex flex-col gap-1">
-          <h2 className="type-heading-s text-fg">Choosing thresholds</h2>
-          <p className="type-body-s text-fg-muted">
-            How many members approve a payment, and how many it takes to read.
-          </p>
-        </header>
-        <div className="grid grid-cols-2 gap-4">
-          {SHAPES.map((shape) => (
-            <div
-              key={shape.members}
-              className="flex flex-col gap-3 rounded-md bg-sunken p-4 shadow-field"
-            >
-              <span className="type-label-m text-fg">{shape.members} members</span>
-              <div className="flex flex-wrap gap-2">
-                <ThresholdChip kind="spend" threshold={shape.approvals} members={shape.members} />
-                <ThresholdChip kind="read" threshold={shape.read} members={shape.members} />
-              </div>
-              <span className="type-body-s text-fg-muted">{shape.survives}</span>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
 
 function Way({
-  illustration,
+  scene,
   title,
   text,
   action,
 }: {
-  illustration: IllustrationId;
+  scene: ReactNode;
   title: string;
   text: string;
-  action: React.ReactNode;
+  action: ReactNode;
 }) {
   return (
     <article className="flex flex-col gap-4 rounded-lg bg-surface p-5 shadow-1">
-      <Illustration
-        id={illustration}
-        alt=""
-        className="aspect-[8/5] w-full rounded-md object-cover"
-      />
+      {scene}
       <div className="flex flex-1 flex-col gap-1">
         <h2 className="type-heading-s text-fg">{title}</h2>
         <p className="type-body-s text-fg-muted">{text}</p>

@@ -78,7 +78,20 @@ export function Navigation({
             ))}
           </SidebarGroup>
         </>
-      ) : null}
+      ) : (
+        // Without a vault, Home is where the member starts, and where Settings and the rest lead back to.
+        <SidebarGroup>
+          {pick(APP_PAGES, ["/home"]).map((page) => (
+            <SidebarItem
+              key={page.path}
+              icon={page.icon}
+              label={page.title}
+              active={pathname === page.path}
+              render={<Link to={page.path} />}
+            />
+          ))}
+        </SidebarGroup>
+      )}
     </Sidebar>
   );
 }
