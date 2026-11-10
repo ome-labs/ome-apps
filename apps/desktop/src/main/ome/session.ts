@@ -22,4 +22,10 @@ export interface AppSession extends OmeClient {
   disableTouchId(): Promise<void>;
   /** Asks for Touch ID, then unlocks the signer with the kept key. */
   unlockWithTouchId(ttlSecs: number): Promise<SignerStatus>;
+  /** Stops and starts the profile's daemon, for settings it reads only as it starts (proving, relays). */
+  restart(): Promise<void>;
+  /** Points the daemon at another node on the same network, then restarts it to use it. */
+  changeNode(url: string): Promise<void>;
+  /** Opens the daemon's or the keeper's log in the system's viewer. */
+  openLog(which: "daemon" | "keeper"): Promise<void>;
 }

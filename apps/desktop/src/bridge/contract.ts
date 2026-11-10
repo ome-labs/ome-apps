@@ -177,7 +177,14 @@ export interface OmeBridge {
     retry(): Promise<Outcome<null>>;
     /** Leaves the profile for the list of profiles (or the first run). */
     leave(): Promise<Outcome<null>>;
+    /** Restarts the profile's daemon, for settings it reads only as it starts. */
+    restart(): Promise<Outcome<null>>;
+    /** Points the daemon at another node on the profile's network, and restarts it. */
+    changeNode(url: string): Promise<Outcome<null>>;
+    openLog(which: "daemon" | "keeper"): Promise<Outcome<null>>;
   };
+  /** This app's version, for About. */
+  version: string;
   /**
    * Touch ID for the open profile (macOS). The sealing key it guards stays in the main process: turning it on takes
    * the passphrase once, and unlocking asks for a fingerprint, not the key.
@@ -218,6 +225,9 @@ export const CHANNELS = {
   sessionSetup: "ome:session:setup",
   sessionRetry: "ome:session:retry",
   sessionLeave: "ome:session:leave",
+  sessionRestart: "ome:session:restart",
+  sessionChangeNode: "ome:session:change-node",
+  sessionOpenLog: "ome:session:open-log",
   touchIdState: "ome:touch-id:state",
   touchIdEnable: "ome:touch-id:enable",
   touchIdDisable: "ome:touch-id:disable",

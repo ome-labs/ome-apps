@@ -53,7 +53,7 @@ export function Navigation({
             <SidebarItem
               key={page.path}
               icon={page.icon}
-              label={page.path === "/settings" ? "App settings" : page.title}
+              label={page.title}
               active={pathname === page.path}
               render={<Link to={page.path} />}
             />

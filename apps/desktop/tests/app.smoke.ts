@@ -103,3 +103,30 @@ test("sets up a profile from the first run, with Touch ID", async () => {
   await expect(page.getByText(/Unlocked/)).toBeVisible();
   await app.close();
 });
+
+test("changes settings", async () => {
+  const app = await electron.launch({
+    args: [join(import.meta.dirname, "..")],
+    env: {
+      ...process.env,
+      OME_DESKTOP_SOURCE: "fixtures",
+      OME_DESKTOP_USER_DATA: mkdtempSync(join(tmpdir(), "ome-desktop-smoke-")),
+    },
+  });
+  const page = await app.firstWindow();
+  await expect(page.getByRole("button", { name: /Alice/ })).toBeVisible();
+
+  await page.keyboard.press(`${process.platform === "darwin" ? "Meta" : "Control"}+,`);
+  await expect(page.getByRole("heading", { name: "Settings", exact: true })).toBeVisible();
+
+  // Proving is read as the daemon starts, so the page offers a restart.
+  await page.getByRole("switch", { name: "Prove on this device" }).click();
+  await expect(
+    page.getByText("Some changes take effect when Ome's daemon restarts."),
+  ).toBeVisible();
+
+  await page.getByRole("combobox", { name: "Longest unlock" }).click();
+  await page.getByRole("option", { name: "4 hours", exact: true }).click();
+  await expect(page.getByText("Unlocking now lasts up to 4 hours")).toBeVisible();
+  await app.close();
+});

@@ -47,6 +47,8 @@ export function createWindow(): BrowserWindow {
       nodeIntegration: false,
       webSecurity: true,
       spellcheck: false,
+      // The sandboxed preload can't ask Electron for the app's version; it reads it from its arguments.
+      additionalArguments: [`--ome-version=${app.getVersion()}`],
     },
   });
   window.once("ready-to-show", () => window.show());

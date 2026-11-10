@@ -10,11 +10,14 @@ import { Profiles } from "./onboarding/profiles.tsx";
 import { Welcome } from "./onboarding/welcome.tsx";
 import { APP_PAGES, VAULT_PAGES } from "./routes/pages.ts";
 import { Start } from "./routes/start.tsx";
+import { SettingsPage } from "./settings/settings-page.tsx";
 import { AppFrame } from "./shell/app-frame.tsx";
 import { SessionGate } from "./shell/session-gate.tsx";
 
 // The root decides between the first run, the profile list and the app. Pages are empty until their screens are
-// built, so their routes have no component yet.
+// built; the ones that are built are listed here by path.
+const SCREENS: Partial<Record<string, () => React.ReactNode>> = { "/settings": SettingsPage };
+
 const root = createRootRoute({ component: SessionGate });
 
 const start = createRoute({ getParentRoute: () => root, path: "/", component: Start });
@@ -30,6 +33,7 @@ const appPages = APP_PAGES.map((page) =>
   createRoute({
     getParentRoute: () => shell,
     path: page.path,
+    ...(SCREENS[page.path] ? { component: SCREENS[page.path] } : {}),
   }),
 );
 

@@ -1,3 +1,5 @@
+import { join } from "node:path";
+
 // The session on the member's own daemon: opens a profile (starting its `omed` when it isn't running), sets up a new
 // one the way `ome init` does, forwards calls and events, and starts the daemon again if it goes away.
 import type {
@@ -7,6 +9,7 @@ import type {
   NodeStatus,
   SignerStatus,
 } from "@ome-labs/api";
+import { shell } from "electron";
 
 import type {
   Preflight,
@@ -15,12 +18,13 @@ import type {
   SetupRequest,
   TouchIdState,
 } from "../../../bridge/contract.ts";
-import { lastProfile, rememberProfile } from "../../preferences.ts";
+import { knownNetwork, lastProfile, rememberNetwork, rememberProfile } from "../../preferences.ts";
 import { OmeError } from "../client.ts";
 import type { AppSession } from "../session.ts";
 import type { DaemonConnection } from "./connection.ts";
 import { listProfiles, omeHome, profileDir, profileNameFor } from "./home.ts";
 import { keeperPath, omedPath, restart, start } from "./launch.ts";
+import { assertSameNetwork, probeNode } from "./node-probe.ts";
 import {
   authenticate,
   forgetSealingKey,
@@ -145,17 +149,69 @@ export class DaemonSession implements AppSession {
     return this.call("signer.unlock", { secret: { key }, ttlSecs });
   }
 
+  async restart(): Promise<void> {
+    const profile = this.#openProfile();
+    const connection = this.#connection;
+    // Detached first, so its closing isn't taken for the daemon going away.
+    this.#connection = undefined;
+    this.#set({ phase: "starting", profile });
+    try {
+      this.#attach(await restart(profile, connection as DaemonConnection));
+      this.#set({ phase: "ready", profile });
+    } catch (error) {
+      this.#set({ phase: "failed", profile, message: message(error) });
+    }
+  }
+
+  async changeNode(url: string): Promise<void> {
+    const dir = profileDir(this.#openProfile());
+    const next = await probeNode(url);
+    const node = await this.call("node.status", {});
+    assertSameNetwork(
+      node.l1ChainId === null || node.rollupVersion === null
+        ? knownNetwork(dir)
+        : { l1ChainId: node.l1ChainId, rollupVersion: node.rollupVersion },
+      next,
+    );
+    await this.call("config.set", { nodeUrl: url });
+    await this.restart();
+  }
+
+  async openLog(which: "daemon" | "keeper"): Promise<void> {
+    const failure = await shell.openPath(join(profileDir(this.#openProfile()), `${which}.log`));
+    if (failure) throw new OmeError("failed", `The ${which} log couldn't be opened: ${failure}`);
+  }
+
   async call<M extends RendererMethod>(
     method: M,
     params: DaemonParams<M>,
   ): Promise<DaemonResult<M>> {
     if (!this.#connection) throw new OmeError("unreachable", "No profile is open.");
-    return this.#connection.call(method, params);
+    const result = await this.#connection.call(method, params);
+    this.#noteNetwork(method, result);
+    return result;
   }
 
   subscribe(listener: (event: DaemonEvent) => void): () => void {
     this.#eventListeners.add(listener);
     return () => this.#eventListeners.delete(listener);
+  }
+
+  /** Remembers the network whenever the node answers, so a later node change can be checked while it's down. */
+  #noteNetwork(method: string, result: unknown): void {
+    const node =
+      method === "node.status"
+        ? (result as NodeStatus)
+        : method === "status"
+          ? (result as { node: NodeStatus }).node
+          : undefined;
+    const profile = this.#profile();
+    if (!node?.reachable || node.l1ChainId === null || node.rollupVersion === null || !profile)
+      return;
+    rememberNetwork(profileDir(profile), {
+      l1ChainId: node.l1ChainId,
+      rollupVersion: node.rollupVersion,
+    });
   }
 
   /** The profile whose daemon answers now, set up or being set up. */

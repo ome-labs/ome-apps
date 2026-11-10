@@ -147,7 +147,7 @@ export function Commands({
         title: "App",
         items: APP_PAGES.map((page) => ({
           id: `app${page.path}`,
-          label: page.path === "/settings" ? "App settings" : page.title,
+          label: page.title,
           icon: page.icon,
           shortcut: page.path === "/settings" ? shortcutOf("Settings") : undefined,
           onSelect: go(page.path),

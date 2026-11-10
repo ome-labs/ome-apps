@@ -3,8 +3,13 @@
 The desktop app for Ome members: their vaults, proposals and keeper, as a client of the member's daemon (`omed`). Built
 with Electron, React, TanStack Router and Query, and Tailwind.
 
-The first run (welcome, profile, passphrase) and the profile list are built and talk to a real daemon. The other pages
-are empty frames that become screens one at a time.
+The first run (welcome, profile, passphrase, Touch ID), the profile list and Settings are built and talk to a real
+daemon. The other pages are empty frames that become screens one at a time.
+
+Settings (⌘,) covers appearance, the profile, the signer (unlock window, Touch ID), the node (a new one must be on the
+profile's network; the daemon restarts to use it), relays, proving, and under Advanced a keeper on the member's own
+server, the fee payer and `aztec-wallet`. Proving and relays are read as the daemon starts, so the page offers a
+restart after changing them.
 
 ## Run it
 

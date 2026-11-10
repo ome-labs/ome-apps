@@ -134,6 +134,25 @@ export function registerIpc(): void {
   ipcMain.handle(CHANNELS.sessionLeave, (event) =>
     outcome(event, async () => (await session().leave(), null)),
   );
+  ipcMain.handle(CHANNELS.sessionRestart, (event) =>
+    outcome(event, async () => (await session().restart(), null)),
+  );
+  ipcMain.handle(CHANNELS.sessionChangeNode, (event, url: unknown) =>
+    outcome(event, async () => {
+      if (typeof url !== "string" || !/^https?:\/\/.+/u.test(url.trim())) {
+        throw new OmeError("invalid", "Use an http:// or https:// URL for the node.");
+      }
+      await session().changeNode(url.trim());
+      return null;
+    }),
+  );
+  ipcMain.handle(CHANNELS.sessionOpenLog, (event, which: unknown) =>
+    outcome(event, async () => {
+      if (which !== "daemon" && which !== "keeper") throw new OmeError("invalid", "Name a log.");
+      await session().openLog(which);
+      return null;
+    }),
+  );
   ipcMain.handle(CHANNELS.preferencesGet, (event) => (fromApp(event) ? preferences() : null));
   ipcMain.handle(CHANNELS.preferencesSet, (event, patch: Partial<Preferences>) =>
     fromApp(event) ? setPreferences(patch) : null,

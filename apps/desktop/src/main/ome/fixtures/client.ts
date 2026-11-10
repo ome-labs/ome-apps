@@ -1,7 +1,7 @@
 // Answers the renderer from the sample data, in the chosen scenario. Reads are simulated; the few writes the shell
 // needs (unlocking and locking the signer) change state; every other write fails with a clear message until a screen
 // needs it simulated.
-import type { DaemonEvent, DaemonParams, DaemonResult, Hex32 } from "@ome-labs/api";
+import type { DaemonEvent, DaemonParams, DaemonResult, Hex32, Settings } from "@ome-labs/api";
 
 import type { RendererMethod } from "../../../bridge/contract.ts";
 import { type OmeClient, OmeError } from "../client.ts";
@@ -18,6 +18,8 @@ const now = () => Math.floor(Date.now() / 1000);
 export class FixtureClient implements OmeClient {
   #scenario: Scenario;
   #unlockedUntil: number | null = null;
+  /** Settings changes stay for the session, so the settings page can be tried on the sample data. */
+  #settings: Settings = settings();
   readonly #listeners = new Set<(event: DaemonEvent) => void>();
 
   constructor(scenario: Scenario) {
@@ -95,9 +97,27 @@ export class FixtureClient implements OmeClient {
       startedAt: now() - 3 * 3600,
       node: settings().nodeUrl,
     }),
-    status: () => status(this.#scenario, now(), this.#unlockedUntil),
-    "config.get": () => settings(),
-    "config.set": () => settings(),
+    status: () => ({
+      ...status(this.#scenario, now(), this.#unlockedUntil),
+      settings: this.#settings,
+    }),
+    "config.get": () => this.#settings,
+    "config.set": (patch) => {
+      const defined = Object.entries(patch).filter(([, value]) => value !== undefined);
+      this.#settings = { ...this.#settings, ...Object.fromEntries(defined) };
+      return this.#settings;
+    },
+    "relays.set": ({ relays }) => {
+      this.#settings = { ...this.#settings, relays };
+      return this.#settings;
+    },
+    "keeper.connect": ({ remote }) => {
+      this.#settings = {
+        ...this.#settings,
+        remoteKeeper: remote ? { address: remote.address, fingerprint: remote.fingerprint } : null,
+      };
+      return { ...keeper(this.#scenario), remote: remote?.address ?? null };
+    },
     "profile.create": ({ passphrase }) => {
       if (passphrase.length < 8)
         throw new OmeError("invalid", "The passphrase needs at least 8 characters.");

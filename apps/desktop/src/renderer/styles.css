@@ -11,6 +11,12 @@
     height: 100%;
   }
 
+  /* A window, not a web page: only the panes inside it scroll, so jumping within a page never moves the sidebar. */
+  html,
+  body {
+    overflow: hidden;
+  }
+
   button:not(:disabled),
   [role="option"] {
     cursor: pointer;

@@ -16,6 +16,7 @@ import type {
   SetupRequest,
   TouchIdState,
 } from "../../../bridge/contract.ts";
+import { OmeError } from "../client.ts";
 import type { AppSession } from "../session.ts";
 import { FixtureClient } from "./client.ts";
 import type { Scenario } from "./scenarios.ts";
@@ -103,6 +104,21 @@ export class FixtureSession implements AppSession {
   unlockWithTouchId(ttlSecs: number): Promise<SignerStatus> {
     return this.client.call("signer.unlock", { secret: { key: SEALING_KEY }, ttlSecs });
   }
+
+  async restart(): Promise<void> {
+    const profile = this.#state.phase === "choose" ? PROFILE : this.#state.profile;
+    this.#set({ phase: "starting", profile });
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    this.#set({ phase: "ready", profile });
+  }
+
+  async changeNode(url: string): Promise<void> {
+    if (!/^https?:\/\/.+/u.test(url))
+      throw new OmeError("invalid", "Use an http:// or https:// URL.");
+    await this.restart();
+  }
+
+  async openLog(): Promise<void> {}
 
   call<M extends RendererMethod>(method: M, params: DaemonParams<M>): Promise<DaemonResult<M>> {
     return this.client.call(method, params);

@@ -14,7 +14,13 @@ import {
   type SessionState,
 } from "../bridge/contract.ts";
 
+/** The app's version, passed by the main process (see `createWindow`). */
+const version =
+  process.argv.find((arg) => arg.startsWith("--ome-version="))?.slice("--ome-version=".length) ??
+  "";
+
 const bridge: OmeBridge = {
+  version,
   call: (method, params) =>
     ipcRenderer.invoke(CHANNELS.call, method, params) as Promise<CallOutcome<typeof method>>,
   preferences: {
@@ -42,6 +48,11 @@ const bridge: OmeBridge = {
       >,
     retry: () => ipcRenderer.invoke(CHANNELS.sessionRetry) as Promise<Outcome<null>>,
     leave: () => ipcRenderer.invoke(CHANNELS.sessionLeave) as Promise<Outcome<null>>,
+    restart: () => ipcRenderer.invoke(CHANNELS.sessionRestart) as Promise<Outcome<null>>,
+    changeNode: (url) =>
+      ipcRenderer.invoke(CHANNELS.sessionChangeNode, url) as Promise<Outcome<null>>,
+    openLog: (which) =>
+      ipcRenderer.invoke(CHANNELS.sessionOpenLog, which) as Promise<Outcome<null>>,
   },
   touchId: {
     state: () =>

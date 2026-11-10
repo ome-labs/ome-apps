@@ -7,8 +7,18 @@ import { app, type Rectangle } from "electron";
 
 import type { Preferences } from "../bridge/contract.ts";
 
-/** Also kept, for the main process alone: the window's bounds and the profile last opened. */
-type Stored = Preferences & { window?: Rectangle | undefined; profile?: string | undefined };
+/** The network a profile's node last reported, so a node change can be checked while the node is down. */
+export interface NetworkIdentity {
+  l1ChainId: number;
+  rollupVersion: number;
+}
+
+/** Also kept, for the main process alone: the window's bounds, the profile last opened, each profile's network. */
+type Stored = Preferences & {
+  window?: Rectangle | undefined;
+  profile?: string | undefined;
+  networks?: Record<string, NetworkIdentity> | undefined;
+};
 
 const DEFAULTS: Stored = { theme: "system" };
 const THEMES = new Set(["light", "dark", "system"]);
@@ -22,6 +32,10 @@ function read(): Stored {
       theme: THEMES.has(stored.theme ?? "") ? (stored.theme as Stored["theme"]) : DEFAULTS.theme,
       window: stored.window,
       profile: typeof stored.profile === "string" ? stored.profile : undefined,
+      networks:
+        typeof stored.networks === "object" && stored.networks !== null
+          ? stored.networks
+          : undefined,
     };
   } catch {
     return DEFAULTS;
@@ -60,4 +74,16 @@ export function lastProfile(): string | undefined {
 export function rememberProfile(profile: string): void {
   const current = read();
   if (current.profile !== profile) write({ ...current, profile });
+}
+
+export function knownNetwork(profileDir: string): NetworkIdentity | undefined {
+  return read().networks?.[profileDir];
+}
+
+export function rememberNetwork(profileDir: string, network: NetworkIdentity): void {
+  const current = read();
+  const known = current.networks?.[profileDir];
+  if (known?.l1ChainId === network.l1ChainId && known.rollupVersion === network.rollupVersion)
+    return;
+  write({ ...current, networks: { ...current.networks, [profileDir]: network } });
 }
