@@ -1,6 +1,6 @@
 import type { DaemonParams } from "@ome-labs/api";
 
-import type { RendererMethod } from "../../shared/contract.ts";
+import type { RendererMethod } from "../../bridge/contract.ts";
 import { useOme } from "../data/ome.ts";
 import type { Page } from "./pages.ts";
 

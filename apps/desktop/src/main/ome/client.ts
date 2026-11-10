@@ -2,7 +2,7 @@
 // building screens without a daemon) and, later, `daemon/` (the real socket client).
 import type { DaemonEvent, DaemonParams, DaemonResult, ErrorKind } from "@ome-labs/api";
 
-import type { RendererMethod } from "../../shared/contract.ts";
+import type { RendererMethod } from "../../bridge/contract.ts";
 
 export interface OmeClient {
   call<M extends RendererMethod>(method: M, params: DaemonParams<M>): Promise<DaemonResult<M>>;

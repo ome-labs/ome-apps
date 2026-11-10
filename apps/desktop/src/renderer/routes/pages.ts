@@ -1,7 +1,7 @@
 // Every page of the desktop app, from the UI guide's site map (`research/desktop/ui-guide.md` §3 and §5). Each is a
 // placeholder until its screen is built from @ome-labs/ui-web: it names its guide section, the daemon methods it uses,
 // and shows the data its main method returns.
-import type { RendererMethod } from "../../shared/contract.ts";
+import type { RendererMethod } from "../../bridge/contract.ts";
 
 export interface Page {
   /** Path under the shell, or under `/vaults/$vault` for vault pages. */

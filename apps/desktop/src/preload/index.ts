@@ -3,7 +3,7 @@ import type { DaemonEvent } from "@ome-labs/api";
 // process checks every call.
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from "electron";
 
-import { CHANNELS, type CallOutcome, type DevState, type OmeBridge } from "../shared/contract.ts";
+import { CHANNELS, type CallOutcome, type DevState, type OmeBridge } from "../bridge/contract.ts";
 
 /** A daemon error with its kind, rebuilt on this side of the boundary. */
 class OmeCallError extends Error {

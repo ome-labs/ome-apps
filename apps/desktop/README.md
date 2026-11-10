@@ -43,7 +43,7 @@ renderer (React)  ──window.ome.call──▶  preload  ──ipc "ome:call"�
                   ◀──window.ome.onEvent──────────────── "ome:event" ◀──────────  events
 ```
 
-- **`src/shared/contract.ts`**: the methods the renderer may call (every daemon method except the session handshake,
+- **`src/bridge/contract.ts`**: the methods the renderer may call (every daemon method except the session handshake,
   the event stream and stopping the daemon), checked at runtime; errors cross the boundary with their kind.
 - **`src/main`**: window, security, the `app://` protocol, IPC, and the client. The real daemon client (socket, token,
   events) will live in `src/main/ome/daemon/`, so the renderer never changes when it lands.

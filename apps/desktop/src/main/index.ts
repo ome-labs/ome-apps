@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { app, BrowserWindow } from "electron";
 
-import { CHANNELS } from "../shared/contract.ts";
+import { CHANNELS } from "../bridge/contract.ts";
 import { registerIpc } from "./ipc.ts";
 import { registerScheme, serveRenderer } from "./protocol.ts";
 import { denyPermissions, enforceSecurity } from "./security.ts";

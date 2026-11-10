@@ -1,6 +1,6 @@
 import { type ChangeEvent, useCallback, useEffect, useState } from "react";
 
-import type { DevState } from "../../shared/contract.ts";
+import type { DevState } from "../../bridge/contract.ts";
 
 /** Development builds only: switch the fixture scenario to see every screen in every state. */
 export function DevPanel() {

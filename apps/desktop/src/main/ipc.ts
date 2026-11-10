@@ -2,7 +2,7 @@
 // development builds the dev switches.
 import { app, ipcMain, type IpcMainInvokeEvent } from "electron";
 
-import { CHANNELS, type CallOutcome, type DevState, isRendererMethod } from "../shared/contract.ts";
+import { CHANNELS, type CallOutcome, type DevState, isRendererMethod } from "../bridge/contract.ts";
 import { OmeError } from "./ome/client.ts";
 import { isAppUrl } from "./security.ts";
 import { client, devState, setDevState } from "./sources.ts";

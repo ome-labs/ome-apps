@@ -2,7 +2,7 @@
 // build uses the fixtures. Development builds can switch scenario from the renderer's dev panel.
 import type { DaemonEvent } from "@ome-labs/api";
 
-import type { DevState, Source } from "../shared/contract.ts";
+import type { DevState, Source } from "../bridge/contract.ts";
 import type { OmeClient } from "./ome/client.ts";
 import { FixtureClient } from "./ome/fixtures/client.ts";
 import { SCENARIOS, type Scenario, isScenario } from "./ome/fixtures/scenarios.ts";

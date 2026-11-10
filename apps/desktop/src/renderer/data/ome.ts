@@ -3,7 +3,7 @@ import { type UseQueryResult, useQuery } from "@tanstack/react-query";
 // Reading the daemon from React: one query per method and params, kept fresh by the daemon's events.
 import type { DaemonParams, DaemonResult } from "@ome-labs/api";
 
-import type { RendererMethod } from "../../shared/contract.ts";
+import type { RendererMethod } from "../../bridge/contract.ts";
 
 export function omeQueryKey<M extends RendererMethod>(
   method: M,

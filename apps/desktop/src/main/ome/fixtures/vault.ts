@@ -1,4 +1,5 @@
-// The Treasury vault: 3 members, 2 approvals to spend, 2 to read, funded with 1,000 OMET of which 250 were paid out.
+// The Treasury vault: 3 members, 2 approvals to spend, 2 to read, funded with 1,000 OMET. The 250 OMET to dave is
+// approved but not executed yet, so all 1,000 are still there.
 import type {
   ActivityEntry,
   AuditView,
@@ -9,14 +10,13 @@ import type {
   VaultSummary,
 } from "@ome-labs/api";
 
-import { proposals } from "./proposals.ts";
+import { createdAt, proposals } from "./proposals.ts";
 import {
   ACCOUNTS,
+  FUNDING_TX,
   MEMBERS,
   OMET,
-  TXS,
   VAULT,
-  omet,
   sampleHex,
   samplePeerId,
   samplePoint,
@@ -132,13 +132,13 @@ export function peers(scenario: Scenario, now: number): MemberReachability[] {
 }
 
 export function tokens(): TokenBalance[] {
-  return [{ token: OMET, balance: omet(750n), error: null }];
+  return [{ token: OMET, balance: "1000000000000000000000", error: null }];
 }
 
 export function activity(now: number): ActivityEntry[] {
   const proposalEntries: ActivityEntry[] = proposals(now).map((proposal) => ({
     kind: "proposal",
-    at: proposal.expiresAt - 24 * HOUR,
+    at: createdAt(proposal),
     proposal,
   }));
   const funded: ActivityEntry = {
@@ -146,8 +146,8 @@ export function activity(now: number): ActivityEntry[] {
     at: now - 110 * 60,
     token: OMET,
     from: ACCOUNTS.alice,
-    amount: omet(1000n),
-    txHash: TXS.funded,
+    amount: "1000000000000000000000",
+    txHash: FUNDING_TX,
     block: 1_182,
   };
   return [...proposalEntries, funded].toSorted((a, b) => b.at - a.at);

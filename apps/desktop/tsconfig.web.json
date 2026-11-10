@@ -1,4 +1,4 @@
 {
   "extends": "klarity/tsconfig/app/vite",
-  "include": ["src/renderer", "src/shared"]
+  "include": ["src/renderer", "src/bridge"]
 }

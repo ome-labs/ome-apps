@@ -271,6 +271,9 @@ importers:
       '@ome-labs/api':
         specifier: 'catalog:'
         version: 0.1.0
+      '@ome-labs/format':
+        specifier: workspace:*
+        version: link:../../packages/format
       '@playwright/test':
         specifier: 1.65.0
         version: 1.65.0

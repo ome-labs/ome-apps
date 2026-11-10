@@ -3,7 +3,7 @@
 // needs it simulated.
 import type { DaemonEvent, DaemonParams, DaemonResult, Hex32 } from "@ome-labs/api";
 
-import type { RendererMethod } from "../../../shared/contract.ts";
+import type { RendererMethod } from "../../../bridge/contract.ts";
 import { type OmeClient, OmeError } from "../client.ts";
 import { proposals, review } from "./proposals.ts";
 import { ACCOUNTS, VAULT } from "./sample.ts";

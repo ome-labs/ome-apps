@@ -1,4 +1,4 @@
-import type { OmeBridge } from "../shared/contract.ts";
+import type { OmeBridge } from "../bridge/contract.ts";
 
 declare global {
   interface Window {
