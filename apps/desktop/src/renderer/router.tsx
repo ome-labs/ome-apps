@@ -7,6 +7,7 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 
+import { HomePage } from "./home/home-page.tsx";
 import { Profiles } from "./onboarding/profiles.tsx";
 import { Welcome } from "./onboarding/welcome.tsx";
 import { APP_PAGES, VAULT_PAGES } from "./routes/pages.ts";
@@ -29,12 +30,17 @@ const profiles = createRoute({
 });
 
 const shell = createRoute({ getParentRoute: () => root, id: "shell", component: AppFrame });
-const appPages = APP_PAGES.filter((page) => page.path !== "/settings").map((page) =>
-  createRoute({
+/** App pages whose screens are built; the others stay empty frames for now. */
+const SCREENS: Partial<Record<string, () => React.ReactNode>> = { "/home": HomePage };
+
+const appPages = APP_PAGES.filter((page) => page.path !== "/settings").map((page) => {
+  const component = SCREENS[page.path];
+  return createRoute({
     getParentRoute: () => shell,
     path: page.path,
-  }),
-);
+    ...(component ? { component } : {}),
+  });
+});
 
 const settings = createRoute({
   getParentRoute: () => shell,

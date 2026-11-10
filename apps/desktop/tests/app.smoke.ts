@@ -135,3 +135,20 @@ test("changes settings", async () => {
   await expect(page.getByText(/take effect when Ome's daemon restarts/)).toBeVisible();
   await app.close();
 });
+
+test("starts a member without a vault on Home", async () => {
+  const app = await electron.launch({
+    args: [join(import.meta.dirname, "..")],
+    env: {
+      ...process.env,
+      OME_DESKTOP_SOURCE: "fixtures",
+      OME_DESKTOP_SCENARIO: "no-vaults",
+      OME_DESKTOP_USER_DATA: mkdtempSync(join(tmpdir(), "ome-desktop-smoke-")),
+    },
+  });
+  const page = await app.firstWindow();
+  await expect(page.getByRole("heading", { name: "Welcome, Alice" })).toBeVisible();
+  await expect(page.getByText("No vaults yet")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Create vault" })).toBeVisible();
+  await app.close();
+});

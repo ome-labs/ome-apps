@@ -45,7 +45,11 @@ export function Navigation({
   return (
     <Sidebar
       header={
-        current ? <VaultSwitcher vaults={choices} current={current} onSelect={select} /> : null
+        current ? (
+          <VaultSwitcher vaults={choices} current={current} onSelect={select} />
+        ) : (
+          <span className="px-2.5 py-1 type-body-s text-fg-subtle">No vaults yet</span>
+        )
       }
       footer={
         <SidebarGroup>
