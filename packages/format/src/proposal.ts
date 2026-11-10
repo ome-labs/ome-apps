@@ -23,9 +23,12 @@ function recipientName(address: string, recipient?: Recipient | null): string {
   return recipient.label;
 }
 
-/** The one-line intent: "Transfer 250 OMET to dave (alias)", "Make 2 contract calls", "Cancel proposal 3eb2". */
+/**
+ * The one-line intent: "Transfer 250 OMET to dave (alias)", "Call swap on AMM", "Make 2 contract calls", "Cancel
+ * proposal 3eb2". The decoded calls, when given, name a single call's contract.
+ */
 export function proposalSummary(
-  proposal: Pick<ProposalView, "intent" | "token">,
+  proposal: Pick<ProposalView, "intent" | "token"> & Partial<Pick<ProposalView, "calls">>,
   recipient?: Recipient | null,
 ): string {
   const { intent, token } = proposal;
@@ -41,8 +44,13 @@ export function proposalSummary(
     }
     case "calls": {
       const count = intent.calls.length;
+      const [only] = intent.calls;
+      if (count === 1 && only) {
+        const label = proposal.calls?.find((call) => call.to === only.to.toLowerCase())?.toLabel;
+        return `Call ${only.fn} on ${label ?? shortHex(only.to)}`;
+      }
 
-      return `Make ${count} contract ${count === 1 ? "call" : "calls"}`;
+      return `Make ${count} contract calls`;
     }
     case "cancel": {
       return `Cancel proposal ${shortProposalId(intent.cancels)}`;

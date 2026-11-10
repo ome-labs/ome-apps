@@ -73,6 +73,14 @@ const bridge: OmeBridge = {
         OmeBridge["avatars"]["clear"]
       >,
   },
+  contracts: {
+    chooseArtifact: () =>
+      ipcRenderer.invoke(CHANNELS.contractsChooseArtifact) as Promise<Outcome<string | null>>,
+    register: (request) =>
+      ipcRenderer.invoke(CHANNELS.contractsRegister, request) as ReturnType<
+        OmeBridge["contracts"]["register"]
+      >,
+  },
   touchId: {
     state: () =>
       ipcRenderer.invoke(CHANNELS.touchIdState) as ReturnType<OmeBridge["touchId"]["state"]>,

@@ -13,24 +13,28 @@ import { formatAmount } from "./amount.ts";
 /** Fee juice has 18 decimals, like every Aztec fee amount. */
 const FEE_DECIMALS = 18;
 
+/** A contract's name when the caller knows one, else its short address. */
+export type NameOf = (address: string) => string | undefined;
+
 /** What went wrong in a simulation, in a sentence a member can act on. */
-export function failureText(failure: SimulationFailure): string {
+export function failureText(failure: SimulationFailure, nameOf: NameOf = () => undefined): string {
+  const name = (address: string) => nameOf(address) ?? shortHex(address);
   switch (failure.kind) {
     case "insufficientBalance":
       return failure.token
         ? `The vault doesn't hold enough ${failure.token.symbol}.`
-        : `The vault doesn't hold enough of the token at ${shortHex(failure.contract)}.`;
+        : `The vault doesn't hold enough of the token at ${name(failure.contract)}.`;
     case "authwitRequired":
       return failure.contract
-        ? `${shortHex(failure.contract)} needs an authwit the proposal doesn't grant.`
+        ? `A call needs an authwit to spend the vault's ${name(failure.contract)}. Add one that lets the calling contract make that call.`
         : "A call needs an authwit the proposal doesn't grant.";
     case "unusedAuthwit":
-      return `Authwit ${failure.index + 1} isn't used by any call; remove it or fix its caller.`;
+      return `Authwit ${failure.index + 1} isn't used by any call; check its caller and call, or remove it.`;
     case "nonceUsed":
       return "Another proposal already used this nonce.";
     case "reverted":
       return failure.function
-        ? `${failure.function} reverted${failure.contract ? ` on ${shortHex(failure.contract)}` : ""}.`
+        ? `${failure.function} reverted${failure.contract ? ` on ${name(failure.contract)}` : ""}.`
         : "A call reverted.";
     case "unavailable":
       return "The node couldn't simulate it right now.";
@@ -40,11 +44,14 @@ export function failureText(failure: SimulationFailure): string {
 }
 
 /** The failure's sentence, then the node's own message when it adds something. */
-export function simulationErrorText(error: SimulationError): {
+export function simulationErrorText(
+  error: SimulationError,
+  nameOf?: NameOf,
+): {
   title: string;
   detail: string | null;
 } {
-  const title = failureText(error.failure);
+  const title = failureText(error.failure, nameOf);
   const detail = error.message && error.message !== title ? error.message : null;
 
   return { title, detail };

@@ -1,8 +1,14 @@
 // The app's session: which profile it's on, whether that profile's daemon answers, and the calls and events of that
 // daemon. Two implementations: `daemon/session.ts` (the member's `omed`) and `fixtures/session.ts` (sample data).
-import type { NodeStatus, SignerStatus } from "@ome-labs/api";
+import type { ContractView, NodeStatus, SignerStatus } from "@ome-labs/api";
 
-import type { Preflight, SessionState, SetupRequest, TouchIdState } from "../../bridge/contract.ts";
+import type {
+  ContractImport,
+  Preflight,
+  SessionState,
+  SetupRequest,
+  TouchIdState,
+} from "../../bridge/contract.ts";
 import type { OmeClient } from "./client.ts";
 
 export interface AppSession extends OmeClient {
@@ -30,4 +36,6 @@ export interface AppSession extends OmeClient {
   changeNode(url: string): Promise<void>;
   /** Opens the daemon's or the keeper's log in the system's viewer. */
   openLog(which: "daemon" | "keeper"): Promise<void>;
+  /** Reads an artifact file and registers the contract at its address with the daemon. */
+  registerContract(request: ContractImport): Promise<ContractView>;
 }

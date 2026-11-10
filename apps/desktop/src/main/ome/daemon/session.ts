@@ -3,6 +3,7 @@ import { join } from "node:path";
 // The session on the member's own daemon: opens a profile (starting its `omed` when it isn't running), sets up a new
 // one the way `ome init` does, forwards calls and events, and starts the daemon again if it goes away.
 import type {
+  ContractView,
   DaemonEvent,
   DaemonParams,
   DaemonResult,
@@ -12,12 +13,14 @@ import type {
 import { shell } from "electron";
 
 import type {
+  ContractImport,
   Preflight,
   RendererMethod,
   SessionState,
   SetupRequest,
   TouchIdState,
 } from "../../../bridge/contract.ts";
+import { readArtifact } from "../../contracts.ts";
 import { knownNetwork, lastProfile, rememberNetwork, rememberProfile } from "../../preferences.ts";
 import { OmeError } from "../client.ts";
 import type { AppSession } from "../session.ts";
@@ -185,6 +188,19 @@ export class DaemonSession implements AppSession {
   async openLog(which: "daemon" | "keeper"): Promise<void> {
     const failure = await shell.openPath(join(profileDir(this.#openProfile()), `${which}.log`));
     if (failure) throw new OmeError("failed", `The ${which} log couldn't be opened: ${failure}`);
+  }
+
+  async registerContract({
+    address,
+    artifactPath,
+    instance,
+  }: ContractImport): Promise<ContractView> {
+    const artifact = await readArtifact(artifactPath);
+    return this.call("contracts.register", {
+      address,
+      artifact,
+      ...(instance ? { instance } : {}),
+    });
   }
 
   async call<M extends RendererMethod>(

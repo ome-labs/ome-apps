@@ -63,8 +63,10 @@ proposals `3eb2`, `335c` and `868c`). `OME_DESKTOP_SCENARIO=<scenario>` starts o
 | `removed`          | this member was removed from the vault                                |
 | `daemon-down`      | the profile's daemon failed to start                                  |
 
-Reads are simulated; the signer unlocks with any passphrase except `wrong`. Other writes fail with "the fixtures don't
-simulate … yet" until a screen needs them.
+The fixtures also hold a USDC token and an OMET/USDC AMM that `aztec-wallet` knows as `amm` (with its artifact path),
+so the composer can add a contract, build a swap and its authwit, and see the simulation fail without the authwit and
+pass with it. Reads are simulated; the signer unlocks with any passphrase except `wrong`. Other writes fail with "the
+fixtures don't simulate … yet" until a screen needs them.
 
 ## How it fits together
 
@@ -75,12 +77,19 @@ renderer (React)  ──window.ome.call──▶  preload  ──ipc "ome:call"�
 ```
 
 - **`src/bridge/contract.ts`**: the methods the renderer may call (every daemon method except the session handshake,
-  the event stream and stopping the daemon), checked at runtime; errors cross the boundary with their kind.
+  the event stream, stopping the daemon and `apps.call`, which is a connected app's), checked at runtime; errors cross
+  the boundary with their kind.
+- **Contract artifacts** reach the daemon through the main process: the renderer names a file (an `aztec-wallet`
+  `artifacts:` alias, or one chosen in a dialog), `src/main/contracts.ts` reads it (a `.json` of at most 32 MiB) and
+  the session calls `contracts.register`, where the daemon checks it is the code at the address.
 - **`src/main`**: window, security, the `app://` protocol, IPC, and the session. `src/main/ome/daemon/` finds, starts
   and talks to `omed`; `src/main/ome/fixtures/` stands in for it.
 - **`src/preload`**: exposes `window.ome` and nothing else.
 - **`src/renderer`**: the session gate (first run, profiles, starting, failed), the first run in `onboarding/`, and
-  routes from the UI guide's site map (`routes/pages.ts`), queries kept fresh by daemon events.
+  routes from the UI guide's site map (`routes/pages.ts`), queries kept fresh by daemon events. A new proposal is a
+  transfer or up to the daemon's `maxCalls` contract calls with `maxAuthwits` authwits (`proposals/calls/`): fields
+  are built from each function's ABI types and checked as the daemon checks them, and the daemon dry-runs the draft
+  once it reads.
 
 ## Security
 

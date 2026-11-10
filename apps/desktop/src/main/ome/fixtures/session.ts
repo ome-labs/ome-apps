@@ -1,6 +1,7 @@
 // The session on the sample data: one profile (Alice's) in the chosen scenario. "no-profile" starts at the first run
 // and "daemon-down" at the failed daemon; setting up a profile moves to "no-vaults", as a new member would be.
 import type {
+  ContractView,
   DaemonEvent,
   DaemonParams,
   DaemonResult,
@@ -10,6 +11,7 @@ import type {
 } from "@ome-labs/api";
 
 import type {
+  ContractImport,
   Preflight,
   RendererMethod,
   SessionState,
@@ -123,6 +125,11 @@ export class FixtureSession implements AppSession {
   }
 
   async openLog(): Promise<void> {}
+
+  /** The sample artifacts aren't on disk: the fixtures know which address has one. */
+  registerContract({ address }: ContractImport): Promise<ContractView> {
+    return this.client.call("contracts.register", { address, artifact: "{}" });
+  }
 
   call<M extends RendererMethod>(method: M, params: DaemonParams<M>): Promise<DaemonResult<M>> {
     return this.client.call(method, params);

@@ -13,6 +13,7 @@ import {
   isRendererMethod,
 } from "../bridge/contract.ts";
 import { avatarsFor, chooseFile, clearAvatar, profilePictures, setArt } from "./avatars.ts";
+import { chooseArtifact, contractImport } from "./contracts.ts";
 import { OmeError } from "./ome/client.ts";
 import { preferences, setPreferences } from "./preferences.ts";
 import { isAppUrl } from "./security.ts";
@@ -117,6 +118,15 @@ function registerAvatars(): void {
   );
 }
 
+function registerContracts(): void {
+  ipcMain.handle(CHANNELS.contractsChooseArtifact, (event) =>
+    outcome(event, () => chooseArtifact(BrowserWindow.fromWebContents(event.sender))),
+  );
+  ipcMain.handle(CHANNELS.contractsRegister, (event, request: unknown) =>
+    outcome(event, () => session().registerContract(contractImport(request))),
+  );
+}
+
 function registerTouchId(): void {
   ipcMain.handle(CHANNELS.touchIdState, (event) => (fromApp(event) ? session().touchId() : null));
   ipcMain.handle(CHANNELS.touchIdEnable, (event, passphrase: unknown) =>
@@ -142,6 +152,7 @@ function registerTouchId(): void {
 export function registerIpc(): void {
   registerTouchId();
   registerAvatars();
+  registerContracts();
   ipcMain.on(
     CHANNELS.windowMinimize,
     control((window) => window.minimize()),

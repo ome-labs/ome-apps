@@ -35,8 +35,19 @@ describe("proposal", () => {
     const calls = { kind: "calls" as const, calls: [], memo: null };
 
     expect(proposalSummary({ intent: cancel, token: null })).toBe("Cancel proposal 868c");
-    expect(proposalSummary({ intent: { ...calls, calls: [{} as never] }, token: null })).toBe(
-      "Make 1 contract call",
+    const swap = { to: `0x${"a".repeat(64)}` as const, fn: "swap", args: [] };
+    expect(proposalSummary({ intent: { ...calls, calls: [swap] }, token: null })).toBe(
+      "Call swap on 0xaaaa…aaaa",
+    );
+    expect(
+      proposalSummary({
+        intent: { ...calls, calls: [swap] },
+        token: null,
+        calls: [{ to: swap.to, toLabel: "AMM" } as never],
+      }),
+    ).toBe("Call swap on AMM");
+    expect(proposalSummary({ intent: { ...calls, calls: [swap, swap] }, token: null })).toBe(
+      "Make 2 contract calls",
     );
   });
 

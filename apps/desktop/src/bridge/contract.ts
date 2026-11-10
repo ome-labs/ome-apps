@@ -1,11 +1,14 @@
 // What the renderer may ask of the main process. The renderer never reaches the daemon itself: it calls
 // `window.ome.call`, and the main process checks the method against this list before passing it on.
 import type {
+  ContractInstanceInput,
+  ContractView,
   DaemonEvent,
   DaemonMethod,
   DaemonParams,
   DaemonResult,
   ErrorKind,
+  Hex32,
   NodeStatus,
   SignerStatus,
 } from "@ome-labs/api";
@@ -223,6 +226,15 @@ export interface OmeBridge {
     chooseFile(target: AvatarTarget): Promise<Outcome<Avatars | null>>;
     clear(target: AvatarTarget): Promise<Outcome<Avatars>>;
   };
+  /**
+   * Contracts a proposal can call. The renderer names an artifact file (from an `aztec-wallet` alias, or one the member
+   * chose); the main process reads it and hands it to the daemon, which checks it is the code at the address.
+   */
+  contracts: {
+    /** Asks for an artifact file; `null` when the member cancels. */
+    chooseArtifact(): Promise<Outcome<string | null>>;
+    register(request: ContractImport): Promise<Outcome<ContractView>>;
+  };
   /** This app's version, for About. */
   version: string;
   /**
@@ -240,6 +252,15 @@ export interface OmeBridge {
     get(): Promise<DevState>;
     set(state: Partial<DevState>): Promise<DevState>;
   };
+}
+
+/** A contract to register from an artifact file on this computer. */
+export interface ContractImport {
+  address: Hex32;
+  /** Absolute path of the artifact JSON (`aztec compile`'s output, or what `aztec-wallet` keeps). */
+  artifactPath: string;
+  /** Its deployment, for a contract the node doesn't publish. */
+  instance?: ContractInstanceInput | undefined;
 }
 
 /** The development switches. */
@@ -277,6 +298,8 @@ export const CHANNELS = {
   touchIdEnable: "ome:touch-id:enable",
   touchIdDisable: "ome:touch-id:disable",
   touchIdUnlock: "ome:touch-id:unlock",
+  contractsChooseArtifact: "ome:contracts:choose-artifact",
+  contractsRegister: "ome:contracts:register",
   devGet: "ome:dev:get",
   devSet: "ome:dev:set",
 } as const;
