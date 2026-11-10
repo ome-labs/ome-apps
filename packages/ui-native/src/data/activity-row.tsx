@@ -1,5 +1,6 @@
 import type { ActivityEntry } from "@ome-labs/api";
 import {
+  formatCount,
   formatTokenAmount,
   proposalSummary,
   shortHex,
@@ -47,7 +48,7 @@ export function ActivityRow({ entry, now, names, className }: ActivityRowProps) 
         <Text className="type-body-s">{line}</Text>
         <Text className="type-caption text-fg-subtle">
           {received
-            ? `${timeAgo(entry.at, now)} · block ${new Intl.NumberFormat("en").format(entry.block)}`
+            ? `${timeAgo(entry.at, now)} · block ${formatCount(entry.block)}`
             : timeAgo(entry.at, now)}
         </Text>
       </View>

@@ -1,7 +1,14 @@
 import { useMemo, useState, type ReactNode } from "react";
 
 import type { Review } from "@ome-labs/api";
-import { canApprove, feeLine, reviewChecks, shortProposalId, voteProgress } from "@ome-labs/format";
+import {
+  canApprove,
+  feeLine,
+  proposalSummary,
+  reviewChecks,
+  shortProposalId,
+  voteProgress,
+} from "@ome-labs/format";
 import { Pressable, View } from "react-native";
 
 import { Button } from "../actions/button.tsx";
@@ -29,6 +36,7 @@ export function ReviewPanel({ review, onApprove, onReject, className }: ReviewPa
   const checks = reviewChecks(review);
   const approvable = canApprove(review);
   const progress = voteProgress(proposal);
+  // Calls are positional: the payload executes them in this order, and the same call can appear twice.
   const calls = proposal.calls.map((call, position) => ({ call, key: `call-${position + 1}` }));
   const votes = [
     ...proposal.approvals.map((vote) => ({ vote, approved: true, key: `approved-${vote.slot}` })),
@@ -76,6 +84,9 @@ export function ReviewPanel({ review, onApprove, onReject, className }: ReviewPa
             {vote.reason ? (
               <Text className="shrink type-body-s text-fg-muted">“{vote.reason}”</Text>
             ) : null}
+            {vote.valid ? null : (
+              <Text className="type-body-s text-danger">signature doesn't verify</Text>
+            )}
           </View>
         ))}
       </Section>
@@ -119,14 +130,12 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 function WhatHappens({ review }: { review: Review }) {
   const { intent, token } = review.proposal;
 
-  if (intent.kind === "cancel")
-    return (
-      <Text>{`Cancel proposal ${shortProposalId(intent.cancels)}, so it can never execute.`}</Text>
-    );
-  if (intent.kind === "calls")
-    return (
-      <Text>{`Make ${intent.calls.length === 1 ? "1 contract call" : `${intent.calls.length} contract calls`} from the vault.`}</Text>
-    );
+  if (intent.kind === "cancel") {
+    return <Text>{`${proposalSummary(review.proposal)}, so it can never execute.`}</Text>;
+  }
+  if (intent.kind === "calls") {
+    return <Text>{`${proposalSummary(review.proposal)} from the vault.`}</Text>;
+  }
 
   return (
     <View className="gap-2">

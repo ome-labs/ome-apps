@@ -81,6 +81,7 @@ test("TypeToConfirm enables its button only for the exact phrase", async () => {
       <PortalHost />
     </>,
   );
+
   const field = screen.getByLabelText("Type Treasury to confirm");
   const confirm = screen.getByRole("button", { name: "Remove member" });
 
@@ -106,4 +107,13 @@ test("ReviewPanel disables Approve when a check fails, but not Reject", async ()
 
   expect(screen.getByRole("button", { name: "Approve" })).toBeDisabled();
   expect(onReject).toHaveBeenCalledTimes(1);
+});
+
+test("ReviewPanel says when a vote's signature doesn't verify", async () => {
+  const [bob] = review.proposal.approvals;
+  const forged = { ...review.proposal, approvals: bob ? [{ ...bob, valid: false }] : [] };
+
+  await render(<ReviewPanel review={{ ...review, proposal: forged }} />);
+
+  expect(screen.getByText("signature doesn't verify")).toBeTruthy();
 });
