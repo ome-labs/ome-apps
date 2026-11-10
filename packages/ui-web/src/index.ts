@@ -30,6 +30,7 @@ export { Tabs, type TabsProps } from "./navigation/tabs.tsx";
 export { StatusBadge, type StatusBadgeProps } from "./status/status-badge.tsx";
 export { Tag, type TagProps } from "./status/tag.tsx";
 
+export { Avatar, type AvatarProps, type AvatarSource } from "./identity/avatar.tsx";
 export { MemberAvatar, type MemberAvatarProps } from "./identity/member-avatar.tsx";
 export { TokenMonogram, type TokenMonogramProps } from "./identity/token-monogram.tsx";
 

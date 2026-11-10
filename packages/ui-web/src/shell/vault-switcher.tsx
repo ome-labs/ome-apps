@@ -3,6 +3,7 @@ import { Logo } from "@ome-labs/brand/web";
 import { approvalsLabel } from "@ome-labs/format";
 import { Icon } from "@ome-labs/icons/web";
 
+import { Avatar, type AvatarSource } from "../identity/avatar.tsx";
 import { cn } from "../styling/class-names.ts";
 
 export type VaultChoice = {
@@ -11,6 +12,8 @@ export type VaultChoice = {
   alias: string;
   threshold: number;
   members: number;
+  /** The vault's picture; without one it shows the Ome mark. */
+  avatar?: AvatarSource | undefined;
 };
 
 export type VaultSwitcherProps = {
@@ -37,9 +40,13 @@ export function VaultSwitcher({ vaults, current, onSelect, className }: VaultSwi
           className,
         )}
       >
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent bg-linear-to-b from-brand-white/15 to-brand-white/0 text-on-accent shadow-accent">
-          <Logo variant="mark" tone="mono" title="" className="size-5" />
-        </span>
+        {vault.avatar ? (
+          <Avatar name={vault.name} source={vault.avatar} shape="square" size={32} />
+        ) : (
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent bg-linear-to-b from-brand-white/15 to-brand-white/0 text-on-accent shadow-accent">
+            <Logo variant="mark" tone="mono" title="" className="size-5" />
+          </span>
+        )}
         <span className="flex min-w-0 flex-1 flex-col">
           <span className="truncate type-label-m text-fg">{vault.name}</span>
           <span className="truncate type-mono-s text-fg-subtle">
@@ -67,6 +74,9 @@ export function VaultSwitcher({ vaults, current, onSelect, className }: VaultSwi
                   value={item.address}
                   className="flex cursor-default items-center gap-2.5 rounded-sm px-2.5 py-2 outline-none data-[highlighted]:bg-hover"
                 >
+                  {item.avatar ? (
+                    <Avatar name={item.name} source={item.avatar} shape="square" size={24} />
+                  ) : null}
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className="truncate type-label-m text-fg">{item.name}</span>
                     <span className="type-caption text-fg-subtle">
