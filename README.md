@@ -4,7 +4,14 @@ Everything people see of [Ome](https://ome.network): the website, the desktop ap
 device), and the UI they share. Ome itself (the protocol, the member's daemon `omed`, the CLI and `@ome-labs/api`)
 lives in [`ome-labs/ome`](https://github.com/ome-labs/ome).
 
-This repo holds the shared foundations so far; the apps come next and build on them.
+This repo holds the shared foundations and the desktop app, which runs on sample data until it talks to the daemon.
+The website and the phone app come next.
+
+## Apps
+
+| App                                 | What it is                                                                                            |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| [`@ome-labs/desktop`](apps/desktop) | The Electron desktop app, a client of the member's daemon; pages are placeholders on fixtures for now |
 
 ## Packages
 
@@ -42,6 +49,7 @@ Node 24 (see `.node-version`) and pnpm 12.
 pnpm install
 pnpm build        # generates the token theme and the brand components
 pnpm storybook    # the web kit, http://localhost:6006
+pnpm --filter @ome-labs/desktop dev   # the desktop app on fixtures
 pnpm check        # format, lint, typecheck and test
 ```
 

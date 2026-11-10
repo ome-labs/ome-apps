@@ -9,12 +9,12 @@ TypeScript UI repo.
 - `pnpm install` also installs the git hooks (lefthook): staged files are formatted and linted on commit, the message
   is checked by commitlint, and `pnpm check` runs before a push.
 - `pnpm build` generates what other packages import: the token theme (`packages/tokens/dist`) and the brand
-  components (`packages/brand/src/generated`). Turbo runs it before `typecheck`, `test`, `storybook` and `kit`.
+  components (`packages/brand/src/generated`). Turbo runs it before `typecheck`, `test`, `storybook` and `dev`.
 
 ## Workflow
 
 - Commit after each coherent change with a [Conventional Commit](https://www.conventionalcommits.org/). Scopes:
-  `tokens`, `brand`, `icons`, `format`, `ui-web`, `ui-native`, `repo`. Body lines are at most 100 characters.
+  `desktop`, `tokens`, `brand`, `icons`, `format`, `ui-web`, `ui-native`, `repo`. Body lines are at most 100 characters.
 - Run the narrowest check first (`pnpm --filter @ome-labs/format test`), then `pnpm check`, which formats, lints,
   typechecks and tests everything.
 - Stop and ask before adding a dependency that duplicates one already chosen, changing a token value away from Figma,
@@ -46,8 +46,15 @@ Components take `@ome-labs/api` and `@ome-labs/format` shapes, so a screen can't
 
 ## Dependencies
 
-Use the latest stable version that fits, pinned once in the `pnpm-workspace.yaml` catalog and referenced as
-`catalog:`. Native modules follow Expo SDK 58's bundled versions (`expo/bundledNativeModules.json`).
+Use the latest stable version that fits, pinned to an exact version (no `^` or `~`):
+
+- a dependency used by **two or more** packages goes in the `pnpm-workspace.yaml` catalog and is referenced as
+  `catalog:`, so they can't drift apart;
+- a dependency used by **one** package is pinned in that package's `package.json`.
+
+Native modules follow Expo SDK 58's bundled versions (`expo/bundledNativeModules.json`), even when npm has newer ones.
+pnpm holds back releases younger than a day; add a just-released version to `minimumReleaseAgeExclude` only when
+it's needed.
 
 ## Tests
 
