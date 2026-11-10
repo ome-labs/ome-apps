@@ -13,7 +13,7 @@ import { parseArgs } from "node:util";
 import sharp from "sharp";
 
 import { assetsDirectory, readCatalog } from "../src/catalog/catalog.ts";
-import { appIconSizes, grids } from "../src/catalog/grid.ts";
+import { grids } from "../src/catalog/grid.ts";
 import {
   appIconVariants,
   illustrationFile,
@@ -87,6 +87,7 @@ async function objectSvg(file: string, title: string): Promise<string> {
     .ensureAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true });
+
   const runs = new Map<string, string[]>();
 
   for (let y = 0; y < height; y += 1) {
@@ -112,6 +113,7 @@ async function objectSvg(file: string, title: string): Promise<string> {
   const paths = [...runs]
     .map(([color, segments]) => `<path fill="${color}" d="${segments.join("")}"/>`)
     .join("");
+
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" shape-rendering="crispEdges" role="img" aria-label="${title}"><title>${title}</title>${paths}</svg>\n`;
 }
 
@@ -199,6 +201,7 @@ async function exportAppIcons() {
   };
 
   const files: [string, Promise<Buffer> | string][] = [];
+  const macosSizes = [1024, 512, 256, 128, 64, 32, 16];
 
   for (const variant of appIconVariants) {
     const master = svg(variant, { rounded: true, markScale: 0.62 });
@@ -206,7 +209,7 @@ async function exportAppIcons() {
 
     // macOS draws icons on Apple's grid: the shape is 824 of 1024 with a 100-pixel margin.
     const padded = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><image href="data:image/svg+xml;base64,${Buffer.from(master).toString("base64")}" x="100" y="100" width="824" height="824"/></svg>`;
-    for (const size of appIconSizes.macos) {
+    for (const size of macosSizes) {
       files.push([`app-icon/macos/${variant}-${size}.png`, renderPng(padded, size)]);
     }
   }

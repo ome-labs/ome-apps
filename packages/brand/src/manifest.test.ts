@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
 import { tokens } from "@ome-labs/tokens";
@@ -65,8 +65,7 @@ describe("fonts", () => {
     expect(existsSync(join(assetsDirectory, "fonts", family, "OFL.txt"))).toBe(true);
   });
 
-  test("the web @font-face rules point at files that exist", async () => {
-    const { readFileSync } = await import("node:fs");
+  test("the web @font-face rules point at files that exist", () => {
     const css = readFileSync(join(import.meta.dirname, "web/fonts.css"), "utf8");
     const urls = [...css.matchAll(/url\("([^"]+)"\)/g)].map((match) =>
       join(import.meta.dirname, "web", match[1] ?? ""),

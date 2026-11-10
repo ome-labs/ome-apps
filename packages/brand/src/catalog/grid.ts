@@ -5,5 +5,3 @@ export const grids = {
   textures: { width: 240, height: 150, scales: { "1x": 2, "2x": 4 } },
   objects: { width: 32, height: 32 },
 } as const;
-
-export const appIconSizes = { macos: [1024, 512, 256, 128, 64, 32, 16] } as const;
