@@ -29,12 +29,15 @@ export function VaultSwitcher({ vaults, current, onSelect, className }: VaultSwi
     <BaseMenu.Root>
       <BaseMenu.Trigger
         className={cn(
-          "focus-ring flex w-full items-center gap-2.5 rounded-[10px] border border-line-subtle bg-canvas p-2.5 text-left",
-          "transition-colors duration-fast ease-standard hover:bg-hover",
+          // Raised like a secondary button: it opens the vault list.
+          "focus-ring flex w-full items-center gap-2.5 rounded-[10px] p-2.5 text-left",
+          "bg-raised bg-linear-to-b from-brand-white/0 to-canvas/60 shadow-control",
+          "transition-[background-color,box-shadow,scale] duration-fast ease-standard hover:bg-hover active:scale-[0.99]",
+          "data-[popup-open]:bg-hover",
           className,
         )}
       >
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent text-on-accent">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent bg-linear-to-b from-brand-white/15 to-brand-white/0 text-on-accent shadow-accent">
           <Logo variant="mark" tone="mono" title="" className="size-5" />
         </span>
         <span className="flex min-w-0 flex-1 flex-col">
@@ -47,7 +50,13 @@ export function VaultSwitcher({ vaults, current, onSelect, className }: VaultSwi
       </BaseMenu.Trigger>
       <BaseMenu.Portal>
         <BaseMenu.Positioner align="start" sideOffset={4} className="z-50">
-          <BaseMenu.Popup className="flex w-[var(--anchor-width)] flex-col gap-0.5 rounded-[10px] border border-line bg-raised p-1 shadow-2 outline-none">
+          <BaseMenu.Popup
+            className={cn(
+              "flex w-[var(--anchor-width)] flex-col gap-0.5 rounded-[10px] bg-raised p-1 shadow-2 outline-none",
+              "origin-[var(--transform-origin)] transition-[opacity,scale] duration-base ease-standard",
+              "data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
+            )}
+          >
             <BaseMenu.RadioGroup
               value={current}
               onValueChange={(value) => onSelect(value as string)}

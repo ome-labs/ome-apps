@@ -32,15 +32,17 @@ export function SegmentedControl<Value extends string>({
         if (picked) onValueChange(picked as Value);
       }}
       aria-label={props["aria-label"]}
-      className={cn("inline-flex gap-0.5 rounded-md bg-sunken p-0.5", className)}
+      // A sunken track; the chosen segment is a raised thumb sitting in it.
+      className={cn("inline-flex gap-0.5 rounded-md bg-sunken p-0.5 shadow-field", className)}
     >
       {options.map((option) => (
         <Toggle
           key={option.value}
           value={option.value}
           className={cn(
-            "focus-ring rounded-sm px-3 py-[5px] type-label-s text-fg-muted transition-colors duration-fast ease-standard",
-            "hover:text-fg data-[pressed]:bg-surface data-[pressed]:text-fg data-[pressed]:shadow-1",
+            "focus-ring rounded-sm px-3 py-[5px] type-label-s text-fg-muted",
+            "transition-[background-color,box-shadow,color] duration-fast ease-standard",
+            "hover:text-fg data-[pressed]:bg-raised data-[pressed]:text-fg data-[pressed]:shadow-control",
           )}
         >
           {option.label}

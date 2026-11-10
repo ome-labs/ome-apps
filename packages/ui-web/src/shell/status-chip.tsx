@@ -14,17 +14,20 @@ export type StatusChipProps = {
   className?: string | undefined;
 };
 
-/** The top bar's rounded chips for node, keeper and signer. Without a tone the chip is quiet and outlined. */
+/**
+ * The top bar's rounded chips for node, keeper and signer. They are readouts, not buttons, so they sit in the
+ * bar (a sunken well when quiet, a rimmed tint when toned) rather than rising out of it.
+ */
 export function StatusChip({ icon, tone, children, className }: StatusChipProps) {
   const colours = tone ? toneClasses[tone] : null;
 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 type-label-s whitespace-nowrap",
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 type-label-s whitespace-nowrap inset-ring",
         colours
-          ? [colours.fill, colours.text]
-          : "border border-line-subtle bg-sunken text-fg-muted",
+          ? [colours.fill, colours.text, "inset-ring-current/15"]
+          : "bg-sunken text-fg-muted shadow-field inset-ring-line-subtle",
         className,
       )}
     >

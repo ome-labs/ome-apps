@@ -4,12 +4,13 @@ import { tokens } from "@ome-labs/tokens";
 
 import { cn } from "../styling/class-names.ts";
 
-// Page 30: four fills that read in both themes, so they come from primitives rather than theme roles.
+// Page 30: four fills that read in both themes, so they come from primitives rather than theme roles. Only the
+// colour is inline, so the class's light wash can layer over it.
 const palette = [
-  { background: tokens.color.primitive["lake/600"], color: tokens.color.primitive["ink/0"] },
-  { background: tokens.color.primitive["ink/700"], color: tokens.color.primitive["ink/0"] },
-  { background: tokens.color.primitive["sun/200"], color: tokens.color.primitive["ink/900"] },
-  { background: tokens.color.primitive["lake/200"], color: tokens.color.primitive["ink/900"] },
+  { backgroundColor: tokens.color.primitive["lake/600"], color: tokens.color.primitive["ink/0"] },
+  { backgroundColor: tokens.color.primitive["ink/700"], color: tokens.color.primitive["ink/0"] },
+  { backgroundColor: tokens.color.primitive["sun/200"], color: tokens.color.primitive["ink/900"] },
+  { backgroundColor: tokens.color.primitive["lake/200"], color: tokens.color.primitive["ink/900"] },
 ];
 
 const sizes = {
@@ -35,7 +36,9 @@ export function MemberAvatar({ name, index, size = "md", className }: MemberAvat
       aria-hidden
       style={style}
       className={cn(
+        // Lit from above with a hairline inside the edge, so pale fills (sun, lake) still hold their shape on white.
         "inline-flex shrink-0 items-center justify-center rounded-full font-medium",
+        "bg-linear-to-b from-brand-white/20 to-brand-white/0 inset-ring inset-ring-brand-night/10",
         sizes[size],
         className,
       )}

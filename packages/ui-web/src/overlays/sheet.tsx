@@ -35,7 +35,7 @@ export function Sheet({
         <BaseDialog.Backdrop className={overlayBackdrop} />
         <BaseDialog.Popup
           className={cn(
-            "fixed inset-y-0 right-0 z-50 flex w-[min(440px,100vw)] flex-col border-l border-line bg-raised shadow-4 outline-none",
+            "fixed inset-y-0 right-0 z-50 flex w-[min(440px,100vw)] flex-col bg-raised shadow-4 outline-none",
             "transition-transform duration-slow ease-emphasized data-[starting-style]:translate-x-full data-[ending-style]:translate-x-full",
             className,
           )}
@@ -53,7 +53,8 @@ export function Sheet({
           </div>
           <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-6 py-5">{children}</div>
           {footer ? (
-            <div className="flex justify-end gap-2 border-t border-line-subtle px-6 py-4">
+            // The footer sits on a slightly sunken band so its actions read as the sheet's base.
+            <div className="flex justify-end gap-2 border-t border-line-subtle bg-canvas/60 px-6 py-4">
               {footer}
             </div>
           ) : null}

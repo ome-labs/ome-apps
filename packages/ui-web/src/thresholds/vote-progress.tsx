@@ -24,7 +24,13 @@ export function VoteProgress({ proposal, className }: VoteProgressProps) {
         {segments.map(({ key, filled }) => (
           <span
             key={key}
-            className={cn("h-1.5 w-[18px] rounded-full", filled ? "bg-accent" : "bg-line")}
+            className={cn(
+              "h-1.5 w-[18px] rounded-full transition-colors duration-base ease-standard",
+              // Empty slots are grooves; a vote fills one with a lit bead.
+              filled
+                ? "bg-accent bg-linear-to-b from-brand-white/25 to-brand-white/0"
+                : "bg-line shadow-field",
+            )}
           />
         ))}
       </span>

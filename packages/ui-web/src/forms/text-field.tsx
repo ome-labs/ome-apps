@@ -15,10 +15,11 @@ export function TextInput({ mono, className, ...props }: TextInputProps) {
   return (
     <Input
       className={cn(
-        "h-control-md w-full rounded-md border border-line bg-surface px-2.5 text-fg placeholder:text-fg-subtle",
-        "outline-none transition-[border-color,box-shadow] duration-fast ease-standard",
+        // A field is a well cut into the surface, the opposite of a raised button.
+        "h-control-md w-full rounded-md border border-line bg-surface px-2.5 text-fg shadow-field placeholder:text-fg-subtle",
+        "outline-none transition-[border-color,box-shadow] duration-fast ease-standard hover:border-line-strong",
         "focus:border-accent focus:shadow-focus",
-        "data-[invalid]:border-danger data-[disabled]:cursor-not-allowed data-[disabled]:bg-sunken data-[disabled]:text-fg-disabled",
+        "data-[invalid]:border-danger data-[disabled]:cursor-not-allowed data-[disabled]:border-line data-[disabled]:bg-sunken data-[disabled]:text-fg-disabled data-[disabled]:shadow-none",
         mono ? "type-mono-m" : "type-body-s",
         className,
       )}

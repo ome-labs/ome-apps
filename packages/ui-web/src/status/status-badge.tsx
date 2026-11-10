@@ -29,7 +29,8 @@ export function StatusBadge(props: StatusBadgeProps) {
     <span
       title={display.meaning}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full py-[3px] pr-[9px] pl-2 type-label-s whitespace-nowrap",
+        // A hairline in the pill's own colour gives the tint a crisp edge on any surface, in both themes.
+        "inline-flex items-center gap-1.5 rounded-full py-[3px] pr-[9px] pl-2 type-label-s whitespace-nowrap inset-ring inset-ring-current/15",
         tone.fill,
         tone.text,
         props.className,

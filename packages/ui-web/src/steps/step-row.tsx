@@ -35,10 +35,10 @@ export function StepRow({ status, label, detail, time, className }: StepRowProps
     >
       <span
         className={cn(
-          "flex size-6 shrink-0 items-center justify-center rounded-full",
+          "flex size-6 shrink-0 items-center justify-center rounded-full inset-ring inset-ring-current/15",
           tone.fill,
           tone.text,
-          status === "active" && "border border-accent",
+          status === "active" && "inset-ring-accent shadow-1",
         )}
       >
         <Icon

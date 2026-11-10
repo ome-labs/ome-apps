@@ -17,7 +17,7 @@ export function Toaster(props: Omit<SonnerProps, "theme" | "toastOptions" | "ico
       unstyled: true,
       classNames: {
         toast:
-          "flex w-[380px] items-center gap-2.5 rounded-lg border border-line bg-raised px-3.5 py-3 shadow-3 type-body-s text-fg",
+          "flex w-[380px] items-center gap-2.5 rounded-lg bg-raised px-3.5 py-3 shadow-3 type-body-s text-fg",
         title: "flex-1",
         description: "type-caption text-fg-subtle",
         actionButton: "focus-ring rounded-xs type-label-s text-accent-fg hover:underline",

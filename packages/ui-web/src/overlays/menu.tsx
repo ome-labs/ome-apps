@@ -37,7 +37,7 @@ export function Menu({ trigger, items, align = "end" }: MenuProps) {
         <BaseMenu.Positioner align={align} sideOffset={4} className="z-50 outline-none">
           <BaseMenu.Popup
             className={cn(
-              "flex w-60 flex-col gap-0.5 rounded-[10px] border border-line bg-raised p-1 shadow-2 outline-none",
+              "flex w-60 flex-col gap-0.5 rounded-[10px] bg-raised p-1 shadow-2 outline-none",
               "origin-[var(--transform-origin)] transition-[opacity,scale] duration-base ease-standard",
               "data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
             )}

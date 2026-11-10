@@ -38,11 +38,20 @@ export function RadioGroup<Value extends string>({
             value={option.value}
             disabled={option.disabled}
             className={cn(
-              "focus-ring flex size-4 shrink-0 items-center justify-center rounded-full border border-line-strong bg-surface",
-              "transition-[border-width,border-color] duration-fast ease-standard",
-              "data-[checked]:border-[5px] data-[checked]:border-accent data-[disabled]:bg-sunken",
+              // Empty, a small well; chosen, a lit accent bead with a white centre.
+              "focus-ring flex size-4 shrink-0 items-center justify-center rounded-full border border-line-strong bg-surface shadow-field",
+              "transition-[background-color,border-color,box-shadow,scale] duration-fast ease-standard active:scale-90",
+              "data-[checked]:border-transparent data-[checked]:bg-accent data-[checked]:bg-linear-to-b data-[checked]:from-brand-white/15 data-[checked]:to-brand-white/0 data-[checked]:shadow-accent",
+              "data-[disabled]:scale-100 data-[disabled]:border-line data-[disabled]:bg-sunken data-[disabled]:bg-none data-[disabled]:shadow-none",
             )}
-          />
+          >
+            <Radio.Indicator
+              className={cn(
+                "size-1.5 rounded-full bg-brand-white transition-[opacity,scale] duration-fast ease-standard",
+                "data-[starting-style]:scale-50 data-[starting-style]:opacity-0 data-[disabled]:bg-fg-disabled",
+              )}
+            />
+          </Radio.Root>
           {option.label}
         </label>
       ))}

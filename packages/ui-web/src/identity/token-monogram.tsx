@@ -23,7 +23,10 @@ export function TokenMonogram({ token, size = "md", className }: TokenMonogramPr
     <span
       aria-hidden
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-full border border-line-subtle bg-accent-subtle font-mono font-medium text-accent-fg",
+        "inline-flex shrink-0 items-center justify-center rounded-full bg-accent-subtle font-mono font-medium text-accent-fg",
+        // A coin's face: lighter at the top, rimmed in its own ink. The wash is fainter in dark, where white
+        // over the deep tint would turn it grey.
+        "bg-linear-to-b from-brand-white/60 to-brand-white/0 inset-ring inset-ring-current/20 dark:from-brand-white/10",
         sizes[size],
         className,
       )}

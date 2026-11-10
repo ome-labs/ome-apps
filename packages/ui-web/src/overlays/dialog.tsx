@@ -47,7 +47,7 @@ export function Dialog({
         <BaseDialog.Popup
           className={cn(
             "fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100dvh-4rem)] w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-[18px] overflow-y-auto",
-            "rounded-xl border border-line bg-raised p-6 shadow-4 outline-none",
+            "rounded-xl bg-raised p-6 shadow-4 outline-none",
             "transition-[opacity,scale] duration-slow ease-emphasized data-[starting-style]:scale-[0.97] data-[starting-style]:opacity-0",
             "data-[ending-style]:scale-[0.97] data-[ending-style]:opacity-0",
             wide ? "max-w-[640px]" : "max-w-[480px]",

@@ -2,19 +2,19 @@ import type { ComponentProps } from "react";
 
 import { cn } from "../styling/class-names.ts";
 
-// Page 38: a surface with a sunken header of overlines and hairline rows. Plain table elements, so screen
-// readers announce rows and columns.
+// Page 38: a raised surface with a sunken header band of overlines and hairline rows. Plain table elements,
+// so screen readers announce rows and columns.
 
 export function Table({ className, ...props }: ComponentProps<"table">) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-line-subtle bg-surface">
+    <div className="overflow-x-auto rounded-lg bg-surface shadow-1">
       <table className={cn("w-full border-collapse text-left", className)} {...props} />
     </div>
   );
 }
 
 export function TableHead({ className, ...props }: ComponentProps<"thead">) {
-  return <thead className={cn("border-b border-line-subtle bg-sunken", className)} {...props} />;
+  return <thead className={cn("border-b border-line-subtle bg-sunken/60", className)} {...props} />;
 }
 
 export function TableBody({ className, ...props }: ComponentProps<"tbody">) {

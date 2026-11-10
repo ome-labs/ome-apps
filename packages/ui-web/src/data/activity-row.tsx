@@ -33,8 +33,10 @@ export function ActivityRow({ entry, now, names, className }: ActivityRowProps) 
     <li className={cn("flex items-center gap-3 px-4 py-3", className)}>
       <span
         className={cn(
-          "flex size-7 shrink-0 items-center justify-center rounded-full",
-          received ? "bg-success-subtle" : "bg-accent-subtle",
+          "flex size-7 shrink-0 items-center justify-center rounded-full inset-ring",
+          received
+            ? "bg-success-subtle inset-ring-success/15"
+            : "bg-accent-subtle inset-ring-accent-fg/15",
         )}
       >
         <Icon

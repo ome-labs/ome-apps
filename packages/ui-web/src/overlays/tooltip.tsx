@@ -21,7 +21,7 @@ export function Tooltip({ content, children, side = "top", mono }: TooltipProps)
         <BaseTooltip.Positioner side={side} sideOffset={6} className="z-50">
           <BaseTooltip.Popup
             className={cn(
-              "max-w-[min(90vw,32rem)] rounded-sm bg-inverse px-2 py-[5px] text-fg-inverse [overflow-wrap:anywhere]",
+              "max-w-[min(90vw,32rem)] rounded-sm bg-inverse px-2 py-[5px] text-fg-inverse shadow-2 [overflow-wrap:anywhere]",
               "origin-[var(--transform-origin)] transition-[opacity,scale] duration-base ease-standard",
               "data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
               // Moving between tooltips shouldn't replay the entrance.

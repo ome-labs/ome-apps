@@ -21,7 +21,7 @@ export function Popover({ trigger, title, children, side = "bottom", className }
         <BasePopover.Positioner side={side} sideOffset={6} className="z-50">
           <BasePopover.Popup
             className={cn(
-              "flex max-w-80 flex-col gap-2 rounded-lg border border-line bg-raised p-4 shadow-2 outline-none",
+              "flex max-w-80 flex-col gap-2 rounded-lg bg-raised p-4 shadow-2 outline-none",
               "origin-[var(--transform-origin)] transition-[opacity,scale] duration-base ease-standard",
               "data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
               className,

@@ -14,7 +14,8 @@ export function CodeBox({ label, value, hint, className }: CodeBoxProps) {
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       <span className="type-label-m text-fg">{label}</span>
-      <div className="flex items-center gap-2.5 rounded-md border border-line-subtle bg-sunken py-1.5 pr-1.5 pl-3">
+      {/* The code sits in a well, with its copy button raised out of it. */}
+      <div className="flex items-center gap-2.5 rounded-md border border-line-subtle bg-sunken py-1.5 pr-1.5 pl-3 shadow-field">
         <code title={value} className="min-w-0 flex-1 truncate type-mono-s text-fg">
           {value}
         </code>
@@ -22,7 +23,7 @@ export function CodeBox({ label, value, hint, className }: CodeBoxProps) {
           value={value}
           label={`Copy ${label.toLowerCase()}`}
           size="md"
-          className="size-control-sm border border-line bg-surface"
+          className="size-control-sm bg-surface shadow-control active:shadow-pressed"
         />
       </div>
       {hint ? <span className="type-caption text-fg-subtle">{hint}</span> : null}

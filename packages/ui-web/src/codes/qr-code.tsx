@@ -39,7 +39,8 @@ export function QrCode({ value, label, size = 192, className }: QrCodeProps) {
       height={size}
       viewBox={`0 0 ${modules} ${modules}`}
       shapeRendering="crispEdges"
-      className={cn("rounded-md bg-brand-white", className)}
+      // The tile's ring keeps the white square's edge visible on a white card.
+      className={cn("rounded-md bg-brand-white shadow-1", className)}
     >
       <path d={path} className="fill-brand-night" />
     </svg>

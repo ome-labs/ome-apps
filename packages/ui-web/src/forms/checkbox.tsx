@@ -22,10 +22,12 @@ export function Checkbox({ label, className, indeterminate, ...props }: Checkbox
       <BaseCheckbox.Root
         indeterminate={indeterminate}
         className={cn(
-          "focus-ring flex size-4 shrink-0 items-center justify-center rounded-xs border border-line-strong bg-surface",
-          "transition-colors duration-fast ease-standard",
-          "data-[checked]:border-transparent data-[checked]:bg-accent data-[indeterminate]:border-transparent data-[indeterminate]:bg-accent",
-          "data-[disabled]:border-line data-[disabled]:bg-sunken",
+          // Empty, the box is a small well; ticked, it fills like a primary button, lit from above.
+          "focus-ring flex size-4 shrink-0 items-center justify-center rounded-xs border border-line-strong bg-surface shadow-field",
+          "transition-[background-color,border-color,box-shadow,scale] duration-fast ease-standard active:scale-90",
+          "data-[checked]:border-transparent data-[checked]:bg-accent data-[checked]:bg-linear-to-b data-[checked]:from-brand-white/15 data-[checked]:to-brand-white/0 data-[checked]:shadow-accent",
+          "data-[indeterminate]:border-transparent data-[indeterminate]:bg-accent data-[indeterminate]:shadow-accent",
+          "data-[disabled]:scale-100 data-[disabled]:border-line data-[disabled]:bg-sunken data-[disabled]:bg-none data-[disabled]:shadow-none",
         )}
         {...props}
       >

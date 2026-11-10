@@ -51,10 +51,12 @@ export function Select<Value extends string>({
       <BaseSelect.Trigger
         aria-label={props["aria-label"]}
         className={cn(
-          "flex h-control-md w-full items-center gap-2 rounded-md border border-line bg-surface px-2.5 text-left",
-          "type-body-s text-fg outline-none transition-[border-color,box-shadow] duration-fast ease-standard",
-          "focus-visible:border-accent focus-visible:shadow-focus data-[popup-open]:border-accent",
-          "data-[disabled]:cursor-not-allowed data-[disabled]:bg-sunken data-[disabled]:text-fg-disabled",
+          // The trigger is pressed to open a list, so it is raised like a secondary button, not sunk like a field.
+          "focus-ring flex h-control-md w-full items-center gap-2 rounded-md px-2.5 text-left type-body-s text-fg",
+          "bg-surface bg-linear-to-b from-brand-white/0 to-canvas/60 shadow-control",
+          "transition-[background-color,box-shadow] duration-fast ease-standard hover:bg-hover",
+          "data-[popup-open]:bg-hover data-[popup-open]:ring-1 data-[popup-open]:ring-accent",
+          "data-[disabled]:cursor-not-allowed data-[disabled]:bg-sunken data-[disabled]:bg-none data-[disabled]:text-fg-disabled data-[disabled]:shadow-none",
           className,
         )}
       >
@@ -87,7 +89,7 @@ export function Select<Value extends string>({
         >
           <BaseSelect.Popup
             className={cn(
-              "min-w-[var(--anchor-width)] rounded-lg border border-line bg-raised p-1 shadow-2 outline-none",
+              "min-w-[var(--anchor-width)] rounded-lg bg-raised p-1 shadow-2 outline-none",
               "origin-[var(--transform-origin)] transition-[opacity,scale] duration-base ease-standard",
               "data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
             )}

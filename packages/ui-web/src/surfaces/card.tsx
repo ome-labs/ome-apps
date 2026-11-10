@@ -2,14 +2,12 @@ import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "../styling/class-names.ts";
 
-/** Page 39's card: the surface every group of content sits on. */
+/** Page 39's card: the surface every group of content sits on, lifted off the canvas by `shadow-1` (its ring
+ * replaces the old hairline border). */
 export function Card({ className, ...props }: ComponentProps<"section">) {
   return (
     <section
-      className={cn(
-        "flex flex-col gap-4 rounded-lg border border-line-subtle bg-surface p-5",
-        className,
-      )}
+      className={cn("flex flex-col gap-4 rounded-lg bg-surface p-5 shadow-1", className)}
       {...props}
     />
   );

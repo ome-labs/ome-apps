@@ -18,7 +18,7 @@ export function Tag({ tone = "neutral", children, className }: TagProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-xs px-1.5 py-0.5 type-label-s whitespace-nowrap",
+        "inline-flex items-center rounded-xs px-1.5 py-0.5 type-label-s whitespace-nowrap inset-ring inset-ring-current/15",
         colours.fill,
         colours.text,
         className,

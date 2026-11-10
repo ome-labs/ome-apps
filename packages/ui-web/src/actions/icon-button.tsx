@@ -28,9 +28,15 @@ export function IconButton({
       aria-label={label}
       className={cn(
         "focus-ring inline-flex shrink-0 items-center justify-center rounded-md text-fg-muted",
-        "transition-colors duration-fast ease-standard hover:bg-hover hover:text-fg active:bg-selected",
-        "data-[disabled]:cursor-not-allowed data-[disabled]:text-fg-disabled data-[disabled]:hover:bg-transparent",
-        variant === "secondary" && "border border-line bg-surface",
+        "transition-[background-color,box-shadow,color,scale] duration-fast ease-standard",
+        "hover:bg-hover hover:text-fg active:scale-95 active:bg-selected",
+        "data-[disabled]:cursor-not-allowed data-[disabled]:scale-100 data-[disabled]:text-fg-disabled data-[disabled]:hover:bg-transparent",
+        // The same raised face as a secondary `Button`, sinking while held.
+        variant === "secondary" && [
+          "bg-surface bg-linear-to-b from-brand-white/0 to-canvas/60 shadow-control",
+          "active:bg-sunken active:shadow-pressed active:ring-1 active:ring-line",
+          "data-[disabled]:bg-sunken data-[disabled]:bg-none data-[disabled]:shadow-none data-[disabled]:hover:bg-sunken",
+        ],
         sizes[size],
         className,
       )}

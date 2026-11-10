@@ -22,7 +22,16 @@ export function HealthMeter({ health, className }: HealthMeterProps) {
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <span aria-hidden className="flex gap-1">
         {segments.map(({ key, filled }) => (
-          <span key={key} className={cn("h-2 w-7 rounded-full", filled ? tone.dot : "bg-line")} />
+          <span
+            key={key}
+            className={cn(
+              "h-2 w-7 rounded-full transition-colors duration-base ease-standard",
+              // Empty slots are grooves; an answering keeper fills one with a lit bead.
+              filled
+                ? [tone.dot, "bg-linear-to-b from-brand-white/25 to-brand-white/0"]
+                : "bg-line shadow-field",
+            )}
+          />
         ))}
       </span>
       <span className={cn("type-label-s", tone.text)}>{health.label}</span>

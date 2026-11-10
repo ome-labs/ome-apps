@@ -35,7 +35,7 @@ export function Tabs<Value extends string>({
             {tab.label}
           </BaseTabs.Tab>
         ))}
-        <BaseTabs.Indicator className="absolute bottom-[-1px] left-[var(--active-tab-left)] h-0.5 w-[var(--active-tab-width)] bg-accent transition-[left,width] duration-base ease-standard" />
+        <BaseTabs.Indicator className="absolute bottom-[-1px] left-[var(--active-tab-left)] h-0.5 w-[var(--active-tab-width)] rounded-full bg-accent transition-[left,width] duration-base ease-standard" />
       </BaseTabs.List>
       {tabs.map((tab) => (
         <BaseTabs.Panel key={tab.value} value={tab.value} className="outline-none">

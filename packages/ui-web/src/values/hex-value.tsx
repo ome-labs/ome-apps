@@ -41,7 +41,11 @@ export function HexValue({
             // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
             tabIndex={0}
             aria-label={`${noun} ${complete}`}
-            className={cn("focus-ring rounded-xs type-mono-s whitespace-nowrap", colour)}
+            // A faint fill on hover says there is more to see (the full value in the tooltip).
+            className={cn(
+              "focus-ring -mx-0.5 rounded-xs px-0.5 type-mono-s whitespace-nowrap transition-colors duration-fast ease-standard hover:bg-hover",
+              colour,
+            )}
           >
             {shortHex(complete)}
           </span>

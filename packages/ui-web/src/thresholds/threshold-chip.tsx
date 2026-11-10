@@ -15,7 +15,7 @@ export function ThresholdChip({ kind, threshold, members, className }: Threshold
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border border-line bg-surface py-1 pr-2.5 pl-2 type-label-s text-fg whitespace-nowrap",
+        "inline-flex items-center gap-1.5 rounded-full bg-surface py-1 pr-2.5 pl-2 type-label-s text-fg whitespace-nowrap shadow-1",
         className,
       )}
     >

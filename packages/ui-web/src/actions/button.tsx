@@ -6,21 +6,33 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../styling/class-names.ts";
 
-// Page 24: four styles, three sizes. Hover and pressed come from the pointer; disabled is a sunken fill
-// rather than a faded one, so it stays legible.
+// Page 24: four styles, three sizes. Solid buttons are lit from above: a faint white wash over the fill and a
+// lit top edge (`shadow-accent`); secondary sits on the surface with its own ring (`shadow-control`). Held
+// down, a button sinks: the drop shadow turns into an inset one and it shrinks a hair. Disabled is a sunken,
+// flat fill rather than a faded one, so it stays legible and plainly can't be pressed.
 const button = cva(
   [
     "focus-ring inline-flex shrink-0 select-none items-center justify-center gap-1.5 whitespace-nowrap rounded-md",
-    "transition-colors duration-fast ease-standard",
-    "data-[disabled]:cursor-not-allowed data-[disabled]:bg-sunken data-[disabled]:text-fg-disabled data-[disabled]:border-transparent",
+    "transition-[background-color,box-shadow,scale] duration-fast ease-standard active:scale-[0.98]",
+    "data-[disabled]:cursor-not-allowed data-[disabled]:scale-100 data-[disabled]:bg-sunken data-[disabled]:bg-none data-[disabled]:text-fg-disabled data-[disabled]:shadow-none",
   ],
   {
     variants: {
       variant: {
-        primary: "bg-accent text-on-accent hover:bg-accent-hover active:bg-accent-pressed",
-        secondary: "border border-line bg-surface text-fg hover:bg-hover active:bg-selected",
+        primary: [
+          "bg-accent bg-linear-to-b from-brand-white/12 to-brand-white/0 text-on-accent shadow-accent",
+          "hover:bg-[color-mix(in_oklab,var(--color-accent),white_10%)] active:bg-accent-pressed active:shadow-pressed",
+        ],
+        secondary: [
+          "bg-surface bg-linear-to-b from-brand-white/0 to-canvas/60 text-fg shadow-control",
+          "hover:bg-hover active:bg-sunken active:shadow-pressed active:ring-1 active:ring-line",
+        ],
         ghost: "text-fg hover:bg-hover active:bg-selected data-[disabled]:bg-transparent",
-        danger: "bg-danger-solid text-fg-inverse hover:opacity-90 active:opacity-80",
+        danger: [
+          "bg-danger-solid bg-linear-to-b from-brand-white/12 to-brand-white/0 text-fg-inverse shadow-accent",
+          "hover:bg-[color-mix(in_oklab,var(--color-danger-solid),white_10%)]",
+          "active:bg-[color-mix(in_oklab,var(--color-danger-solid),black_10%)] active:shadow-pressed",
+        ],
       },
       size: {
         sm: "h-control-sm px-2.5 type-label-s",

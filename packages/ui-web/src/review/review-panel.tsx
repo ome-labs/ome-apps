@@ -54,7 +54,10 @@ export function ReviewPanel({ review, onApprove, onReject, actions, className }:
         <Section title="Calls, as rebuilt">
           <ol className="flex flex-col gap-2">
             {calls.map(({ call, key }) => (
-              <li key={key} className="flex flex-col gap-1 rounded-md bg-sunken px-3 py-2.5">
+              <li
+                key={key}
+                className="flex flex-col gap-1 rounded-md bg-sunken px-3 py-2.5 shadow-field"
+              >
                 <span className="flex flex-wrap items-center gap-2 type-label-m text-fg">
                   {call.toLabel ?? "Contract"}
                   <Hash value={call.to} noun="contract" tone="quiet" />
@@ -107,13 +110,13 @@ export function ReviewPanel({ review, onApprove, onReject, actions, className }:
         )}
       </Section>
 
-      <Collapsible.Root className="rounded-md border border-line-subtle">
-        <Collapsible.Trigger className="focus-ring group flex w-full items-center justify-between rounded-md px-3 py-2.5 type-label-m text-fg">
+      <Collapsible.Root className="rounded-md bg-surface shadow-1">
+        <Collapsible.Trigger className="focus-ring group flex w-full items-center justify-between rounded-md px-3 py-2.5 type-label-m text-fg transition-colors duration-fast ease-standard hover:bg-hover">
           What you sign
           <Icon
             name="chevron-down"
             size={16}
-            className="text-fg-subtle transition-transform duration-fast group-data-[panel-open]:rotate-180"
+            className="text-fg-subtle transition-transform duration-fast ease-standard group-data-[panel-open]:rotate-180"
           />
         </Collapsible.Trigger>
         <Collapsible.Panel className="flex flex-col gap-2 border-t border-line-subtle px-3 py-2.5">

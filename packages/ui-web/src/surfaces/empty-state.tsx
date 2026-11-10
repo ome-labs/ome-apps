@@ -18,7 +18,11 @@ export function EmptyState({ illustration, title, children, action, className }:
     <div className={cn("flex flex-col items-center gap-3 px-6 py-7 text-center", className)}>
       {/* The title says what the scene shows, so the image is decorative here. */}
       {illustration ? (
-        <Illustration id={illustration} alt="" className="h-[120px] w-48 rounded-md object-cover" />
+        <Illustration
+          id={illustration}
+          alt=""
+          className="h-[120px] w-48 rounded-md object-cover shadow-1"
+        />
       ) : null}
       <h3 className="type-heading-s text-fg">{title}</h3>
       {children ? <div className="max-w-[360px] type-body-s text-fg-muted">{children}</div> : null}

@@ -21,12 +21,16 @@
   }
 }
 
-/* Page 23: one ring for every focusable thing, shown for the keyboard only. */
+/* Page 23: one ring for every focusable thing, shown for the keyboard only. It is layered on top of the
+   control's own shadow stack (Tailwind's composed variables) so a focused button keeps its depth. */
 @utility focus-ring {
   outline: none;
 
   &:focus-visible {
-    box-shadow: var(--shadow-focus);
+    box-shadow:
+      var(--shadow-focus), var(--tw-inset-shadow, 0 0 #0000),
+      var(--tw-inset-ring-shadow, 0 0 #0000), var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow, 0 0 #0000);
   }
 }
 
