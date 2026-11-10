@@ -16,6 +16,7 @@ catalog:
   clsx: 2.1.1
   jsdom: 31.0.0
   klarity: 0.3.0
+  motion: 14.11.1
   oxlint: 1.93.0
   react: 19.3.0
   react-dom: 19.3.0

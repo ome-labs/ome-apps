@@ -35,6 +35,7 @@
     "electron-builder": "26.18.0",
     "electron-vite": "6.0.0",
     "klarity": "catalog:",
+    "motion": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "tailwindcss": "catalog:",

@@ -5,6 +5,7 @@ import { Banner, Button, SegmentedControl, TextField } from "@ome-labs/ui-web";
 
 import { unwrap } from "../data/session.ts";
 import { StepHeading } from "./layout.tsx";
+import { Reveal } from "./motion.tsx";
 import {
   LOCAL_NODE,
   NETWORK_OPTIONS,
@@ -82,23 +83,31 @@ export function ProfileStep({
       </StepHeading>
 
       {unreachable ? (
-        <Banner kind="alarm" action={retryAction}>
-          Can't reach the node at {unreachable.url}. {nodeFix(unreachable.url)}
-        </Banner>
+        <Reveal>
+          <Banner kind="alarm" action={retryAction}>
+            Can't reach the node at {unreachable.url}. {nodeFix(unreachable.url)}
+          </Banner>
+        </Reveal>
       ) : null}
-      {error ? <Banner kind="alarm">{error}</Banner> : null}
+      {error ? (
+        <Reveal>
+          <Banner kind="alarm">{error}</Banner>
+        </Reveal>
+      ) : null}
 
-      <TextField
-        label="Your name"
-        hint="Shown to the other members on rosters and votes."
-        value={member}
-        onValueChange={setMember}
-        error={nameError}
-        maxLength={48}
-        disabled={pending}
-      />
+      <Reveal>
+        <TextField
+          label="Your name"
+          hint="Shown to the other members on rosters and votes."
+          value={member}
+          onValueChange={setMember}
+          error={nameError}
+          maxLength={48}
+          disabled={pending}
+        />
+      </Reveal>
 
-      <div className="flex flex-col gap-2">
+      <Reveal className="flex flex-col gap-2">
         <span className="type-label-m text-fg">Network</span>
         <SegmentedControl
           aria-label="Network"
@@ -118,16 +127,16 @@ export function ProfileStep({
         ) : (
           <span className="type-mono-s text-fg-subtle">{nodeUrl}</span>
         )}
-      </div>
+      </Reveal>
 
-      <div className="flex items-center justify-end gap-2">
+      <Reveal className="flex items-center justify-end gap-2">
         <Button variant="ghost" onClick={onBack} disabled={pending}>
           Back
         </Button>
         <Button variant="primary" type="submit" disabled={!ready || pending}>
           {pending ? "Starting your daemon…" : "Continue"}
         </Button>
-      </div>
+      </Reveal>
     </form>
   );
 }

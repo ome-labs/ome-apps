@@ -6,6 +6,7 @@ import { Banner, Button, TextField } from "@ome-labs/ui-web";
 import { callOme } from "../data/ome.ts";
 import { unwrap } from "../data/session.ts";
 import { StepHeading } from "./layout.tsx";
+import { Reveal } from "./motion.tsx";
 import { describeNode, isLocal } from "./networks.ts";
 import type { ProfileDraft } from "./profile-step.tsx";
 
@@ -70,39 +71,47 @@ export function PassphraseStep({
         somewhere safe.
       </StepHeading>
 
-      <p className="type-body-s text-fg-muted">
-        {draft.member} on {describeNode(node)}
-      </p>
+      <Reveal>
+        <p className="type-body-s text-fg-muted">
+          {draft.member} on {describeNode(node)}
+        </p>
+      </Reveal>
 
-      {error ? <Banner kind="alarm">{error}</Banner> : null}
+      {error ? (
+        <Reveal>
+          <Banner kind="alarm">{error}</Banner>
+        </Reveal>
+      ) : null}
 
-      <TextField
-        label="Passphrase"
-        type="password"
-        hint={strength(passphrase)}
-        value={passphrase}
-        onValueChange={setPassphrase}
-        autoComplete="new-password"
-        disabled={pending}
-      />
-      <TextField
-        label="Passphrase again"
-        type="password"
-        value={again}
-        onValueChange={setAgain}
-        error={mismatch ? "This doesn't match." : undefined}
-        autoComplete="new-password"
-        disabled={pending}
-      />
+      <Reveal className="flex flex-col gap-6">
+        <TextField
+          label="Passphrase"
+          type="password"
+          hint={strength(passphrase)}
+          value={passphrase}
+          onValueChange={setPassphrase}
+          autoComplete="new-password"
+          disabled={pending}
+        />
+        <TextField
+          label="Passphrase again"
+          type="password"
+          value={again}
+          onValueChange={setAgain}
+          error={mismatch ? "This doesn't match." : undefined}
+          autoComplete="new-password"
+          disabled={pending}
+        />
+      </Reveal>
 
-      <div className="flex items-center justify-end gap-2">
+      <Reveal className="flex items-center justify-end gap-2">
         <Button variant="ghost" onClick={onBack} disabled={pending}>
           Back
         </Button>
         <Button variant="primary" type="submit" disabled={!ready || pending}>
           {pending ? "Sealing your key and creating your account…" : "Create profile"}
         </Button>
-      </div>
+      </Reveal>
     </form>
   );
 }
