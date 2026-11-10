@@ -1,4 +1,10 @@
 {
   "extends": "klarity/tsconfig/library/react",
-  "include": ["src"]
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "types": ["node"],
+    "lib": ["ES2024", "DOM", "DOM.Iterable"]
+  },
+  "include": ["src", "scripts", "*.config.ts"]
 }

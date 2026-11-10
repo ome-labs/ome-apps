@@ -1,0 +1,1014 @@
+{
+  "$description": "Every raster and pixel asset with its group and alt text. scripts/export.ts and scripts/generate.ts read this file; the manifest test checks it against the files on disk.",
+  "illustrations": [
+    {
+      "id": "hero-dawn",
+      "title": "Dawn over Lake Texcoco",
+      "group": "brand-onboarding",
+      "theme": "Brand",
+      "alt": "Dawn over Lake Texcoco: three lit lanterns on posts, a poled canoe with a lantern, a loaded canoe and a heron in the reeds, volcanoes behind."
+    },
+    {
+      "id": "hero-day",
+      "title": "Midday on the lake",
+      "group": "brand-onboarding",
+      "theme": "Brand",
+      "alt": "Midday on the lake: canoes carrying flowers between chinampa gardens under a bright sky."
+    },
+    {
+      "id": "hero-dusk",
+      "title": "Dusk on the lake",
+      "group": "brand-onboarding",
+      "theme": "Brand",
+      "alt": "Dusk over the lake: a lit causeway crosses the water while a canoe with a lantern heads home."
+    },
+    {
+      "id": "hero-night",
+      "title": "Night watch",
+      "group": "brand-onboarding",
+      "theme": "Brand",
+      "alt": "Night on the lake under a crescent moon: three lanterns on posts and two canoes with lanterns."
+    },
+    {
+      "id": "hero-mist",
+      "title": "Morning mist",
+      "group": "brand-onboarding",
+      "theme": "Brand",
+      "alt": "Mist over the lake: a single canoe and a heron near one lit and one dark lantern."
+    },
+    {
+      "id": "alliance",
+      "title": "Three houses, one lake",
+      "group": "brand-onboarding",
+      "theme": "Brand",
+      "alt": "Three canoes with lanterns side by side at dawn."
+    },
+    {
+      "id": "ome-two",
+      "title": "Ōme, two",
+      "group": "brand-onboarding",
+      "theme": "Brand",
+      "alt": "A low sun and its reflection at dusk, with two canoes far apart on calm water."
+    },
+    {
+      "id": "horizon",
+      "title": "The surface and what is under it",
+      "group": "brand-onboarding",
+      "theme": "Brand",
+      "alt": "A paper boat on calm water under a wide sky."
+    },
+    {
+      "id": "chinampas",
+      "title": "Chinampas, plots on the water",
+      "group": "brand-onboarding",
+      "theme": "Brand",
+      "alt": "Rows of chinampa gardens with tall trees and a canoe carrying flowers."
+    },
+    {
+      "id": "causeway",
+      "title": "The causeway",
+      "group": "brand-onboarding",
+      "theme": "Brand",
+      "alt": "A long causeway with lanterns across the lake, a canoe passing in front."
+    },
+    {
+      "id": "welcome",
+      "title": "Welcome to Ome",
+      "group": "brand-onboarding",
+      "theme": "Onboarding",
+      "alt": "Sunrise over a dock, a lantern post and a canoe with a lantern ready to set out."
+    },
+    {
+      "id": "create-profile",
+      "title": "Create your profile",
+      "group": "brand-onboarding",
+      "theme": "Onboarding",
+      "alt": "One person standing in a canoe beside a dock, a paper boat nearby."
+    },
+    {
+      "id": "passphrase",
+      "title": "Seal your signing key",
+      "group": "brand-onboarding",
+      "theme": "Onboarding",
+      "alt": "A single canoe with a lit lantern on a dark night lake."
+    },
+    {
+      "id": "touch-id",
+      "title": "Unlock with Touch ID",
+      "group": "brand-onboarding",
+      "theme": "Onboarding",
+      "alt": "Concentric ripples spreading from a leaping fish among lily pads."
+    },
+    {
+      "id": "keeper-server",
+      "title": "Keeper on your server",
+      "group": "brand-onboarding",
+      "theme": "Onboarding",
+      "alt": "A row of four lit lanterns on posts near a dock."
+    },
+    {
+      "id": "no-vaults",
+      "title": "No vaults yet",
+      "group": "brand-onboarding",
+      "theme": "Onboarding",
+      "alt": "An empty dock and an unlit lantern in the mist."
+    },
+    {
+      "id": "create-vault",
+      "title": "Create a vault",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "A canoe with a lantern leaving a dock, two paper boats drifting ahead."
+    },
+    {
+      "id": "invite",
+      "title": "Send the invite",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "Paper boats travelling across the lake toward two distant canoes."
+    },
+    {
+      "id": "lobby",
+      "title": "Co-founders gather",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "Three canoes gathering around one lantern post at dawn."
+    },
+    {
+      "id": "key-generation",
+      "title": "Generating the shared key",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "Three lanterns at night sending beams of light to one glowing orb above the water."
+    },
+    {
+      "id": "deploy",
+      "title": "Deploying the vault",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "A glowing orb rising over the lake while two canoes watch."
+    },
+    {
+      "id": "vault-founded",
+      "title": "Vault founded",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "Three canoes with lanterns together at sunrise, birds overhead."
+    },
+    {
+      "id": "balances",
+      "title": "Balances",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "Chinampas full of flowers and two canoes loaded with cargo."
+    },
+    {
+      "id": "no-tokens",
+      "title": "No tokens tracked yet",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "A bare chinampa garden in the mist with nothing growing."
+    },
+    {
+      "id": "receive",
+      "title": "Receive privately",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "Four paper boats arriving at a dock."
+    },
+    {
+      "id": "payment-received",
+      "title": "Payment received",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "A loaded canoe coming in to a dock at dawn."
+    },
+    {
+      "id": "health-good",
+      "title": "Keepers answering",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "Three lanterns on posts, all lit, on a clear day."
+    },
+    {
+      "id": "health-low",
+      "title": "No spare keeper",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "Three lanterns at dusk: two lit, one dark."
+    },
+    {
+      "id": "health-unreadable",
+      "title": "Vault can’t read now",
+      "group": "vault-proposals",
+      "theme": "Vault",
+      "alt": "Three lanterns in night fog: one lit, two dark."
+    },
+    {
+      "id": "new-proposal",
+      "title": "New proposal",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "A person in a canoe setting a paper boat on the water."
+    },
+    {
+      "id": "collecting",
+      "title": "Collecting approvals",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "A paper boat between two lanterns: one lit, one still dark."
+    },
+    {
+      "id": "ready",
+      "title": "Ready to execute",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "A paper boat between two lit lanterns."
+    },
+    {
+      "id": "proving",
+      "title": "Proving",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "In the mist, two lanterns send light to a glowing orb while a canoe waits."
+    },
+    {
+      "id": "sending",
+      "title": "Sending",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "A canoe with a lantern moving fast, leaving a long wake."
+    },
+    {
+      "id": "executed",
+      "title": "Executed",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "A canoe with a lantern arriving at a far chinampa under a morning sun."
+    },
+    {
+      "id": "blocked",
+      "title": "Blocked by rejections",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "A canoe stopped at a broken causeway at dusk."
+    },
+    {
+      "id": "expired",
+      "title": "Expired",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "A paper boat stranded in the reeds as the sun sets."
+    },
+    {
+      "id": "cancelled",
+      "title": "Cancelled",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "A faded paper boat drifting in the mist beside an unlit lantern."
+    },
+    {
+      "id": "stale",
+      "title": "Stale, made under an older config",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "An empty canoe moored to an unlit post in the mist."
+    },
+    {
+      "id": "no-proposals",
+      "title": "Nothing waiting for you",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "Calm water and birds on a clear day, nothing waiting."
+    },
+    {
+      "id": "review",
+      "title": "Review before you sign",
+      "group": "vault-proposals",
+      "theme": "Proposals",
+      "alt": "A heron watching a paper boat closely."
+    },
+    {
+      "id": "member-joining",
+      "title": "A member joins",
+      "group": "members-keepers-states",
+      "theme": "Membership",
+      "alt": "Two canoes together as a third canoe approaches."
+    },
+    {
+      "id": "member-leaving",
+      "title": "A member leaves",
+      "group": "members-keepers-states",
+      "theme": "Membership",
+      "alt": "Two canoes together at dusk as a third paddles away."
+    },
+    {
+      "id": "reshare",
+      "title": "Resharing the key",
+      "group": "members-keepers-states",
+      "theme": "Membership",
+      "alt": "Three canoes with lanterns at night, light passing between them."
+    },
+    {
+      "id": "join-request",
+      "title": "Join request",
+      "group": "members-keepers-states",
+      "theme": "Membership",
+      "alt": "A paper boat sent from a lone canoe toward a group of canoes."
+    },
+    {
+      "id": "share-plan",
+      "title": "Share the plan",
+      "group": "members-keepers-states",
+      "theme": "Membership",
+      "alt": "Paper boats dispersing across the lake from one canoe."
+    },
+    {
+      "id": "new-committee",
+      "title": "New committee active",
+      "group": "members-keepers-states",
+      "theme": "Membership",
+      "alt": "Two canoes with lanterns side by side at sunrise."
+    },
+    {
+      "id": "counterparties",
+      "title": "Counterparties",
+      "group": "members-keepers-states",
+      "theme": "Membership",
+      "alt": "Many small canoes spread across the lake."
+    },
+    {
+      "id": "handshake",
+      "title": "Handshake again",
+      "group": "members-keepers-states",
+      "theme": "Membership",
+      "alt": "Two canoes bow to bow at dusk, their lanterns close together."
+    },
+    {
+      "id": "keeper",
+      "title": "Your keeper",
+      "group": "members-keepers-states",
+      "theme": "Keepers",
+      "alt": "One tall lit lantern on a post at night."
+    },
+    {
+      "id": "relay",
+      "title": "Through a relay",
+      "group": "members-keepers-states",
+      "theme": "Keepers",
+      "alt": "A causeway linking two chinampas at dusk, a beam of light between the lanterns at each end."
+    },
+    {
+      "id": "peers",
+      "title": "Peers connected",
+      "group": "members-keepers-states",
+      "theme": "Keepers",
+      "alt": "Five lanterns across the night lake joined by dotted beams of light."
+    },
+    {
+      "id": "peer-offline",
+      "title": "Keeper offline",
+      "group": "members-keepers-states",
+      "theme": "Keepers",
+      "alt": "Night fog: two lanterns joined by a beam, a third dark and unconnected."
+    },
+    {
+      "id": "audit-log",
+      "title": "Keeper audit log",
+      "group": "members-keepers-states",
+      "theme": "Keepers",
+      "alt": "A carved stone with tally marks beside a lit lantern."
+    },
+    {
+      "id": "devices",
+      "title": "Paired phone",
+      "group": "members-keepers-states",
+      "theme": "Keepers",
+      "alt": "Three small canoes at night, each carrying a lantern."
+    },
+    {
+      "id": "no-devices",
+      "title": "No paired devices",
+      "group": "members-keepers-states",
+      "theme": "Keepers",
+      "alt": "An empty dock and an unlit lantern in the mist."
+    },
+    {
+      "id": "starting",
+      "title": "Starting Ome…",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "First light before sunrise, one canoe on the water."
+    },
+    {
+      "id": "daemon-failed",
+      "title": "The daemon didn’t start",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "Rain over a dark lake: unlit lanterns and an empty canoe."
+    },
+    {
+      "id": "node-unreachable",
+      "title": "Node unreachable",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "Thick fog hides the far shore; an empty dock and a dark lantern."
+    },
+    {
+      "id": "syncing",
+      "title": "Syncing blocks",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "A long flock of birds crossing the sky above a moving canoe."
+    },
+    {
+      "id": "alarm",
+      "title": "The keeper raised an alarm",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "A red signal fire burning on a platform at night."
+    },
+    {
+      "id": "locked",
+      "title": "Signer locked",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "Night, calm water, an unlit lantern and an empty moored canoe."
+    },
+    {
+      "id": "unlocked",
+      "title": "Unlocked",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "Dawn, a lantern lit beside a canoe."
+    },
+    {
+      "id": "not-found",
+      "title": "Not found",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "Fog and empty water, a ripple where something was."
+    },
+    {
+      "id": "no-activity",
+      "title": "No activity yet",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "Still water, lily pads and a quiet chinampa."
+    },
+    {
+      "id": "removed",
+      "title": "You were removed",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "A lone canoe drifting away from the others at dusk."
+    },
+    {
+      "id": "testnet",
+      "title": "Aztec Testnet",
+      "group": "members-keepers-states",
+      "theme": "States",
+      "alt": "Mist over the lake, a small canoe and two paper boats."
+    }
+  ],
+  "spot": [
+    {
+      "id": "no-vaults",
+      "use": "No vaults yet"
+    },
+    {
+      "id": "no-proposals",
+      "use": "Nothing waiting for you."
+    },
+    {
+      "id": "no-tokens",
+      "use": "No tokens tracked yet"
+    },
+    {
+      "id": "no-activity",
+      "use": "No activity yet"
+    },
+    {
+      "id": "no-devices",
+      "use": "No paired phones"
+    },
+    {
+      "id": "counterparties",
+      "use": "No counterparties yet"
+    },
+    {
+      "id": "proving",
+      "use": "Proving"
+    },
+    {
+      "id": "key-generation",
+      "use": "Generate the shared key"
+    },
+    {
+      "id": "syncing",
+      "use": "Syncing"
+    }
+  ],
+  "textures": [
+    {
+      "id": "gradient-vertical",
+      "title": "Dither gradient",
+      "use": "Night to paper, top to bottom. Hero backs, cards."
+    },
+    {
+      "id": "gradient-horizontal",
+      "title": "Dither sweep",
+      "use": "Left to right. Banners, slide edges."
+    },
+    {
+      "id": "glow",
+      "title": "Dawn glow",
+      "use": "A soft sun behind content. Covers, empty states."
+    },
+    {
+      "id": "checker",
+      "title": "Reflection checker",
+      "use": "The private half of the mark, as a field."
+    },
+    {
+      "id": "stripes",
+      "title": "Reflection stripes",
+      "use": "The logo’s stripes, repeated. Dividers, footers."
+    },
+    {
+      "id": "grain",
+      "title": "Night grain",
+      "use": "Subtle noise on Night. Large dark surfaces only."
+    },
+    {
+      "id": "water",
+      "title": "Water lines",
+      "use": "Broken horizontal ripples. Below horizons."
+    },
+    {
+      "id": "grid",
+      "title": "Survey grid",
+      "use": "A 12-unit grid on Night. Diagrams, docs."
+    },
+    {
+      "id": "step-fret",
+      "title": "Step-fret band",
+      "use": "The xicalcoliuhqui as a band. Footers, merch."
+    },
+    {
+      "id": "horizon",
+      "title": "Horizon band",
+      "use": "Sky meeting water, no scenery. Section breaks."
+    },
+    {
+      "id": "stars",
+      "title": "Night sky",
+      "use": "Sparse stars. Night states, keepers."
+    },
+    {
+      "id": "mist",
+      "title": "Mist",
+      "use": "Light, low-contrast cloud. Light-mode heroes."
+    }
+  ],
+  "objects": [
+    {
+      "id": "vault",
+      "title": "Vault",
+      "group": "vault-and-keys",
+      "alt": "Vault"
+    },
+    {
+      "id": "vault-open",
+      "title": "Open vault",
+      "group": "vault-and-keys",
+      "alt": "Open vault"
+    },
+    {
+      "id": "key",
+      "title": "Key",
+      "group": "vault-and-keys",
+      "alt": "Key"
+    },
+    {
+      "id": "two-keys",
+      "title": "Two keys",
+      "group": "vault-and-keys",
+      "alt": "Two keys"
+    },
+    {
+      "id": "padlock",
+      "title": "Padlock",
+      "group": "vault-and-keys",
+      "alt": "Padlock"
+    },
+    {
+      "id": "padlock-open",
+      "title": "Open padlock",
+      "group": "vault-and-keys",
+      "alt": "Open padlock"
+    },
+    {
+      "id": "shield",
+      "title": "Shield",
+      "group": "vault-and-keys",
+      "alt": "Shield"
+    },
+    {
+      "id": "seal",
+      "title": "Wax seal",
+      "group": "vault-and-keys",
+      "alt": "Wax seal"
+    },
+    {
+      "id": "split-coin",
+      "title": "Split coin",
+      "group": "vault-and-keys",
+      "alt": "Split coin"
+    },
+    {
+      "id": "share",
+      "title": "Key share",
+      "group": "vault-and-keys",
+      "alt": "Key share"
+    },
+    {
+      "id": "obsidian-mirror",
+      "title": "Obsidian mirror",
+      "group": "vault-and-keys",
+      "alt": "Obsidian mirror"
+    },
+    {
+      "id": "jade-bead",
+      "title": "Jade bead",
+      "group": "vault-and-keys",
+      "alt": "Jade bead"
+    },
+    {
+      "id": "paper-boat",
+      "title": "Proposal (paper boat)",
+      "group": "proposals",
+      "alt": "Proposal (paper boat)"
+    },
+    {
+      "id": "scroll",
+      "title": "Scroll",
+      "group": "proposals",
+      "alt": "Scroll"
+    },
+    {
+      "id": "envelope",
+      "title": "Sealed envelope",
+      "group": "proposals",
+      "alt": "Sealed envelope"
+    },
+    {
+      "id": "ballot",
+      "title": "Ballot",
+      "group": "proposals",
+      "alt": "Ballot"
+    },
+    {
+      "id": "approve-stone",
+      "title": "Approval",
+      "group": "proposals",
+      "alt": "Approval"
+    },
+    {
+      "id": "reject-stone",
+      "title": "Rejection",
+      "group": "proposals",
+      "alt": "Rejection"
+    },
+    {
+      "id": "quill",
+      "title": "Signature",
+      "group": "proposals",
+      "alt": "Signature"
+    },
+    {
+      "id": "hourglass",
+      "title": "Expiry",
+      "group": "proposals",
+      "alt": "Expiry"
+    },
+    {
+      "id": "stamp",
+      "title": "Executed stamp",
+      "group": "proposals",
+      "alt": "Executed stamp"
+    },
+    {
+      "id": "receipt",
+      "title": "Receipt",
+      "group": "proposals",
+      "alt": "Receipt"
+    },
+    {
+      "id": "ticket",
+      "title": "Invite",
+      "group": "proposals",
+      "alt": "Invite"
+    },
+    {
+      "id": "qr",
+      "title": "QR code",
+      "group": "proposals",
+      "alt": "QR code"
+    },
+    {
+      "id": "beacon",
+      "title": "Beacon",
+      "group": "keepers",
+      "alt": "Beacon"
+    },
+    {
+      "id": "relay",
+      "title": "Relay",
+      "group": "keepers",
+      "alt": "Relay"
+    },
+    {
+      "id": "bridge",
+      "title": "Bridge",
+      "group": "keepers",
+      "alt": "Bridge"
+    },
+    {
+      "id": "broken-bridge",
+      "title": "Broken bridge",
+      "group": "keepers",
+      "alt": "Broken bridge"
+    },
+    {
+      "id": "server",
+      "title": "Server",
+      "group": "keepers",
+      "alt": "Server"
+    },
+    {
+      "id": "laptop",
+      "title": "Laptop",
+      "group": "keepers",
+      "alt": "Laptop"
+    },
+    {
+      "id": "phone",
+      "title": "Phone",
+      "group": "keepers",
+      "alt": "Phone"
+    },
+    {
+      "id": "signal",
+      "title": "Signal",
+      "group": "keepers",
+      "alt": "Signal"
+    },
+    {
+      "id": "link",
+      "title": "Link",
+      "group": "keepers",
+      "alt": "Link"
+    },
+    {
+      "id": "node",
+      "title": "Aztec node",
+      "group": "keepers",
+      "alt": "Aztec node"
+    },
+    {
+      "id": "canoe",
+      "title": "Canoe",
+      "group": "lake",
+      "alt": "Canoe"
+    },
+    {
+      "id": "oar",
+      "title": "Oar",
+      "group": "lake",
+      "alt": "Oar"
+    },
+    {
+      "id": "reeds",
+      "title": "Reeds",
+      "group": "lake",
+      "alt": "Reeds"
+    },
+    {
+      "id": "fish",
+      "title": "Fish",
+      "group": "lake",
+      "alt": "Fish"
+    },
+    {
+      "id": "heron",
+      "title": "Heron",
+      "group": "lake",
+      "alt": "Heron"
+    },
+    {
+      "id": "feather",
+      "title": "Quetzal feather",
+      "group": "lake",
+      "alt": "Quetzal feather"
+    },
+    {
+      "id": "wave",
+      "title": "Wave",
+      "group": "lake",
+      "alt": "Wave"
+    },
+    {
+      "id": "drop",
+      "title": "Drop",
+      "group": "lake",
+      "alt": "Drop"
+    },
+    {
+      "id": "sun",
+      "title": "Sun",
+      "group": "lake",
+      "alt": "Sun"
+    },
+    {
+      "id": "sunrise",
+      "title": "Sun on water",
+      "group": "lake",
+      "alt": "Sun on water"
+    },
+    {
+      "id": "moon",
+      "title": "Moon",
+      "group": "lake",
+      "alt": "Moon"
+    },
+    {
+      "id": "star",
+      "title": "Star",
+      "group": "lake",
+      "alt": "Star"
+    },
+    {
+      "id": "cloud",
+      "title": "Cloud",
+      "group": "lake",
+      "alt": "Cloud"
+    },
+    {
+      "id": "volcano",
+      "title": "Two volcanoes",
+      "group": "lake",
+      "alt": "Two volcanoes"
+    },
+    {
+      "id": "ahuejote",
+      "title": "Ahuejote tree",
+      "group": "lake",
+      "alt": "Ahuejote tree"
+    },
+    {
+      "id": "chinampa",
+      "title": "Chinampa plot",
+      "group": "lake",
+      "alt": "Chinampa plot"
+    },
+    {
+      "id": "dock",
+      "title": "Dock",
+      "group": "lake",
+      "alt": "Dock"
+    },
+    {
+      "id": "step-fret",
+      "title": "Step-fret tile",
+      "group": "craft",
+      "alt": "Step-fret tile"
+    },
+    {
+      "id": "jar",
+      "title": "Clay jar",
+      "group": "craft",
+      "alt": "Clay jar"
+    },
+    {
+      "id": "bowl",
+      "title": "Bowl",
+      "group": "craft",
+      "alt": "Bowl"
+    },
+    {
+      "id": "basket",
+      "title": "Basket",
+      "group": "craft",
+      "alt": "Basket"
+    },
+    {
+      "id": "stela",
+      "title": "Stela",
+      "group": "craft",
+      "alt": "Stela"
+    },
+    {
+      "id": "lantern",
+      "title": "Lantern",
+      "group": "craft",
+      "alt": "Lantern"
+    },
+    {
+      "id": "lantern-dark",
+      "title": "Lantern, dark",
+      "group": "craft",
+      "alt": "Lantern, dark"
+    },
+    {
+      "id": "bell",
+      "title": "Bell",
+      "group": "craft",
+      "alt": "Bell"
+    },
+    {
+      "id": "compass",
+      "title": "Compass",
+      "group": "craft",
+      "alt": "Compass"
+    },
+    {
+      "id": "map",
+      "title": "Map",
+      "group": "craft",
+      "alt": "Map"
+    },
+    {
+      "id": "book",
+      "title": "Docs",
+      "group": "craft",
+      "alt": "Docs"
+    },
+    {
+      "id": "flag",
+      "title": "Flag",
+      "group": "craft",
+      "alt": "Flag"
+    },
+    {
+      "id": "anchor",
+      "title": "Anchor",
+      "group": "craft",
+      "alt": "Anchor"
+    },
+    {
+      "id": "gem",
+      "title": "Gem",
+      "group": "craft",
+      "alt": "Gem"
+    },
+    {
+      "id": "coin",
+      "title": "Coin",
+      "group": "craft",
+      "alt": "Coin"
+    },
+    {
+      "id": "coin-stack",
+      "title": "Coin stack",
+      "group": "craft",
+      "alt": "Coin stack"
+    },
+    {
+      "id": "monogram-coin",
+      "title": "Token monogram",
+      "group": "craft",
+      "alt": "Token monogram"
+    },
+    {
+      "id": "chest",
+      "title": "Chest",
+      "group": "craft",
+      "alt": "Chest"
+    },
+    {
+      "id": "puzzle",
+      "title": "Shared piece",
+      "group": "craft",
+      "alt": "Shared piece"
+    },
+    {
+      "id": "eye",
+      "title": "Eye",
+      "group": "craft",
+      "alt": "Eye"
+    },
+    {
+      "id": "eye-closed",
+      "title": "Eye closed",
+      "group": "craft",
+      "alt": "Eye closed"
+    },
+    {
+      "id": "hand",
+      "title": "Raised hand",
+      "group": "craft",
+      "alt": "Raised hand"
+    }
+  ]
+}

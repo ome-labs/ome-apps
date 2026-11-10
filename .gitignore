@@ -3,6 +3,10 @@ node_modules/
 .pnpm-store/
 
 # Build output and caches
+# (generated TypeScript from @ome-labs/brand and others)
+packages/*/src/generated/
+# Figma art masters downloaded by @ome-labs/brand's export script
+.masters/
 dist/
 build/
 out/

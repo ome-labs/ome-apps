@@ -1,0 +1,34 @@
+/* The kit's three families (Figma page 08), self-hosted. Instrument Serif for display, Inter for the
+   interface, JetBrains Mono for anything compared character by character. All SIL OFL 1.1. */
+
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../../assets/fonts/instrument-serif/InstrumentSerif-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../../assets/fonts/instrument-serif/InstrumentSerif-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../../assets/fonts/inter/Inter-Variable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("../../assets/fonts/jetbrains-mono/JetBrainsMono-Variable.woff2") format("woff2");
+}
