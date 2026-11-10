@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 
 import type { InvitePreview } from "@ome-labs/api";
 import { Scene } from "@ome-labs/brand/web";
-import { Banner, Button, MemberAvatar, Tag, TextField } from "@ome-labs/ui-web";
+import { Banner, Button, MemberAvatar, Tag, TextField, ThresholdChip } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
 import { FlowPage } from "./flow-page.tsx";
@@ -149,10 +149,11 @@ function Preview({ preview }: { preview: InvitePreview }) {
         <Tag tone={preview.sameNetwork ? "neutral" : "danger"}>{networkName(preview.network)}</Tag>
       </div>
       <div className="flex flex-col gap-2">
-        <span className="type-caption text-fg-subtle">Proposed thresholds</span>
-        <span className="type-label-m text-fg">
-          {preview.threshold} to approve · {preview.viewingThreshold} to read
-        </span>
+        <span className="type-caption text-fg-subtle">Proposed</span>
+        <div className="flex flex-wrap gap-2">
+          <ThresholdChip kind="spend" threshold={preview.threshold} />
+          <ThresholdChip kind="read" threshold={preview.viewingThreshold} />
+        </div>
       </div>
       {preview.sameNetwork ? null : (
         <Banner kind="warning">

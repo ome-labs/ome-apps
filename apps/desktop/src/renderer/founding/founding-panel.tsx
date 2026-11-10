@@ -4,7 +4,15 @@ import { useNavigate } from "@tanstack/react-router";
 
 import type { FoundingState, FoundingStep, FoundingStepId, LobbyView } from "@ome-labs/api";
 import { Scene } from "@ome-labs/brand/web";
-import { Address, Banner, Button, StatusBadge, StepList, StepRow } from "@ome-labs/ui-web";
+import {
+  Address,
+  Banner,
+  Button,
+  QrButton,
+  StatusBadge,
+  StepList,
+  StepRow,
+} from "@ome-labs/ui-web";
 
 import { useAvatarsChanged } from "../avatars/avatars.ts";
 import { callOme } from "../data/ome.ts";
@@ -163,7 +171,14 @@ export function FoundingPanel({
             <>
               <div className="flex flex-col gap-1.5">
                 <span className="type-caption text-fg-subtle">Vault address</span>
-                <Address address={founding.vault} copy />
+                <div className="flex items-center gap-1">
+                  <Address address={founding.vault} copy />
+                  <QrButton
+                    value={founding.vault}
+                    label="address"
+                    title={`${lobby.name}'s address`}
+                  />
+                </div>
               </div>
               <Button variant="primary" icon="arrow-right" onClick={open}>
                 Open {lobby.name}
