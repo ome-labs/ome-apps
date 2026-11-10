@@ -39,27 +39,25 @@ function keeperLabel(keeper: KeeperState): string {
   return `Keeper · ${keeper.status}`;
 }
 
-/** Placeholder unlock: the unlock sheet (§5.5) replaces it. */
+// Placeholder unlock: the unlock sheet (§5.5) replaces it.
+const unlock = () =>
+  void callOme("signer.unlock", { secret: { passphrase: "sample" }, ttlSecs: 900 });
+const lock = () => void callOme("signer.lock", {});
+
 function SignerButton({ signer }: { signer: SignerStatus }) {
   if (signer.locked) {
     return (
       <button
         type="button"
         className="rounded border border-neutral-300 px-2 py-0.5"
-        onClick={() =>
-          void callOme("signer.unlock", { secret: { passphrase: "sample" }, ttlSecs: 900 })
-        }
+        onClick={unlock}
       >
         Locked · Unlock
       </button>
     );
   }
   return (
-    <button
-      type="button"
-      className="rounded border border-neutral-300 px-2 py-0.5"
-      onClick={() => void callOme("signer.lock", {})}
-    >
+    <button type="button" className="rounded border border-neutral-300 px-2 py-0.5" onClick={lock}>
       Unlocked · Lock
     </button>
   );

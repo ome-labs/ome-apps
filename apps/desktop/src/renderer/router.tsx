@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 // The app's routes, built from the page table. Hash history: the app is served from one `index.html`.
 import {
   Outlet,
@@ -15,8 +17,9 @@ import { Start } from "./routes/start.tsx";
 import { AppShell } from "./shell/app-shell.tsx";
 
 function PageRoute({ page }: { page: Page }) {
-  const params = useParams({ strict: false }) as { vault?: string; id?: string };
-  return <Placeholder page={page} route={{ vault: params.vault ?? "", id: params.id ?? "" }} />;
+  const { vault = "", id = "" } = useParams({ strict: false }) as { vault?: string; id?: string };
+  const route = useMemo(() => ({ vault, id }), [vault, id]);
+  return <Placeholder page={page} route={route} />;
 }
 
 const root = createRootRoute({

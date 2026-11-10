@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import type { DevState } from "../../shared/contract.ts";
 
@@ -10,8 +10,11 @@ export function DevPanel() {
     void window.ome.dev?.get().then(setState);
   }, []);
 
-  if (!state || !window.ome.dev) return null;
-  const dev = window.ome.dev;
+  const choose = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+    void window.ome.dev?.set({ scenario: event.target.value }).then(setState);
+  }, []);
+
+  if (!state) return null;
 
   return (
     <div className="fixed right-3 bottom-3 rounded border border-neutral-300 bg-white/95 p-2 text-xs shadow">
@@ -19,7 +22,7 @@ export function DevPanel() {
         <span className="text-neutral-500">Fixtures</span>
         <select
           value={state.scenario}
-          onChange={(event) => void dev.set({ scenario: event.target.value }).then(setState)}
+          onChange={choose}
           className="rounded border border-neutral-300 px-1 py-0.5"
         >
           {state.scenarios.map((scenario) => (
