@@ -97,6 +97,13 @@ export class FixtureClient implements OmeClient {
     }),
     status: () => status(this.#scenario, now(), this.#unlockedUntil),
     "config.get": () => settings(),
+    "config.set": () => settings(),
+    "profile.create": ({ passphrase }) => {
+      if (passphrase.length < 8)
+        throw new OmeError("invalid", "The passphrase needs at least 8 characters.");
+      this.setScenario("no-vaults");
+      return status(this.#scenario, now(), this.#unlockedUntil);
+    },
     "node.status": () => node(this.#scenario, now()),
     "signer.status": () => signer(this.#scenario, now(), this.#unlockedUntil),
     "signer.unlock": ({ secret, ttlSecs }) => {

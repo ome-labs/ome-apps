@@ -1,18 +1,20 @@
-// The only doors between the renderer and the main process: a daemon call (allowlisted), the event stream, and in
-// development builds the dev switches.
+// The only doors between the renderer and the main process: a daemon call (allowlisted), the event stream, the
+// session (which profile, and its daemon), preferences, and in development builds the dev switches.
 import { app, ipcMain, type IpcMainInvokeEvent } from "electron";
 
 import {
   CHANNELS,
-  type CallOutcome,
+  type CallFailure,
   type DevState,
+  type Outcome,
   type Preferences,
+  type SetupRequest,
   isRendererMethod,
 } from "../bridge/contract.ts";
 import { OmeError } from "./ome/client.ts";
 import { preferences, setPreferences } from "./preferences.ts";
 import { isAppUrl } from "./security.ts";
-import { client, devState, setDevState } from "./sources.ts";
+import { devState, session, setDevState } from "./sources.ts";
 
 /** Calls must come from the app's own page, not from anything that got loaded into a frame. */
 function fromApp(event: IpcMainInvokeEvent): boolean {
@@ -20,36 +22,75 @@ function fromApp(event: IpcMainInvokeEvent): boolean {
   return url !== undefined && isAppUrl(url);
 }
 
-async function call(
+const NOT_APP: Outcome<never> = {
+  ok: false,
+  error: { kind: "unauthorized", message: "Not the app's page." },
+};
+
+function failure(error: unknown): CallFailure {
+  if (error instanceof OmeError) return { kind: error.kind, message: error.message };
+  return { kind: "failed", message: error instanceof Error ? error.message : String(error) };
+}
+
+/** Runs a request from the renderer, turning a throw into a failure that keeps its kind. */
+async function outcome<T>(event: IpcMainInvokeEvent, run: () => Promise<T>): Promise<Outcome<T>> {
+  if (!fromApp(event)) return NOT_APP;
+  try {
+    return { ok: true, value: await run() };
+  } catch (error) {
+    return { ok: false, error: failure(error) };
+  }
+}
+
+function call(
   event: IpcMainInvokeEvent,
   method: unknown,
   params: unknown,
-): Promise<CallOutcome<never>> {
-  if (!fromApp(event))
-    return { ok: false, error: { kind: "unauthorized", message: "Not the app's page." } };
+): Promise<Outcome<unknown>> {
   if (!isRendererMethod(method)) {
-    return {
+    return Promise.resolve({
       ok: false,
       error: { kind: "method-not-found", message: `${String(method)} is not available.` },
-    };
+    });
   }
+  // The params come from the renderer as-is; the daemon validates them, as it does for any client.
+  return outcome(event, () => session().call(method, params as never));
+}
 
-  try {
-    // The params come from the renderer as-is; the daemon validates them, as it does for any client.
-    const value = await client().call(method, params as never);
-    return { ok: true, value } as CallOutcome<never>;
-  } catch (error) {
-    if (error instanceof OmeError)
-      return { ok: false, error: { kind: error.kind, message: error.message } };
-    return {
-      ok: false,
-      error: { kind: "failed", message: error instanceof Error ? error.message : String(error) },
-    };
+/** The first step of a setup, checked here because it decides which profile folder the daemon gets. */
+function setupRequest(request: unknown): SetupRequest {
+  const { member, nodeUrl } = (request ?? {}) as Partial<SetupRequest>;
+  const name = typeof member === "string" ? member.trim() : "";
+  if (name.length < 1 || name.length > 48)
+    throw new OmeError("invalid", "Use 1 to 48 characters for your name.");
+  if (typeof nodeUrl !== "string" || !/^https?:\/\//u.test(nodeUrl)) {
+    throw new OmeError("invalid", "Use an http:// or https:// URL for the node.");
   }
+  return { member: name, nodeUrl };
 }
 
 export function registerIpc(): void {
   ipcMain.handle(CHANNELS.call, call);
+  ipcMain.handle(CHANNELS.sessionState, (event) => (fromApp(event) ? session().state() : null));
+  ipcMain.handle(CHANNELS.sessionPreflight, (event) =>
+    fromApp(event) ? session().preflight() : null,
+  );
+  ipcMain.handle(CHANNELS.sessionOpen, (event, profile: unknown) =>
+    outcome(event, async () => {
+      if (typeof profile !== "string") throw new OmeError("invalid", "Name a profile.");
+      await session().open(profile);
+      return null;
+    }),
+  );
+  ipcMain.handle(CHANNELS.sessionSetup, (event, request: unknown) =>
+    outcome(event, () => session().setup(setupRequest(request))),
+  );
+  ipcMain.handle(CHANNELS.sessionRetry, (event) =>
+    outcome(event, async () => (await session().retry(), null)),
+  );
+  ipcMain.handle(CHANNELS.sessionLeave, (event) =>
+    outcome(event, async () => (await session().leave(), null)),
+  );
   ipcMain.handle(CHANNELS.preferencesGet, (event) => (fromApp(event) ? preferences() : null));
   ipcMain.handle(CHANNELS.preferencesSet, (event, patch: Partial<Preferences>) =>
     fromApp(event) ? setPreferences(patch) : null,

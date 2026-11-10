@@ -1,40 +1,38 @@
-// Which client answers the renderer. Packaged builds will use the member's daemon; until its client exists, every
-// build uses the fixtures. Development builds can switch scenario from the devtools console:
-// `window.ome.dev.set({ scenario })`.
-import type { DaemonEvent } from "@ome-labs/api";
-
+// Which session answers the renderer: the member's daemon, or the sample data when `OME_DESKTOP_SOURCE=fixtures`
+// (tests, and designing a screen without a daemon). On fixtures, development builds can switch scenario from the
+// devtools console: `window.ome.dev.set({ scenario })`.
 import type { DevState, Source } from "../bridge/contract.ts";
-import type { OmeClient } from "./ome/client.ts";
-import { FixtureClient } from "./ome/fixtures/client.ts";
+import { DaemonSession } from "./ome/daemon/session.ts";
 import { SCENARIOS, type Scenario, isScenario } from "./ome/fixtures/scenarios.ts";
+import { FixtureSession } from "./ome/fixtures/session.ts";
+import type { AppSession } from "./ome/session.ts";
 
-const fixtures = new FixtureClient(initialScenario());
-let source: Source = "fixtures";
+const source: Source = process.env["OME_DESKTOP_SOURCE"] === "fixtures" ? "fixtures" : "daemon";
 
 function initialScenario(): Scenario {
   const named = process.env["OME_DESKTOP_SCENARIO"];
   return isScenario(named) ? named : "normal";
 }
 
-export function client(): OmeClient {
-  return fixtures;
-}
+const fixtures = source === "fixtures" ? new FixtureSession(initialScenario()) : undefined;
+const active: AppSession = fixtures ?? new DaemonSession();
 
-/** Forwards the active client's events; returns the function that stops forwarding. */
-export function forwardEvents(send: (event: DaemonEvent) => void): () => void {
-  return client().subscribe(send);
+export function session(): AppSession {
+  return active;
 }
 
 export function devState(): DevState {
-  return { source, scenario: fixtures.scenario, scenarios: SCENARIOS };
+  return {
+    source,
+    scenario: fixtures?.client.scenario ?? "",
+    scenarios: fixtures ? SCENARIOS : [],
+  };
 }
 
 export function setDevState(next: Partial<DevState>): DevState {
-  if (next.source === "daemon") {
-    throw new Error("The daemon client isn't built yet; the app runs on fixtures.");
-  }
-  if (next.source) source = next.source;
   if (next.scenario !== undefined) {
+    if (!fixtures)
+      throw new Error("Scenarios belong to the fixtures: start with OME_DESKTOP_SOURCE=fixtures.");
     if (!isScenario(next.scenario)) throw new Error(`Unknown scenario ${next.scenario}.`);
     fixtures.setScenario(next.scenario);
   }

@@ -8,7 +8,10 @@ import {
   type CallOutcome,
   type DevState,
   type OmeBridge,
+  type Outcome,
   type Preferences,
+  type Preflight,
+  type SessionState,
 } from "../bridge/contract.ts";
 
 const bridge: OmeBridge = {
@@ -17,6 +20,22 @@ const bridge: OmeBridge = {
   preferences: {
     get: () => ipcRenderer.invoke(CHANNELS.preferencesGet) as Promise<Preferences>,
     set: (patch) => ipcRenderer.invoke(CHANNELS.preferencesSet, patch) as Promise<Preferences>,
+  },
+  session: {
+    state: () => ipcRenderer.invoke(CHANNELS.sessionState) as Promise<SessionState>,
+    onState(listener) {
+      const handler = (_event: IpcRendererEvent, state: SessionState) => listener(state);
+      ipcRenderer.on(CHANNELS.sessionChanged, handler);
+      return () => ipcRenderer.removeListener(CHANNELS.sessionChanged, handler);
+    },
+    preflight: () => ipcRenderer.invoke(CHANNELS.sessionPreflight) as Promise<Preflight>,
+    open: (profile) => ipcRenderer.invoke(CHANNELS.sessionOpen, profile) as Promise<Outcome<null>>,
+    setup: (request) =>
+      ipcRenderer.invoke(CHANNELS.sessionSetup, request) as ReturnType<
+        OmeBridge["session"]["setup"]
+      >,
+    retry: () => ipcRenderer.invoke(CHANNELS.sessionRetry) as Promise<Outcome<null>>,
+    leave: () => ipcRenderer.invoke(CHANNELS.sessionLeave) as Promise<Outcome<null>>,
   },
   onEvent(listener) {
     const handler = (_event: IpcRendererEvent, event: DaemonEvent) => listener(event);

@@ -7,7 +7,8 @@ import { app, type Rectangle } from "electron";
 
 import type { Preferences } from "../bridge/contract.ts";
 
-type Stored = Preferences & { window?: Rectangle | undefined };
+/** Also kept, for the main process alone: the window's bounds and the profile last opened. */
+type Stored = Preferences & { window?: Rectangle | undefined; profile?: string | undefined };
 
 const DEFAULTS: Stored = { theme: "system" };
 const THEMES = new Set(["light", "dark", "system"]);
@@ -20,6 +21,7 @@ function read(): Stored {
     return {
       theme: THEMES.has(stored.theme ?? "") ? (stored.theme as Stored["theme"]) : DEFAULTS.theme,
       window: stored.window,
+      profile: typeof stored.profile === "string" ? stored.profile : undefined,
     };
   } catch {
     return DEFAULTS;
@@ -49,4 +51,13 @@ export function windowBounds(): Rectangle | undefined {
 
 export function saveWindowBounds(bounds: Rectangle): void {
   write({ ...read(), window: bounds });
+}
+
+export function lastProfile(): string | undefined {
+  return read().profile;
+}
+
+export function rememberProfile(profile: string): void {
+  const current = read();
+  if (current.profile !== profile) write({ ...current, profile });
 }

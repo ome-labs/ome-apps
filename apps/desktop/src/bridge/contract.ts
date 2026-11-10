@@ -6,6 +6,7 @@ import type {
   DaemonParams,
   DaemonResult,
   ErrorKind,
+  NodeStatus,
 } from "@ome-labs/api";
 
 /** Methods only the main process uses: the session handshake, the event stream and stopping the daemon. */
@@ -94,10 +95,41 @@ export interface CallFailure {
   message: string;
 }
 
-/** What `ome:call` returns: errors travel as data so their kind survives the IPC boundary. */
-export type CallOutcome<M extends RendererMethod> =
-  | { ok: true; value: DaemonResult<M> }
-  | { ok: false; error: CallFailure };
+/** What crosses IPC for a request: errors travel as data so their kind survives the boundary. */
+export type Outcome<T> = { ok: true; value: T } | { ok: false; error: CallFailure };
+
+/** What `ome:call` returns. */
+export type CallOutcome<M extends RendererMethod> = Outcome<DaemonResult<M>>;
+
+/** A profile on this computer that was set up: its folder name and the member's name. */
+export interface ProfileSummary {
+  name: string;
+  member: string;
+}
+
+/**
+ * Which profile the app is on and whether its daemon answers. `choose` comes first: no profile yet (first run) or
+ * several to pick from. `setup` is a daemon started for a profile that `profile.create` hasn't made yet.
+ */
+export type SessionState =
+  | { phase: "choose"; profiles: ProfileSummary[] }
+  | { phase: "starting"; profile: string }
+  | { phase: "setup"; profile: string }
+  | { phase: "ready"; profile: string }
+  | { phase: "failed"; profile: string; message: string };
+
+/** What the first run checks before it offers to set up: where the home is and whether the programs are there. */
+export interface Preflight {
+  home: string;
+  omed: string | null;
+  keeper: string | null;
+}
+
+/** The first step of setting up: who the member is and which node their account lives on. */
+export interface SetupRequest {
+  member: string;
+  nodeUrl: string;
+}
 
 /** Where the main process gets its answers: the sample data, or the member's daemon. */
 export type Source = "fixtures" | "daemon";
@@ -115,6 +147,19 @@ export interface OmeBridge {
   preferences: {
     get(): Promise<Preferences>;
     set(patch: Partial<Preferences>): Promise<Preferences>;
+  };
+  session: {
+    state(): Promise<SessionState>;
+    onState(listener: (state: SessionState) => void): () => void;
+    preflight(): Promise<Preflight>;
+    /** Opens a profile that was set up, starting its daemon if it isn't running. */
+    open(profile: string): Promise<Outcome<null>>;
+    /** Starts a daemon for a new member, points it at the node and says whether the node answers. */
+    setup(request: SetupRequest): Promise<Outcome<NodeStatus>>;
+    /** Starts the current profile's daemon again after it failed. */
+    retry(): Promise<Outcome<null>>;
+    /** Leaves the profile for the list of profiles (or the first run). */
+    leave(): Promise<Outcome<null>>;
   };
   /** Development builds only: pick the data source and the fixture scenario. */
   dev?: {
@@ -136,6 +181,13 @@ export const CHANNELS = {
   event: "ome:event",
   preferencesGet: "ome:preferences:get",
   preferencesSet: "ome:preferences:set",
+  sessionState: "ome:session:state",
+  sessionChanged: "ome:session:changed",
+  sessionPreflight: "ome:session:preflight",
+  sessionOpen: "ome:session:open",
+  sessionSetup: "ome:session:setup",
+  sessionRetry: "ome:session:retry",
+  sessionLeave: "ome:session:leave",
   devGet: "ome:dev:get",
   devSet: "ome:dev:set",
 } as const;

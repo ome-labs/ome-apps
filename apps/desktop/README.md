@@ -3,24 +3,42 @@
 The desktop app for Ome members: their vaults, proposals and keeper, as a client of the member's daemon (`omed`). Built
 with Electron, React, TanStack Router and Query, and Tailwind.
 
-The pages are placeholders for now. Each names its section of the UI guide, the daemon methods it uses and shows the
-data its main method returns. They become real screens as `@ome-labs/ui-web` lands.
+The first run (welcome, profile, passphrase) and the profile list are built and talk to a real daemon. The other pages
+are empty frames that become screens one at a time.
 
 ## Run it
 
 ```sh
-pnpm --filter @ome-labs/desktop dev          # the app with hot reload, on fixtures
+pnpm --filter @ome-labs/desktop dev          # the app with hot reload, on your daemon
+OME_DESKTOP_SOURCE=fixtures pnpm --filter @ome-labs/desktop dev   # on the sample data instead
 pnpm --filter @ome-labs/desktop test         # unit tests (fast; what CI runs)
 pnpm --filter @ome-labs/desktop test:smoke   # builds and launches the app with Playwright (local only)
 pnpm --filter @ome-labs/desktop package      # an unsigned app in release/ for this platform
 ```
 
-`OME_DESKTOP_SCENARIO=<scenario>` starts on a scenario; in development the panel at the bottom right switches it.
+## The daemon
+
+The app runs each profile's daemon the way the `ome` CLI does, so both share it:
+
+- **Profiles** live in `OME_HOME` (default `~/.ome`), one folder per member under `profiles/`. At launch the app opens
+  the profile it opened last, or the only one; with several it asks, and with none it starts the first run.
+- **Starting `omed`**: when a profile's daemon isn't running, the app starts it detached (it outlives the app) with its
+  output in the profile's `daemon.log`. It looks for `OME_DAEMON`, then `<home>/bin/omed`, then, in development, the core
+  checkout's `packages/daemon/src/omed.ts` run with Node 24 (`OME_CORE_DIR`, default `../ome` beside this repository).
+  The keeper comes from `OME_KEEPER_BIN`, `<home>/bin/ome-keeper` or the checkout's `crates/target`.
+- **Talking to it**: newline-delimited JSON-RPC on the profile's socket, authenticated with its token, with the event
+  stream forwarded to the renderer. If the daemon goes away, the app starts it again.
+- **The first run** does what `ome init` does: starts a daemon for the new member, points it at the node (restarting
+  it when the URL changes), checks the node answers, then `profile.create` with the passphrase.
+
+A local network for trying it: `aztec start --local-network`, then choose "Local network" in the first run.
 
 ## Fixtures
 
-Until the daemon client exists, the app runs on `src/main/ome/fixtures/`: the UI guide's sample data (Alice, Bob and
-Carol's Treasury vault, the OMET test token, proposals `3eb2`, `335c` and `868c`). Scenarios:
+With `OME_DESKTOP_SOURCE=fixtures` (the smoke test, and designing a screen without a daemon) the app runs on
+`src/main/ome/fixtures/`: the UI guide's sample data (Alice, Bob and Carol's Treasury vault, the OMET test token,
+proposals `3eb2`, `335c` and `868c`). `OME_DESKTOP_SCENARIO=<scenario>` starts on a scenario, and in development
+`window.ome.dev.set({ scenario })` in the devtools console switches it. Scenarios:
 
 | Scenario           | Shows                                                                 |
 | ------------------ | --------------------------------------------------------------------- |
@@ -32,6 +50,8 @@ Carol's Treasury vault, the OMET test token, proposals `3eb2`, `335c` and `868c`
 | `syncing`          | the wallet is behind the node                                         |
 | `keeper-failed`    | the keeper stopped; peers look offline                                |
 | `alarm`            | the vault's on-chain config names a committee the keeper can't verify |
+| `removed`          | this member was removed from the vault                                |
+| `daemon-down`      | the profile's daemon failed to start                                  |
 
 Reads are simulated; the signer unlocks with any passphrase except `wrong`. Other writes fail with "the fixtures don't
 simulate … yet" until a screen needs them.
@@ -39,16 +59,18 @@ simulate … yet" until a screen needs them.
 ## How it fits together
 
 ```text
-renderer (React)  ──window.ome.call──▶  preload  ──ipc "ome:call"──▶  main  ──▶  OmeClient (fixtures | daemon)
+renderer (React)  ──window.ome.call──▶  preload  ──ipc "ome:call"──▶  main  ──▶  AppSession (daemon | fixtures)
                   ◀──window.ome.onEvent──────────────── "ome:event" ◀──────────  events
+                  ──window.ome.session──▶ open, setup, retry, leave; "ome:session:changed" back
 ```
 
 - **`src/bridge/contract.ts`**: the methods the renderer may call (every daemon method except the session handshake,
   the event stream and stopping the daemon), checked at runtime; errors cross the boundary with their kind.
-- **`src/main`**: window, security, the `app://` protocol, IPC, and the client. The real daemon client (socket, token,
-  events) will live in `src/main/ome/daemon/`, so the renderer never changes when it lands.
+- **`src/main`**: window, security, the `app://` protocol, IPC, and the session. `src/main/ome/daemon/` finds, starts
+  and talks to `omed`; `src/main/ome/fixtures/` stands in for it.
 - **`src/preload`**: exposes `window.ome` and nothing else.
-- **`src/renderer`**: routes from the UI guide's site map (`routes/pages.ts`), queries kept fresh by daemon events.
+- **`src/renderer`**: the session gate (first run, profiles, starting, failed), the first run in `onboarding/`, and
+  routes from the UI guide's site map (`routes/pages.ts`), queries kept fresh by daemon events.
 
 ## Security
 
@@ -61,5 +83,5 @@ renderer (React)  ──window.ome.call──▶  preload  ──ipc "ome:call"�
 
 ## Not built yet
 
-The daemon client, bundling `omed` and `ome-keeper`, Touch ID, code signing and notarization, auto-update, and the
-release workflow.
+Bundling `omed` and `ome-keeper` (the app needs them installed, or the core checkout, and Node 24 on `PATH`), Touch ID,
+code signing and notarization, auto-update, and the release workflow.

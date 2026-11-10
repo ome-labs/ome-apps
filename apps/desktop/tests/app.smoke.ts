@@ -11,6 +11,7 @@ test("opens on the default vault's overview", async () => {
     args: [join(import.meta.dirname, "..")],
     env: {
       ...process.env,
+      OME_DESKTOP_SOURCE: "fixtures",
       OME_DESKTOP_SCENARIO: "normal",
       OME_DESKTOP_USER_DATA: mkdtempSync(join(tmpdir(), "ome-desktop-smoke-")),
     },

@@ -7,7 +7,7 @@ import { CHANNELS } from "../bridge/contract.ts";
 import { registerIpc } from "./ipc.ts";
 import { registerScheme, serveRenderer } from "./protocol.ts";
 import { denyPermissions, enforceSecurity } from "./security.ts";
-import { forwardEvents } from "./sources.ts";
+import { session } from "./sources.ts";
 import { createWindow } from "./window.ts";
 
 // Tests run beside the member's own copy with their own data folder, which also gives them their own lock.
@@ -22,8 +22,14 @@ enforceSecurity();
 
 function open(): void {
   const window = createWindow();
-  const stop = forwardEvents((event) => window.webContents.send(CHANNELS.event, event));
-  window.on("closed", stop);
+  const stopEvents = session().subscribe((event) => window.webContents.send(CHANNELS.event, event));
+  const stopState = session().onState((state) =>
+    window.webContents.send(CHANNELS.sessionChanged, state),
+  );
+  window.on("closed", () => {
+    stopEvents();
+    stopState();
+  });
 }
 
 app.on("second-instance", () => {
@@ -42,6 +48,7 @@ app.on("ready", () => {
   serveRenderer(join(import.meta.dirname, "../renderer"));
   registerIpc();
   open();
+  void session().boot();
 });
 
 // macOS keeps the app running without windows; the dock icon reopens one.
