@@ -1,0 +1,37 @@
+/* The kit's stylesheet: Tailwind, the token theme, the brand fonts, and the classes these components use.
+   An app imports this once (`@import "@ome-labs/ui-web/styles.css";`) from its own Tailwind entry. */
+
+@import "tailwindcss";
+@import "@ome-labs/tokens/theme.web.css";
+@import "@ome-labs/brand/fonts.css";
+
+/* Tailwind only generates classes it finds, so it has to read the components as well as the app. */
+@source "./";
+
+@layer base {
+  html {
+    background-color: var(--color-canvas);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-accent-subtle);
+  }
+}
+
+/* Page 23: one ring for every focusable thing, shown for the keyboard only. */
+@utility focus-ring {
+  outline: none;
+
+  &:focus-visible {
+    box-shadow: var(--shadow-focus);
+  }
+}
+
+/* Square controls (icon buttons) share the control heights. */
+@utility size-control-* {
+  width: --value(--height-control-*);
+  height: --value(--height-control-*);
+}

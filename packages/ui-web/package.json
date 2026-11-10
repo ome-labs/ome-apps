@@ -6,15 +6,57 @@
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css"
   },
   "scripts": {
+    "build-storybook": "storybook build -o storybook-static",
     "lint": "oxlint --deny-warnings .",
+    "storybook": "storybook dev -p 6006",
+    "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json"
   },
+  "dependencies": {
+    "@base-ui/react": "catalog:",
+    "@ome-labs/api": "catalog:",
+    "@ome-labs/brand": "workspace:*",
+    "@ome-labs/format": "workspace:*",
+    "@ome-labs/icons": "workspace:*",
+    "@ome-labs/tokens": "workspace:*",
+    "class-variance-authority": "catalog:",
+    "clsx": "catalog:",
+    "motion": "catalog:",
+    "sonner": "catalog:",
+    "tailwind-merge": "catalog:",
+    "uqr": "catalog:"
+  },
   "devDependencies": {
+    "@storybook/addon-a11y": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/addon-themes": "catalog:",
+    "@storybook/react": "catalog:",
+    "@storybook/react-vite": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "axe-core": "catalog:",
+    "jsdom": "catalog:",
     "klarity": "catalog:",
     "oxlint": "catalog:",
-    "typescript": "catalog:"
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "storybook": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tailwindcss": "catalog:"
   }
 }
