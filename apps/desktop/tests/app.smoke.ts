@@ -64,3 +64,32 @@ test("opens on the default vault's overview", async () => {
   expect(errors).toEqual([]);
   await app.close();
 });
+
+test("sets up a profile from the first run", async () => {
+  const app = await electron.launch({
+    args: [join(import.meta.dirname, "..")],
+    env: {
+      ...process.env,
+      OME_DESKTOP_SOURCE: "fixtures",
+      OME_DESKTOP_SCENARIO: "no-profile",
+      OME_DESKTOP_USER_DATA: mkdtempSync(join(tmpdir(), "ome-desktop-smoke-")),
+    },
+  });
+  const page = await app.firstWindow();
+
+  await page.getByRole("button", { name: "Set up Ome" }).click();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("Enter your name.")).toBeVisible();
+  await page.getByLabel("Your name").fill("Alice");
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await page.getByLabel("Passphrase", { exact: true }).fill("correct horse");
+  await page.getByLabel("Passphrase again").fill("correct horses");
+  await page.getByRole("button", { name: "Create profile" }).click();
+  await expect(page.getByText("This doesn't match.")).toBeVisible();
+  await page.getByLabel("Passphrase again").fill("correct horse");
+  await page.getByRole("button", { name: "Create profile" }).click();
+
+  await expect(page.getByRole("button", { name: /Alice/ })).toBeVisible();
+  await app.close();
+});

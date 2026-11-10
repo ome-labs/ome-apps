@@ -15,16 +15,17 @@ export type Direction = 1 | -1;
 export const step: Variants = {
   enter: {},
   shown: { transition: { staggerChildren: 0.045, delayChildren: 0.03 } },
-  leave: (direction: Direction) => ({
+  leave: (direction: Direction | undefined) => ({
     opacity: 0,
-    x: direction * -12,
+    x: (direction ?? 1) * -12,
     transition: { duration: ms(duration.fast), ease: easing.standard },
   }),
 };
 
 /** A part of a step, arriving in turn; `Reveal` wraps one, or give it to a motion element directly. */
 export const part: Variants = {
-  enter: (direction: Direction) => ({ opacity: 0, x: direction * 20 }),
+  // A part that mounts later (an error, a banner) gets no direction from the step; it arrives as if forward.
+  enter: (direction: Direction | undefined) => ({ opacity: 0, x: (direction ?? 1) * 20 }),
   shown: { opacity: 1, x: 0, transition: { duration: ms(duration.slow), ease: easing.emphasized } },
 };
 

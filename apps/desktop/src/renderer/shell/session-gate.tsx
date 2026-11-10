@@ -34,7 +34,8 @@ export function SessionGate() {
   const state = useSession();
   const { pathname } = useLocation();
   const queryClient = useQueryClient();
-  const profile = state && state.phase !== "choose" ? state.profile : undefined;
+  // Only an opened profile owns the pages: the first run's daemon (`setup`) must not remount the steps it runs under.
+  const profile = state?.phase === "ready" ? state.profile : undefined;
 
   // Answers cached for one profile never show under another. This runs before the pages below mount (an effect would
   // run after, and clearing then strands their queries), and the pages remount per profile.

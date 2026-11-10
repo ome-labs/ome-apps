@@ -4,13 +4,17 @@ import type { NodeStatus } from "@ome-labs/api";
 export const LOCAL_NODE = "http://localhost:8080";
 export const TESTNET_NODE = "https://aztec-testnet.drpc.org";
 
-export type NetworkChoice = "local" | "testnet" | "custom";
+export type NetworkChoice = "testnet" | "local";
 
 export const NETWORK_OPTIONS: { value: NetworkChoice; label: string }[] = [
-  { value: "local", label: "Local network" },
   { value: "testnet", label: "Testnet" },
-  { value: "custom", label: "Another node" },
+  { value: "local", label: "Local network" },
 ];
+
+export const NODE_URLS: Record<NetworkChoice, string> = {
+  testnet: TESTNET_NODE,
+  local: LOCAL_NODE,
+};
 
 export function isLocal(url: string): boolean {
   return url.includes("localhost") || url.includes("127.0.0.1");

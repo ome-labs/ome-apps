@@ -3,13 +3,14 @@ import type { ReactNode } from "react";
 import { Illustration, type IllustrationId } from "@ome-labs/brand/web";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 
+import { ThemeSwitch } from "../shell/theme-switch.tsx";
 import { TitleStrip } from "../shell/window-chrome.tsx";
 import { type Direction, Reveal, scene, step } from "./motion.tsx";
 
 /**
  * The first run's window: a scene on the left, anchored to its left edge as the kit draws it, and the step on the
  * right in a narrower column, centred in its half. `stepKey` changes when the step does, which crossfades the scene and moves the step in
- * `direction`; `footer` sits in the bottom-right corner.
+ * `direction`; `footer` sits in the bottom-right corner, beside the theme switch.
  */
 export function OnboardingLayout({
   illustration,
@@ -64,7 +65,10 @@ export function OnboardingLayout({
               </motion.div>
             </AnimatePresence>
           </div>
-          {footer ? <div className="absolute right-6 bottom-5">{footer}</div> : null}
+          <div className="absolute right-6 bottom-5 flex items-center gap-3">
+            {footer}
+            <ThemeSwitch />
+          </div>
         </main>
       </div>
     </MotionConfig>

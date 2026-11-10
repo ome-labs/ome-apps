@@ -1,7 +1,10 @@
-import { type FormEvent, useCallback, useState } from "react";
+import { useMemo, useState } from "react";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { NodeStatus } from "@ome-labs/api";
 import { Banner, Button, TextField } from "@ome-labs/ui-web";
+import { useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
 
 import { callOme } from "../data/ome.ts";
 import { unwrap } from "../data/session.ts";
@@ -10,9 +13,24 @@ import { Reveal } from "./motion.tsx";
 import { describeNode, isLocal } from "./networks.ts";
 import type { ProfileDraft } from "./profile-step.tsx";
 
+/** The daemon's only rule is the minimum length (`profile.create`). */
 const MIN_LENGTH = 8;
 
-/** How strong a passphrase looks, by length alone: the daemon's only rule is the minimum. */
+const schema = z
+  .object({
+    passphrase: z.string().min(MIN_LENGTH, `Use at least ${MIN_LENGTH} characters.`),
+    again: z.string(),
+  })
+  .refine((values) => values.again === values.passphrase, {
+    path: ["again"],
+    message: "This doesn't match.",
+  });
+
+type Values = z.input<typeof schema>;
+
+const DEFAULTS: Values = { passphrase: "", again: "" };
+
+/** How strong a passphrase looks, by length alone. */
 function strength(passphrase: string): string {
   if (passphrase.length < MIN_LENGTH) return `At least ${MIN_LENGTH} characters.`;
   if (passphrase.length < 14) return "Long enough. A few more words make it much harder to guess.";
@@ -32,40 +50,43 @@ export function PassphraseStep({
   node: NodeStatus;
   onBack: () => void;
 }) {
-  const [passphrase, setPassphrase] = useState("");
-  const [again, setAgain] = useState("");
-  const [pending, setPending] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: DEFAULTS });
+  const passphrase = useWatch({ control, name: "passphrase" });
   const [error, setError] = useState<string>();
+  // Stays on after success, while the app moves to the new profile.
+  const [opening, setOpening] = useState(false);
+  const pending = isSubmitting || opening;
 
-  const mismatch = again.length > 0 && again !== passphrase.slice(0, again.length);
-  const ready = passphrase.length >= MIN_LENGTH && again === passphrase;
-
-  const create = useCallback(
-    async (event: FormEvent) => {
-      event.preventDefault();
-      if (!ready || pending) return;
-      setPending(true);
-      setError(undefined);
-      try {
-        await callOme("profile.create", {
-          name: draft.member,
-          nodeUrl: draft.nodeUrl,
-          passphrase,
-        });
-        // A local network has no prover worth running; Testnet proofs are real.
-        await callOme("config.set", { proverEnabled: !isLocal(draft.nodeUrl) });
-        const state = await window.ome.session.state();
-        if (state.phase !== "choose") await unwrap(window.ome.session.open(state.profile));
-      } catch (failure) {
-        setError(failure instanceof Error ? failure.message : String(failure));
-        setPending(false);
-      }
-    },
-    [draft, passphrase, pending, ready],
+  const create = useMemo(
+    () =>
+      handleSubmit(async (values) => {
+        setError(undefined);
+        try {
+          await callOme("profile.create", {
+            name: draft.member,
+            nodeUrl: draft.nodeUrl,
+            passphrase: values.passphrase,
+          });
+          // A local network has no prover worth running; Testnet proofs are real.
+          await callOme("config.set", { proverEnabled: !isLocal(draft.nodeUrl) });
+          setOpening(true);
+          const state = await window.ome.session.state();
+          if (state.phase !== "choose") await unwrap(window.ome.session.open(state.profile));
+        } catch (failure) {
+          setOpening(false);
+          setError(failure instanceof Error ? failure.message : String(failure));
+        }
+      }),
+    [draft, handleSubmit],
   );
 
   return (
-    <form className="flex flex-col gap-6" onSubmit={create}>
+    <form className="flex flex-col gap-6" onSubmit={create} noValidate>
       <StepHeading step="Step 2 of 2" title="Choose a passphrase">
         It seals your signing key on this computer. Nobody can recover it, Ome included, so keep it
         somewhere safe.
@@ -88,19 +109,18 @@ export function PassphraseStep({
           label="Passphrase"
           type="password"
           hint={strength(passphrase)}
-          value={passphrase}
-          onValueChange={setPassphrase}
+          error={errors.passphrase?.message}
           autoComplete="new-password"
           disabled={pending}
+          {...register("passphrase")}
         />
         <TextField
           label="Passphrase again"
           type="password"
-          value={again}
-          onValueChange={setAgain}
-          error={mismatch ? "This doesn't match." : undefined}
+          error={errors.again?.message}
           autoComplete="new-password"
           disabled={pending}
+          {...register("again")}
         />
       </Reveal>
 
@@ -108,7 +128,7 @@ export function PassphraseStep({
         <Button variant="ghost" onClick={onBack} disabled={pending}>
           Back
         </Button>
-        <Button variant="primary" type="submit" disabled={!ready || pending}>
+        <Button variant="primary" type="submit" disabled={pending}>
           {pending ? "Sealing your key and creating your account…" : "Create profile"}
         </Button>
       </Reveal>

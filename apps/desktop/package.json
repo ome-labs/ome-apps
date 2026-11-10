@@ -17,6 +17,7 @@
     "typecheck": "tsc -p tsconfig.node.json && tsc -p tsconfig.web.json"
   },
   "devDependencies": {
+    "@hookform/resolvers": "7.0.5",
     "@ome-labs/api": "catalog:",
     "@ome-labs/brand": "workspace:*",
     "@ome-labs/format": "workspace:*",
@@ -38,9 +39,11 @@
     "motion": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-hook-form": "7.91.0",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "zod": "4.6.7"
   }
 }

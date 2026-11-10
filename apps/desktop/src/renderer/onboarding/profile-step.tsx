@@ -1,22 +1,34 @@
-import { type FormEvent, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { NodeStatus } from "@ome-labs/api";
 import { Banner, Button, SegmentedControl, TextField } from "@ome-labs/ui-web";
+import { useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
 
 import { unwrap } from "../data/session.ts";
 import { StepHeading } from "./layout.tsx";
 import { Reveal } from "./motion.tsx";
-import {
-  LOCAL_NODE,
-  NETWORK_OPTIONS,
-  type NetworkChoice,
-  TESTNET_NODE,
-  nodeFix,
-} from "./networks.ts";
+import { LOCAL_NODE, NETWORK_OPTIONS, NODE_URLS, type NetworkChoice, nodeFix } from "./networks.ts";
 
 export interface ProfileDraft {
   member: string;
   nodeUrl: string;
+}
+
+const schema = z.object({
+  member: z.string().trim().min(1, "Enter your name.").max(48, "Use at most 48 characters."),
+  network: z.enum(["testnet", "local"]),
+});
+
+type Values = z.input<typeof schema>;
+
+/** Testnet first: it's where real vaults live. Coming back from step 2 keeps what was chosen. */
+function defaultsFrom(draft: ProfileDraft | undefined): Values {
+  return {
+    member: draft?.member ?? "",
+    network: draft?.nodeUrl === LOCAL_NODE ? "local" : "testnet",
+  };
 }
 
 /**
@@ -32,51 +44,45 @@ export function ProfileStep({
   onBack: () => void;
   onReady: (draft: ProfileDraft, node: NodeStatus) => void;
 }) {
-  const [member, setMember] = useState(draft?.member ?? "");
-  const [network, setNetwork] = useState<NetworkChoice>(
-    draft === undefined || draft.nodeUrl === LOCAL_NODE
-      ? "local"
-      : draft.nodeUrl === TESTNET_NODE
-        ? "testnet"
-        : "custom",
-  );
-  const [customUrl, setCustomUrl] = useState(
-    draft && network === "custom" ? draft.nodeUrl : "https://",
-  );
-  const [pending, setPending] = useState(false);
+  const defaultValues = useMemo(() => defaultsFrom(draft), [draft]);
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<Values>({ resolver: zodResolver(schema), defaultValues });
   const [error, setError] = useState<string>();
   const [unreachable, setUnreachable] = useState<NodeStatus>();
 
-  const nodeUrl =
-    network === "local" ? LOCAL_NODE : network === "testnet" ? TESTNET_NODE : customUrl.trim();
-  const nameError = member.trim().length > 48 ? "Use at most 48 characters." : undefined;
-  const ready = member.trim().length > 0 && !nameError && /^https?:\/\/.+/u.test(nodeUrl);
+  const network = useWatch({ control, name: "network" });
+  const pickNetwork = useCallback(
+    (next: NetworkChoice) => setValue("network", next, { shouldValidate: false }),
+    [setValue],
+  );
 
-  const submit = useCallback(
-    async (event?: FormEvent) => {
-      event?.preventDefault();
-      if (!ready || pending) return;
-      setPending(true);
-      setError(undefined);
-      setUnreachable(undefined);
-      try {
-        const next = { member: member.trim(), nodeUrl };
-        const node = await unwrap(window.ome.session.setup(next));
-        if (node.reachable) onReady(next, node);
-        else setUnreachable(node);
-      } catch (failure) {
-        setError(failure instanceof Error ? failure.message : String(failure));
-      } finally {
-        setPending(false);
-      }
-    },
-    [member, nodeUrl, onReady, pending, ready],
+  const submit = useMemo(
+    () =>
+      handleSubmit(async (values) => {
+        setError(undefined);
+        setUnreachable(undefined);
+        try {
+          const next = { member: values.member.trim(), nodeUrl: NODE_URLS[values.network] };
+          const node = await unwrap(window.ome.session.setup(next));
+          if (node.reachable) onReady(next, node);
+          else setUnreachable(node);
+        } catch (failure) {
+          setError(failure instanceof Error ? failure.message : String(failure));
+        }
+      }),
+    [handleSubmit, onReady],
   );
   const retry = useCallback(() => void submit(), [submit]);
   const retryAction = useMemo(() => ({ label: "Try again", onClick: retry }), [retry]);
+  const pending = isSubmitting;
 
   return (
-    <form className="flex flex-col gap-6" onSubmit={submit}>
+    <form className="flex flex-col gap-6" onSubmit={submit} noValidate>
       <StepHeading step="Step 1 of 2" title="Create your profile">
         One profile is one member on this computer. Ome starts a daemon for it that keeps your
         wallet and signing key.
@@ -98,12 +104,10 @@ export function ProfileStep({
       <Reveal>
         <TextField
           label="Your name"
-          hint="Shown to the other members on rosters and votes."
-          value={member}
-          onValueChange={setMember}
-          error={nameError}
+          error={errors.member?.message}
           maxLength={48}
           disabled={pending}
+          {...register("member")}
         />
       </Reveal>
 
@@ -113,27 +117,16 @@ export function ProfileStep({
           aria-label="Network"
           options={NETWORK_OPTIONS}
           value={network}
-          onValueChange={setNetwork}
+          onValueChange={pickNetwork}
         />
-        {network === "custom" ? (
-          <TextField
-            label="Node URL"
-            hint="The JSON-RPC URL of an Aztec node."
-            value={customUrl}
-            onValueChange={setCustomUrl}
-            mono
-            disabled={pending}
-          />
-        ) : (
-          <span className="type-mono-s text-fg-subtle">{nodeUrl}</span>
-        )}
+        <span className="type-mono-s text-fg-subtle">{NODE_URLS[network]}</span>
       </Reveal>
 
       <Reveal className="flex items-center justify-end gap-2">
         <Button variant="ghost" onClick={onBack} disabled={pending}>
           Back
         </Button>
-        <Button variant="primary" type="submit" disabled={!ready || pending}>
+        <Button variant="primary" type="submit" disabled={pending}>
           {pending ? "Starting your daemon…" : "Continue"}
         </Button>
       </Reveal>
