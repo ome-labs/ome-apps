@@ -28,7 +28,6 @@ test("opens on the default vault's overview", async () => {
     "page",
   );
   await expect(page.getByRole("button", { name: /Treasury/ })).toBeVisible();
-  await expect(page.getByText("Local network · block 1,210")).toBeVisible();
 
   const mod = process.platform === "darwin" ? "Meta" : "Control";
   await page.keyboard.press(`${mod}+k`);
@@ -39,10 +38,8 @@ test("opens on the default vault's overview", async () => {
     "page",
   );
 
-  await page
-    .getByRole("button", { name: /Unlock/ })
-    .first()
-    .click();
+  await page.getByRole("button", { name: /Alice/ }).click();
+  await page.getByRole("menuitem", { name: "Unlock…" }).click();
   await page.getByLabel("Passphrase").fill("wrong");
   await page.keyboard.press("Enter");
   await expect(
@@ -95,12 +92,12 @@ test("sets up a profile from the first run, with Touch ID", async () => {
   await page.getByRole("button", { name: "Use Touch ID" }).click();
   await expect(page.getByRole("button", { name: /Alice/ })).toBeVisible();
 
-  await page
-    .getByRole("button", { name: /Unlock/ })
-    .first()
-    .click();
+  await page.getByRole("button", { name: /Alice/ }).click();
+  await page.getByRole("menuitem", { name: "Unlock…" }).click();
   await page.getByRole("button", { name: /Touch ID/ }).click();
-  await expect(page.getByText(/Unlocked/)).toBeVisible();
+  await expect(page.getByRole("dialog")).toBeHidden();
+  await page.getByRole("button", { name: /Alice/ }).click();
+  await expect(page.getByRole("menuitem", { name: "Lock now" })).toBeVisible();
   await app.close();
 });
 

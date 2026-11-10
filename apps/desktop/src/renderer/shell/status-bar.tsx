@@ -2,45 +2,22 @@ import { useMemo } from "react";
 
 import { useNavigate } from "@tanstack/react-router";
 
-import type { NodeStatus, Status } from "@ome-labs/api";
-import { Menu, MemberAvatar, TopBar, type NodeState } from "@ome-labs/ui-web";
+import type { Status } from "@ome-labs/api";
+import { MemberAvatar, Menu, TopBar } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
-import { useNow } from "./now.ts";
 import { ThemeSwitch } from "./theme-switch.tsx";
 import { IS_MAC, WindowControls } from "./window-chrome.tsx";
-
-const LOCAL_CHAIN = 31_337;
-
-function nodeState(node: NodeStatus): NodeState {
-  const network = node.l1ChainId === LOCAL_CHAIN ? "Local network" : "Testnet";
-  if (!node.reachable) return { state: "unreachable", network };
-
-  const block = node.blockNumber ?? 0;
-  if (node.syncedBlock !== null && node.syncedBlock < block) {
-    return { state: "syncing", network, synced: node.syncedBlock, block };
-  }
-  return { state: "ready", network, block };
-}
 
 const lock = (): void => void callOme("signer.lock", {});
 
 /**
- * The top bar, which is also the window's title bar: network and node, keeper, signer and the profile menu, from the
- * daemon's status. Its empty parts move the window.
+ * The top bar, which is also the window's title bar: the logo, the theme and the profile menu. The node, keeper and
+ * signer stay out of it; banners say when one of them needs attention. Its empty parts move the window.
  */
 export function StatusBar({ status, onUnlock }: { status: Status; onUnlock: () => void }) {
-  const now = useNow();
   const navigate = useNavigate();
-  const { node, keeper, signer, profile } = status;
-
-  const signerState = useMemo(
-    () =>
-      signer.locked || signer.unlockedUntil === null
-        ? ({ locked: true } as const)
-        : ({ locked: false, unlockedUntil: signer.unlockedUntil } as const),
-    [signer.locked, signer.unlockedUntil],
-  );
+  const { profile, signer } = status;
 
   const menu = useMemo(
     () => [
@@ -50,9 +27,11 @@ export function StatusBar({ status, onUnlock }: { status: Status; onUnlock: () =
         shortcut: "⌘,",
         onSelect: (): void => void navigate({ to: "/settings" }),
       },
-      { label: "Lock now", icon: "lock" as const, shortcut: "⌘L", onSelect: lock },
+      signer.locked
+        ? { label: "Unlock…", icon: "unlock" as const, onSelect: onUnlock }
+        : { label: "Lock now", icon: "lock" as const, shortcut: "⌘L", onSelect: lock },
     ],
-    [navigate],
+    [navigate, onUnlock, signer.locked],
   );
 
   return (
@@ -60,12 +39,6 @@ export function StatusBar({ status, onUnlock }: { status: Status; onUnlock: () =
       <TopBar
         className="min-w-0 flex-1"
         windowControlsInset={IS_MAC}
-        node={nodeState(node)}
-        keeper={keeper.status}
-        signer={signerState}
-        now={now}
-        onLock={lock}
-        onUnlock={onUnlock}
         profile={
           <div className="flex items-center gap-1">
             <ThemeSwitch />
