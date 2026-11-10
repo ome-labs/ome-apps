@@ -10,7 +10,6 @@
     "dev": "turbo run dev",
     "format": "oxfmt --write . && turbo run format",
     "format:check": "oxfmt --check . && turbo run format:check",
-    "kit": "turbo run kit --filter=@ome-labs/kit",
     "lint": "oxlint --deny-warnings . && turbo run lint",
     "lint:fix": "oxlint --fix .",
     "prepare": "lefthook install",

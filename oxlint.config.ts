@@ -22,16 +22,8 @@ export default defineConfig({
   rules: { "no-restricted-imports": ["error", restrictedImports] },
   overrides: [
     {
-      // Stories, tests and the kit app's screens render fixed sample data; memoising their props would only
-      // obscure them.
-      files: [
-        "**/stories/**",
-        "**/*.stories.tsx",
-        "**/tests/**",
-        "**/*.test.tsx",
-        "apps/kit/app/**",
-        "apps/kit/src/**",
-      ],
+      // Stories and tests render fixed sample data; memoising their props would only obscure them.
+      files: ["**/stories/**", "**/*.stories.tsx", "**/tests/**", "**/*.test.tsx"],
       rules: {
         "react-perf/jsx-no-new-object-as-prop": "off",
         "react-perf/jsx-no-new-array-as-prop": "off",
@@ -42,7 +34,7 @@ export default defineConfig({
     {
       // Base UI composes through `render={<Element />}` and inline callbacks handed to primitives that aren't
       // memoised; wrapping each in useMemo or useCallback would add code and save no renders.
-      files: ["packages/ui-web/**", "packages/ui-native/**", "apps/kit/**"],
+      files: ["packages/ui-web/**", "packages/ui-native/**"],
       rules: {
         "react-perf/jsx-no-jsx-as-prop": "off",
         "react-perf/jsx-no-new-function-as-prop": "off",

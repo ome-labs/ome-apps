@@ -16,7 +16,7 @@ codes and QR, steps and the unlock flow come first. Same domain folders, names a
 
 ## Use
 
-The app sets up Uniwind once (see [`apps/kit`](../../apps/kit) for a working setup):
+The app sets up Uniwind once:
 
 ```css
 /* global.css, the Uniwind entry */

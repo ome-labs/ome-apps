@@ -1,8 +1,0 @@
-{
-  "extends": "klarity/tsconfig/app/react-native",
-  "compilerOptions": {
-    "allowImportingTsExtensions": true,
-    "lib": ["ESNext"]
-  },
-  "include": ["app", "src", "*.d.ts", ".expo/types/**/*.ts"]
-}

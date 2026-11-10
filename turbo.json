@@ -17,11 +17,6 @@
       "cache": false,
       "persistent": true
     },
-    "kit": {
-      "dependsOn": ["^build"],
-      "cache": false,
-      "persistent": true
-    },
     "format": {
       "cache": false
     },
