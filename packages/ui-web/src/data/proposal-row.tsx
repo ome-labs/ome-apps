@@ -43,10 +43,13 @@ export type ProposalRowProps = {
 export function ProposalRow({ proposal, recipient, now, href, link }: ProposalRowProps) {
   const summary = proposalSummary(proposal, recipient);
   const [vote, voteColour] = voteWords[myVote(proposal)];
+  const expires = open.has(proposal.status)
+    ? formatExpiry(proposal.expiresAt, now).replace("expires ", "")
+    : undefined;
 
   return (
     <TableRow interactive>
-      <TableCell className="w-14 type-mono-s text-fg-subtle">
+      <TableCell className="hidden w-14 type-mono-s text-fg-subtle @2xl:table-cell">
         {shortProposalId(proposal.id)}
       </TableCell>
       <TableCell className="max-w-0">
@@ -58,22 +61,24 @@ export function ProposalRow({ proposal, recipient, now, href, link }: ProposalRo
               {summary}
             </RowLink>
           )}
-          <span className="type-caption text-fg-subtle">from {proposal.proposer.name}</span>
+          <span className="truncate type-caption text-fg-subtle">
+            from {proposal.proposer.name}
+            {/* Without room for the Expires column, the expiry joins the proposer. */}
+            {expires ? <span className="@3xl:hidden"> · expires {expires}</span> : null}
+          </span>
         </div>
       </TableCell>
       <TableCell className="w-28">
         <StatusBadge kind="proposal" status={proposal.status} />
       </TableCell>
-      <TableCell className="w-56">
+      <TableCell className="w-48">
         <VoteProgress proposal={proposal} />
       </TableCell>
       <TableCell
-        className="w-28 type-caption text-fg-subtle"
+        className="hidden w-28 type-caption text-fg-subtle @3xl:table-cell"
         title={formatAbsoluteTime(proposal.expiresAt)}
       >
-        {open.has(proposal.status)
-          ? formatExpiry(proposal.expiresAt, now).replace("expires ", "")
-          : "—"}
+        {expires ?? "—"}
       </TableCell>
       <TableCell className={cn("w-20 type-label-s", voteColour)}>{vote}</TableCell>
     </TableRow>
@@ -99,11 +104,11 @@ export function ProposalTable({
     <Table aria-label={label}>
       <TableHead>
         <tr>
-          <TableHeader>ID</TableHeader>
+          <TableHeader className="hidden @2xl:table-cell">ID</TableHeader>
           <TableHeader>Proposal</TableHeader>
           <TableHeader>Status</TableHeader>
           <TableHeader>Votes</TableHeader>
-          <TableHeader>Expires</TableHeader>
+          <TableHeader className="hidden @3xl:table-cell">Expires</TableHeader>
           <TableHeader>You</TableHeader>
         </tr>
       </TableHead>

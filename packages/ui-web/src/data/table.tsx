@@ -7,7 +7,8 @@ import { cn } from "../styling/class-names.ts";
 
 export function Table({ className, ...props }: ComponentProps<"table">) {
   return (
-    <div className="overflow-x-auto rounded-lg bg-surface shadow-1">
+    // A container, so a table can drop its less important columns when it has little room.
+    <div className="@container overflow-x-auto rounded-lg bg-surface shadow-1">
       <table className={cn("w-full border-collapse text-left", className)} {...props} />
     </div>
   );
