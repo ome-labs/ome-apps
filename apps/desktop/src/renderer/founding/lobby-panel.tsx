@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
 import type { LobbyView } from "@ome-labs/api";
-import { Illustration } from "@ome-labs/brand/web";
+import { Scene } from "@ome-labs/brand/web";
 import {
   Banner,
   Button,
@@ -204,7 +204,7 @@ function WaitingCard({ lobby, hostName }: { lobby: LobbyView; hostName: string |
 
   return (
     <section className="flex flex-col gap-5 rounded-lg bg-surface p-5 shadow-1">
-      <Illustration id="lobby" alt="" className="aspect-[16/10] w-full rounded-md object-cover" />
+      <Scene id="lobby" alt="" className="aspect-[16/10] w-full rounded-md object-cover" />
       <div className="flex flex-col gap-1">
         <h2 className="type-heading-s text-fg">Waiting for {hostName ?? "the host"}</h2>
         <p className="type-body-s text-fg-muted">

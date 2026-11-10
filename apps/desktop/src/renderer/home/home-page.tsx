@@ -2,26 +2,10 @@ import { type ReactNode, useCallback } from "react";
 
 import { useNavigate } from "@tanstack/react-router";
 
+import { Scene } from "@ome-labs/brand/web";
 import { Button } from "@ome-labs/ui-web";
 
 import { useOme } from "../data/ome.ts";
-import { type Placed, WayScene } from "./way-scene.tsx";
-
-// Each way in, as a small still life: what you do, drawn with the kit's objects.
-const CREATE: Placed[] = [
-  { id: "vault", size: 96, x: 50, y: 56 },
-  { id: "key", size: 48, x: 82, y: 72 },
-  { id: "star", size: 48, x: 17, y: 30 },
-];
-const JOIN: Placed[] = [
-  { id: "paper-boat", size: 96, x: 42, y: 58 },
-  { id: "envelope", size: 48, x: 82, y: 32 },
-];
-const REQUEST: Placed[] = [
-  { id: "bridge", size: 96, x: 50, y: 60 },
-  { id: "lantern", size: 48, x: 15, y: 40 },
-  { id: "heron", size: 48, x: 85, y: 42 },
-];
 
 /** `/home`: where a member without a vault starts. Create one, join one by invite, or ask to join an existing one. */
 export function HomePage() {
@@ -41,7 +25,13 @@ export function HomePage() {
 
       <div className="grid grid-cols-3 gap-5">
         <Way
-          scene={<WayScene texture="glow" objects={CREATE} />}
+          scene={
+            <Scene
+              id="create-vault"
+              alt=""
+              className="aspect-[16/9] w-full rounded-md object-cover"
+            />
+          }
           title="Create a vault"
           text="Start a vault and invite co-founders."
           action={
@@ -51,7 +41,9 @@ export function HomePage() {
           }
         />
         <Way
-          scene={<WayScene texture="water" objects={JOIN} />}
+          scene={
+            <Scene id="invite" alt="" className="aspect-[16/9] w-full rounded-md object-cover" />
+          }
           title="Join a vault"
           text="Paste an invite from a co-founder."
           action={
@@ -61,7 +53,13 @@ export function HomePage() {
           }
         />
         <Way
-          scene={<WayScene texture="stars" objects={REQUEST} />}
+          scene={
+            <Scene
+              id="join-request"
+              alt=""
+              className="aspect-[16/9] w-full rounded-md object-cover"
+            />
+          }
           title="Join an existing vault"
           text="Send a join request to one of its members."
           action={

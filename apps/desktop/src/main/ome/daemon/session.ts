@@ -124,6 +124,11 @@ export class DaemonSession implements AppSession {
     this.#set({ phase: "choose", profiles: await listProfiles() });
   }
 
+  profileKey(): string | undefined {
+    const profile = this.#profile();
+    return profile ? profileDir(profile) : undefined;
+  }
+
   async touchId(): Promise<TouchIdState> {
     const profile = this.#profile();
     return {

@@ -16,6 +16,8 @@ export interface AppSession extends OmeClient {
   setup(request: SetupRequest): Promise<NodeStatus>;
   retry(): Promise<void>;
   leave(): Promise<void>;
+  /** Where this profile's on-computer state is keyed: its folder, or a fixed name on the fixtures. */
+  profileKey(): string | undefined;
   touchId(): Promise<TouchIdState>;
   /** Derives the sealing key from the passphrase (`signer.sealingKey`) and keeps it behind Touch ID. */
   enableTouchId(passphrase: string): Promise<void>;

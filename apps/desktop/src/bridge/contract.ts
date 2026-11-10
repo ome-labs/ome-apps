@@ -132,6 +132,18 @@ export interface TouchIdState {
   enabled: boolean;
 }
 
+/** A picture for a profile or a vault: one of the kit's avatars, or an image the member chose (as a data URL). */
+export type AvatarChoice = { kind: "art"; id: string } | { kind: "image"; url: string };
+
+/** Whose picture: the open profile's, or one of its vaults'. */
+export type AvatarTarget = { kind: "profile" } | { kind: "vault"; vault: string };
+
+/** The open profile's pictures, kept on this computer only. */
+export interface Avatars {
+  profile: AvatarChoice | null;
+  vaults: Record<string, AvatarChoice>;
+}
+
 /** The first step of setting up: who the member is and which node their account lives on. */
 export interface SetupRequest {
   member: string;
@@ -183,6 +195,16 @@ export interface OmeBridge {
     changeNode(url: string): Promise<Outcome<null>>;
     openLog(which: "daemon" | "keeper"): Promise<Outcome<null>>;
   };
+  /** Pictures for the open profile and its vaults, on this computer only; other members don't see them. */
+  avatars: {
+    get(): Promise<Avatars>;
+    /** Every profile's own picture on this computer, by profile name, for the list of profiles. */
+    ofProfiles(): Promise<Record<string, AvatarChoice>>;
+    setArt(target: AvatarTarget, id: string): Promise<Outcome<Avatars>>;
+    /** Asks for an image file; `null` when the member cancels. */
+    chooseFile(target: AvatarTarget): Promise<Outcome<Avatars | null>>;
+    clear(target: AvatarTarget): Promise<Outcome<Avatars>>;
+  };
   /** This app's version, for About. */
   version: string;
   /**
@@ -228,6 +250,11 @@ export const CHANNELS = {
   sessionRestart: "ome:session:restart",
   sessionChangeNode: "ome:session:change-node",
   sessionOpenLog: "ome:session:open-log",
+  avatarsGet: "ome:avatars:get",
+  avatarsOfProfiles: "ome:avatars:of-profiles",
+  avatarsSetArt: "ome:avatars:set-art",
+  avatarsChooseFile: "ome:avatars:choose-file",
+  avatarsClear: "ome:avatars:clear",
   touchIdState: "ome:touch-id:state",
   touchIdEnable: "ome:touch-id:enable",
   touchIdDisable: "ome:touch-id:disable",

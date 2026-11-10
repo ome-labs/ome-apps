@@ -3,14 +3,16 @@ import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Illustration } from "@ome-labs/brand/web";
-import { Banner, Button, NumberStepper, TextField } from "@ome-labs/ui-web";
+import { type AvatarId, Scene } from "@ome-labs/brand/web";
+import { Avatar, Banner, Button, NumberStepper, TextField } from "@ome-labs/ui-web";
 import { type Control, useController, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
+import { AvatarPicker } from "../avatars/avatar-picker.tsx";
+import { VAULT_ART } from "../avatars/avatars.ts";
 import { callOme } from "../data/ome.ts";
 import { FlowPage } from "./flow-page.tsx";
-import { rememberPlanned } from "./planned.ts";
+import { rememberPicture, rememberPlanned } from "./planned.ts";
 import { LIMITS } from "./thresholds.ts";
 
 const schema = z
@@ -40,6 +42,13 @@ const NEXT = [
 export function CreateForm() {
   const navigate = useNavigate();
   const [error, setError] = useState<string>();
+  // The vault has no address yet, so its default can't be the address-based one: pick one now and keep it.
+  const [picture, setPicture] = useState<AvatarId>(
+    () => (VAULT_ART[Math.floor(Math.random() * VAULT_ART.length)] as { id: AvatarId }).id,
+  );
+  const [picking, setPicking] = useState(false);
+  const openPicker = useCallback(() => setPicking(true), []);
+  const source = useMemo(() => ({ kind: "art" as const, id: picture }), [picture]);
   const {
     register,
     control,
@@ -60,15 +69,17 @@ export function CreateForm() {
             viewingThreshold: values.read,
           });
           rememberPlanned(lobby.lobby, values.members);
+          rememberPicture(lobby.lobby, picture);
           await navigate({ to: "/create", search: { lobby: lobby.lobby } });
         } catch (failure) {
           setError(failure instanceof Error ? failure.message : String(failure));
         }
       }),
-    [handleSubmit, navigate],
+    [handleSubmit, navigate, picture],
   );
   const cancel = useCallback(() => void navigate({ to: "/home" }), [navigate]);
   const members = useWatch({ control, name: "members" });
+  const name = useWatch({ control, name: "name" });
   // Fewer members pulls the thresholds down with it, so the form never holds an impossible vault.
   const setMembers = useCallback(
     (next: number) => {
@@ -86,15 +97,35 @@ export function CreateForm() {
     >
       <div className="grid grid-cols-1 items-start gap-6 @3xl:grid-cols-[minmax(0,1fr)_340px]">
         <form className="flex flex-col rounded-lg bg-surface shadow-1" onSubmit={submit} noValidate>
-          <div className="flex flex-col gap-1 border-b border-line-subtle p-6">
+          <div className="flex flex-col gap-3 border-b border-line-subtle p-6">
             {error ? <Banner kind="alarm">{error}</Banner> : null}
-            <TextField
-              label="Vault name"
-              placeholder="Treasury"
-              error={errors.name?.message}
-              maxLength={48}
-              disabled={isSubmitting}
-              {...register("name")}
+            <div className="flex items-start gap-4">
+              <button
+                type="button"
+                onClick={openPicker}
+                disabled={isSubmitting}
+                aria-label="Choose the vault's picture"
+                className="focus-ring mt-[22px] rounded-md transition-opacity duration-fast ease-standard hover:opacity-80"
+              >
+                <Avatar name={name || "?"} source={source} shape="square" size={48} />
+              </button>
+              <TextField
+                label="Vault name"
+                className="flex-1"
+                placeholder="Treasury"
+                error={errors.name?.message}
+                maxLength={48}
+                disabled={isSubmitting}
+                {...register("name")}
+              />
+            </div>
+            <AvatarPicker
+              kind="vault"
+              name={name || "?"}
+              open={picking}
+              onOpenChange={setPicking}
+              selected={picture}
+              onPick={setPicture}
             />
           </div>
 
@@ -133,7 +164,7 @@ export function CreateForm() {
         </form>
 
         <aside className="flex flex-col gap-5 rounded-lg bg-surface p-5 shadow-1">
-          <Illustration
+          <Scene
             id="create-vault"
             alt=""
             className="aspect-[16/10] w-full rounded-md object-cover"

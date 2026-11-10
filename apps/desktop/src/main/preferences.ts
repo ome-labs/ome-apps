@@ -14,7 +14,11 @@ export interface NetworkIdentity {
 }
 
 /** Also kept, for the main process alone: the window's bounds, the profile last opened, each profile's network. */
+/** A picture as kept: a kit avatar's id, or the name of a file in the app's avatars folder. */
+export type StoredAvatar = { kind: "art"; id: string } | { kind: "image"; file: string };
+
 type Stored = Preferences & {
+  avatars?: Record<string, StoredAvatar> | undefined;
   window?: Rectangle | undefined;
   profile?: string | undefined;
   networks?: Record<string, NetworkIdentity> | undefined;
@@ -36,6 +40,8 @@ function read(): Stored {
         typeof stored.networks === "object" && stored.networks !== null
           ? stored.networks
           : undefined,
+      avatars:
+        typeof stored.avatars === "object" && stored.avatars !== null ? stored.avatars : undefined,
     };
   } catch {
     return DEFAULTS;
@@ -86,4 +92,16 @@ export function rememberNetwork(profileDir: string, network: NetworkIdentity): v
   if (known?.l1ChainId === network.l1ChainId && known.rollupVersion === network.rollupVersion)
     return;
   write({ ...current, networks: { ...current.networks, [profileDir]: network } });
+}
+
+export function storedAvatars(): Record<string, StoredAvatar> {
+  return read().avatars ?? {};
+}
+
+export function setStoredAvatar(key: string, avatar: StoredAvatar | null): void {
+  const current = read();
+  const avatars = { ...current.avatars };
+  if (avatar) avatars[key] = avatar;
+  else delete avatars[key];
+  write({ ...current, avatars });
 }

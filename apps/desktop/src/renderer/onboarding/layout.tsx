@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { Illustration, type IllustrationId } from "@ome-labs/brand/web";
+import { Illustration, Scene, type IllustrationId, type SceneId } from "@ome-labs/brand/web";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 
 import { ThemeSwitch } from "../shell/theme-switch.tsx";
@@ -14,12 +14,15 @@ import { type Direction, Reveal, scene, step } from "./motion.tsx";
  */
 export function OnboardingLayout({
   illustration,
-  stepKey = illustration,
+  sceneId,
+  stepKey = sceneId ?? illustration ?? "",
   direction = 1,
   children,
   footer,
 }: {
-  illustration: IllustrationId;
+  /** The first run's own art, or one of the app's scenes. */
+  illustration?: IllustrationId;
+  sceneId?: SceneId;
   stepKey?: string;
   direction?: Direction;
   children: ReactNode;
@@ -32,18 +35,22 @@ export function OnboardingLayout({
         <div className="relative overflow-hidden bg-brand-night">
           <AnimatePresence initial={false}>
             <motion.div
-              key={illustration}
+              key={sceneId ?? illustration}
               variants={scene}
               initial="enter"
               animate="shown"
               exit="leave"
               className="absolute inset-0"
             >
-              <Illustration
-                id={illustration}
-                alt=""
-                className="h-full w-full object-cover object-left"
-              />
+              {sceneId ? (
+                <Scene id={sceneId} alt="" className="h-full w-full object-cover object-left" />
+              ) : illustration ? (
+                <Illustration
+                  id={illustration}
+                  alt=""
+                  className="h-full w-full object-cover object-left"
+                />
+              ) : null}
             </motion.div>
           </AnimatePresence>
         </div>

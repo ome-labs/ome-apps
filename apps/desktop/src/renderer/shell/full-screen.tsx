@@ -1,18 +1,18 @@
 import { type ReactNode, useCallback } from "react";
 
-import type { IllustrationId } from "@ome-labs/brand/web";
+import type { SceneId } from "@ome-labs/brand/web";
 import { Button, type ButtonProps, EmptyState } from "@ome-labs/ui-web";
 
 import { TitleStrip } from "./window-chrome.tsx";
 
 /** A state that replaces the whole window: the daemon isn't there, or the app is still reaching it. */
 export function FullScreen({
-  illustration,
+  scene,
   title,
   children,
   action,
 }: {
-  illustration: IllustrationId;
+  scene: SceneId;
   title: string;
   children?: ReactNode;
   action?: ReactNode;
@@ -20,7 +20,7 @@ export function FullScreen({
   return (
     <div className="relative grid h-dvh place-items-center bg-canvas p-10">
       <TitleStrip />
-      <EmptyState illustration={illustration} title={title} action={action} className="max-w-md">
+      <EmptyState scene={scene} large title={title} action={action} className="max-w-md">
         {children}
       </EmptyState>
     </div>

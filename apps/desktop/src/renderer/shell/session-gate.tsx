@@ -49,7 +49,7 @@ export function SessionGate() {
 
   if (state.phase === "starting") {
     return (
-      <FullScreen illustration="starting" title="Starting Ome">
+      <FullScreen scene="starting" title="Starting Ome">
         Opening {state.profile}'s daemon. The first start of the day can take up to a minute while
         the wallet opens.
       </FullScreen>
@@ -58,7 +58,7 @@ export function SessionGate() {
   if (state.phase === "failed") {
     return (
       <FullScreen
-        illustration="daemon-failed"
+        scene="daemon-failed"
         title="Ome's daemon didn't start"
         action={
           <div className="flex gap-2">

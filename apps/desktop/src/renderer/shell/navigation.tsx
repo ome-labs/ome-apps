@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import type { VaultSummary } from "@ome-labs/api";
 import { Sidebar, SidebarGroup, SidebarItem, VaultSwitcher } from "@ome-labs/ui-web";
 
+import { useAvatars, vaultAvatar } from "../avatars/avatars.ts";
 import { useOme } from "../data/ome.ts";
 import { APP_PAGES, type Page, VAULT_PAGES } from "../routes/pages.ts";
 
@@ -26,6 +27,7 @@ export function Navigation({
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  const avatars = useAvatars();
   const choices = useMemo(
     () =>
       vaults.map((vault) => ({
@@ -34,8 +36,9 @@ export function Navigation({
         alias: vault.alias ?? vault.name.toLowerCase(),
         threshold: vault.threshold,
         members: vault.members,
+        avatar: vaultAvatar(avatars, vault.address),
       })),
-    [vaults],
+    [avatars, vaults],
   );
   const select = useCallback(
     (vault: string) => void navigate({ to: "/vaults/$vault", params: { vault } }),

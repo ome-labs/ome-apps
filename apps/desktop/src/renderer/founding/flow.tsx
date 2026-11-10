@@ -20,7 +20,7 @@ export function LobbyFlow({ lobby: id }: { lobby: Hex16 }) {
   if (lobby.isError) {
     return (
       <EmptyState
-        illustration="not-found"
+        scene="not-found"
         title="This lobby isn't here"
         action={<Button onClick={home}>Back to Home</Button>}
       >
@@ -31,7 +31,7 @@ export function LobbyFlow({ lobby: id }: { lobby: Hex16 }) {
   if (lobby.data.status === "closed" && !founding) {
     return (
       <EmptyState
-        illustration="cancelled"
+        scene="cancelled"
         title="The lobby was closed"
         action={<Button onClick={home}>Back to Home</Button>}
       >

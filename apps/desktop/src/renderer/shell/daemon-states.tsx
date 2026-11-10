@@ -13,12 +13,12 @@ import { FullScreen, RunButton } from "./full-screen.tsx";
  */
 export function daemonStates(status: UseQueryResult<Status, Error>): ReactNode | null {
   if (status.isPending) {
-    return <FullScreen illustration="starting" title="Starting Ome…" />;
+    return <FullScreen scene="starting" title="Starting Ome…" />;
   }
   if (status.isError && failureKind(status.error) === "unreachable") {
     return (
       <FullScreen
-        illustration="daemon-failed"
+        scene="daemon-failed"
         title="Ome's daemon isn't running"
         action={<RunButton run={status.refetch}>Try again</RunButton>}
       >
@@ -30,7 +30,7 @@ export function daemonStates(status: UseQueryResult<Status, Error>): ReactNode |
   if (status.isError) {
     return (
       <FullScreen
-        illustration="not-found"
+        scene="not-found"
         title="Something went wrong"
         action={<RunButton run={status.refetch}>Try again</RunButton>}
       >
@@ -41,7 +41,7 @@ export function daemonStates(status: UseQueryResult<Status, Error>): ReactNode |
   if (!status.data.profile) {
     return (
       <FullScreen
-        illustration="create-profile"
+        scene="profile-not-set-up"
         title="This profile isn't set up"
         action={<RunButton run={window.ome.session.leave}>Use another profile</RunButton>}
       >

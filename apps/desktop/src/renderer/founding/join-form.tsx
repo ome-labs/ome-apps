@@ -3,7 +3,7 @@ import { type FormEvent, useCallback, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
 import type { InvitePreview } from "@ome-labs/api";
-import { Illustration } from "@ome-labs/brand/web";
+import { Scene } from "@ome-labs/brand/web";
 import { Banner, Button, MemberAvatar, Tag, TextField } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
@@ -120,8 +120,8 @@ export function JoinForm() {
         </section>
 
         <aside className="flex flex-col gap-4 rounded-lg bg-surface p-5 shadow-1">
-          <Illustration
-            id="invite"
+          <Scene
+            id={preview && !preview.sameNetwork ? "wrong-network" : "invite"}
             alt=""
             className="aspect-[16/10] w-full rounded-md object-cover"
           />

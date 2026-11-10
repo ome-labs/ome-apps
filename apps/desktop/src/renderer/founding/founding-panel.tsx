@@ -1,14 +1,17 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useNavigate } from "@tanstack/react-router";
 
 import type { FoundingState, FoundingStep, FoundingStepId, LobbyView } from "@ome-labs/api";
-import { Illustration } from "@ome-labs/brand/web";
+import { Scene } from "@ome-labs/brand/web";
 import { Address, Banner, Button, StatusBadge, StepList, StepRow } from "@ome-labs/ui-web";
 
+import { useAvatarsChanged } from "../avatars/avatars.ts";
 import { callOme } from "../data/ome.ts";
+import { unwrap } from "../data/session.ts";
 import { useNow } from "../shell/now.ts";
 import { FlowPage } from "./flow-page.tsx";
+import { takePicture } from "./planned.ts";
 
 const LABELS: Record<FoundingStepId, string> = {
   agree: "Agree on the plan",
@@ -69,6 +72,9 @@ export function FoundingPanel({
   const hostName = lobby.members.find((member) => member.index === 1)?.name ?? "the host";
 
   const failed = founding?.error ?? null;
+  const deploying = founding?.steps.some(
+    (step) => (step.id === "deploy" || step.id === "verify") && step.status === "active",
+  );
   const done = founding?.done === true && !failed;
   const blamed = failed?.blamed
     .map((identity) => lobby.members.find((member) => member.identity === identity)?.name)
@@ -84,6 +90,17 @@ export function FoundingPanel({
     if (vault) void navigate({ to: "/vaults/$vault", params: { vault } });
   }, [vault, navigate]);
   const home = useCallback(() => void navigate({ to: "/home" }), [navigate]);
+
+  // The picture the host chose on Create belongs to the vault once it has an address.
+  const changed = useAvatarsChanged();
+  useEffect(() => {
+    if (!done || !vault) return;
+    const picture = takePicture(lobby.lobby);
+    if (!picture) return;
+    void unwrap(window.ome.avatars.setArt({ kind: "vault", vault }, picture))
+      .then(changed)
+      .catch(() => undefined);
+  }, [changed, done, lobby.lobby, vault]);
 
   return (
     <FlowPage
@@ -114,8 +131,16 @@ export function FoundingPanel({
         </section>
 
         <aside className="flex flex-col gap-5 rounded-lg bg-surface p-5 shadow-1">
-          <Illustration
-            id={failed ? "blocked" : done ? "vault-founded" : "key-generation"}
+          <Scene
+            id={
+              failed
+                ? "founding-failed"
+                : done
+                  ? "vault-founded"
+                  : deploying
+                    ? "deploy"
+                    : "key-generation"
+            }
             alt=""
             className="aspect-[16/10] w-full rounded-md object-cover"
           />

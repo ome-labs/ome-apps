@@ -87,6 +87,10 @@ export class FixtureSession implements AppSession {
     this.#set({ phase: "choose", profiles: [{ name: PROFILE, member: "Alice" }] });
   }
 
+  profileKey(): string | undefined {
+    return this.#state.phase === "choose" ? undefined : `fixtures:${this.#state.profile}`;
+  }
+
   // Touch ID is simulated as available everywhere, with no prompt, so its screens can be designed on any machine.
   async touchId(): Promise<TouchIdState> {
     return { available: true, enabled: this.#touchId };

@@ -54,6 +54,25 @@ const bridge: OmeBridge = {
     openLog: (which) =>
       ipcRenderer.invoke(CHANNELS.sessionOpenLog, which) as Promise<Outcome<null>>,
   },
+  avatars: {
+    get: () => ipcRenderer.invoke(CHANNELS.avatarsGet) as ReturnType<OmeBridge["avatars"]["get"]>,
+    ofProfiles: () =>
+      ipcRenderer.invoke(CHANNELS.avatarsOfProfiles) as ReturnType<
+        OmeBridge["avatars"]["ofProfiles"]
+      >,
+    setArt: (target, id) =>
+      ipcRenderer.invoke(CHANNELS.avatarsSetArt, target, id) as ReturnType<
+        OmeBridge["avatars"]["setArt"]
+      >,
+    chooseFile: (target) =>
+      ipcRenderer.invoke(CHANNELS.avatarsChooseFile, target) as ReturnType<
+        OmeBridge["avatars"]["chooseFile"]
+      >,
+    clear: (target) =>
+      ipcRenderer.invoke(CHANNELS.avatarsClear, target) as ReturnType<
+        OmeBridge["avatars"]["clear"]
+      >,
+  },
   touchId: {
     state: () =>
       ipcRenderer.invoke(CHANNELS.touchIdState) as ReturnType<OmeBridge["touchId"]["state"]>,

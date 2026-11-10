@@ -3,8 +3,9 @@ import { useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
 import type { Status } from "@ome-labs/api";
-import { MemberAvatar, Menu, TopBar } from "@ome-labs/ui-web";
+import { Avatar, Menu, TopBar } from "@ome-labs/ui-web";
 
+import { useProfileAvatar } from "../avatars/avatars.ts";
 import { callOme } from "../data/ome.ts";
 import { ThemeSwitch } from "./theme-switch.tsx";
 import { IS_MAC, WindowControls } from "./window-chrome.tsx";
@@ -18,6 +19,7 @@ const lock = (): void => void callOme("signer.lock", {});
 export function StatusBar({ status, onUnlock }: { status: Status; onUnlock: () => void }) {
   const navigate = useNavigate();
   const { profile, signer } = status;
+  const picture = useProfileAvatar(profile?.name);
 
   const menu = useMemo(
     () => [
@@ -51,7 +53,7 @@ export function StatusBar({ status, onUnlock }: { status: Status; onUnlock: () =
                     type="button"
                     className="flex items-center gap-2 rounded-md px-1.5 py-1 type-label-m text-fg"
                   >
-                    <MemberAvatar name={profile.name} index={1} size="sm" />
+                    <Avatar name={profile.name} source={picture} size={22} />
                     {profile.name}
                   </button>
                 }

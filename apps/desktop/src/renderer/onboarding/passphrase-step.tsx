@@ -72,6 +72,12 @@ export function PassphraseStep({
             nodeUrl: draft.nodeUrl,
             passphrase: values.passphrase,
           });
+          // A picture is a nicety: failing to save it never stops the profile.
+          if (draft.picture) {
+            await window.ome.avatars
+              .setArt({ kind: "profile" }, draft.picture)
+              .catch(() => undefined);
+          }
           // Ome proves on the member's device on every network, the local one included.
           await callOme("config.set", { proverEnabled: true });
           setOpening(true);

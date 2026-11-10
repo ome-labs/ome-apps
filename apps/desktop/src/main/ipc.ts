@@ -4,6 +4,7 @@ import { app, BrowserWindow, type IpcMainEvent, ipcMain, type IpcMainInvokeEvent
 
 import {
   CHANNELS,
+  type AvatarTarget,
   type CallFailure,
   type DevState,
   type Outcome,
@@ -11,6 +12,7 @@ import {
   type SetupRequest,
   isRendererMethod,
 } from "../bridge/contract.ts";
+import { avatarsFor, chooseFile, clearAvatar, profilePictures, setArt } from "./avatars.ts";
 import { OmeError } from "./ome/client.ts";
 import { preferences, setPreferences } from "./preferences.ts";
 import { isAppUrl } from "./security.ts";
@@ -77,6 +79,44 @@ function control(run: (window: BrowserWindow) => void) {
   };
 }
 
+/** Whose picture a request names, checked: the profile, or a vault by its address. */
+function avatarTarget(target: unknown): AvatarTarget {
+  const t = (target ?? {}) as { kind?: unknown; vault?: unknown };
+  if (t.kind === "profile") return { kind: "profile" };
+  if (t.kind === "vault" && typeof t.vault === "string" && /^0x[0-9a-fA-F]{64}$/u.test(t.vault)) {
+    return { kind: "vault", vault: t.vault };
+  }
+  throw new OmeError("invalid", "Say whose picture: the profile, or a vault.");
+}
+
+function openProfile(): string {
+  const key = session().profileKey();
+  if (!key) throw new OmeError("not-ready", "No profile is open.");
+  return key;
+}
+
+function registerAvatars(): void {
+  ipcMain.handle(CHANNELS.avatarsGet, (event) => {
+    const key = session().profileKey();
+    return fromApp(event) && key ? avatarsFor(key) : { profile: null, vaults: {} };
+  });
+  ipcMain.handle(CHANNELS.avatarsOfProfiles, (event) => (fromApp(event) ? profilePictures() : {}));
+  ipcMain.handle(CHANNELS.avatarsSetArt, (event, target: unknown, id: unknown) =>
+    outcome(event, async () => {
+      if (typeof id !== "string") throw new OmeError("invalid", "Name an avatar.");
+      return setArt(openProfile(), avatarTarget(target), id);
+    }),
+  );
+  ipcMain.handle(CHANNELS.avatarsChooseFile, (event, target: unknown) =>
+    outcome(event, () =>
+      chooseFile(openProfile(), avatarTarget(target), BrowserWindow.fromWebContents(event.sender)),
+    ),
+  );
+  ipcMain.handle(CHANNELS.avatarsClear, (event, target: unknown) =>
+    outcome(event, async () => clearAvatar(openProfile(), avatarTarget(target))),
+  );
+}
+
 function registerTouchId(): void {
   ipcMain.handle(CHANNELS.touchIdState, (event) => (fromApp(event) ? session().touchId() : null));
   ipcMain.handle(CHANNELS.touchIdEnable, (event, passphrase: unknown) =>
@@ -101,6 +141,7 @@ function registerTouchId(): void {
 
 export function registerIpc(): void {
   registerTouchId();
+  registerAvatars();
   ipcMain.on(
     CHANNELS.windowMinimize,
     control((window) => window.minimize()),
