@@ -1,4 +1,9 @@
 {
   "extends": "klarity/tsconfig/library",
-  "include": ["src"]
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "lib": ["ESNext"]
+  },
+  "include": ["src", "*.config.ts"]
 }

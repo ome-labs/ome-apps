@@ -6,15 +6,21 @@
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./sample": "./src/sample/treasury.ts"
   },
   "scripts": {
     "lint": "oxlint --deny-warnings .",
+    "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ome-labs/api": "catalog:"
   },
   "devDependencies": {
     "klarity": "catalog:",
     "oxlint": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
