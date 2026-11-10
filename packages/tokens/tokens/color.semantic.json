@@ -1,5 +1,5 @@
 {
-  "$description": "Semantic colours (Figma collections Theme \u00b7 Light and Theme \u00b7 Dark). $value is light; the dark value and the Tailwind utility name live in $extensions.network.ome. CSS code name: --ome-<group>-<role>.",
+  "$description": "Semantic colours (Figma collections Theme · Light and Theme · Dark). $value is light; the dark value and the Tailwind utility name live in $extensions.network.ome. CSS code name: --ome-<group>-<role>.",
   "semantic": {
     "bg": {
       "canvas": {
@@ -7,7 +7,7 @@
         "$value": "{color.ink.25}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.950}",
+            "dark": "{color.graphite.950}",
             "utility": "canvas"
           }
         }
@@ -17,7 +17,7 @@
         "$value": "{color.ink.0}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.850}",
+            "dark": "{color.graphite.900}",
             "utility": "surface"
           }
         }
@@ -27,7 +27,7 @@
         "$value": "{color.ink.0}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.800}",
+            "dark": "{color.graphite.850}",
             "utility": "raised"
           }
         }
@@ -37,17 +37,17 @@
         "$value": "{color.ink.50}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.1000}",
+            "dark": "{color.graphite.1000}",
             "utility": "sunken"
           }
         }
       },
       "hover": {
         "$type": "color",
-        "$value": "{color.lake.50}",
+        "$value": "{color.ink.50}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.750}",
+            "dark": "{color.graphite.800}",
             "utility": "hover"
           }
         }
@@ -57,7 +57,7 @@
         "$value": "{color.lake.100}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.700}",
+            "dark": "{color.graphite.750}",
             "utility": "selected"
           }
         }
@@ -67,7 +67,7 @@
         "$value": "{color.ink.900}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.10}",
+            "dark": "{color.graphite.50}",
             "utility": "inverse"
           }
         }
@@ -79,7 +79,7 @@
         "$value": "{color.ink.75}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.750}",
+            "dark": "{color.graphite.800}",
             "utility": "line-subtle"
           }
         }
@@ -89,7 +89,7 @@
         "$value": "{color.ink.100}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.700}",
+            "dark": "{color.graphite.750}",
             "utility": "line"
           }
         }
@@ -99,7 +99,7 @@
         "$value": "{color.ink.150}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.600}",
+            "dark": "{color.graphite.600}",
             "utility": "line-strong"
           }
         }
@@ -111,7 +111,7 @@
         "$value": "{color.ink.900}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.10}",
+            "dark": "{color.graphite.50}",
             "utility": "fg"
           }
         }
@@ -121,7 +121,7 @@
         "$value": "{color.ink.500}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.200}",
+            "dark": "{color.graphite.200}",
             "utility": "fg-muted"
           }
         }
@@ -131,7 +131,7 @@
         "$value": "{color.ink.400}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.350}",
+            "dark": "{color.graphite.350}",
             "utility": "fg-subtle"
           }
         }
@@ -141,7 +141,7 @@
         "$value": "{color.ink.300}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.500}",
+            "dark": "{color.graphite.500}",
             "utility": "fg-disabled"
           }
         }
@@ -151,7 +151,7 @@
         "$value": "{color.ink.0}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.900}",
+            "dark": "{color.graphite.900}",
             "utility": "fg-inverse"
           }
         }
@@ -193,7 +193,7 @@
         "$value": "{color.lake.100}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.lake.950}",
+            "dark": "{color.lake.925}",
             "utility": "accent-subtle"
           }
         }
@@ -285,7 +285,7 @@
         "$value": "{color.red.700}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.red.400}",
+            "dark": "{color.red.600}",
             "utility": "danger-solid"
           }
         }
@@ -325,7 +325,7 @@
         "$value": "{color.ink.50}",
         "$extensions": {
           "network.ome": {
-            "dark": "{color.ink.750}",
+            "dark": "{color.graphite.750}",
             "utility": "neutral-subtle"
           }
         }

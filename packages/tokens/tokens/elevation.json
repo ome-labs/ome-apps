@@ -23,7 +23,7 @@
           }
         },
         {
-          "color": "rgba(16, 24, 48, 0.05)",
+          "color": "rgba(16, 24, 48, 0.04)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -40,51 +40,12 @@
             "value": 0,
             "unit": "px"
           }
-        },
-        {
-          "color": "rgba(16, 24, 48, 0.06)",
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": 2,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 8,
-            "unit": "px"
-          },
-          "spread": {
-            "value": -2,
-            "unit": "px"
-          }
         }
       ],
       "$description": "Cards and panels at rest",
       "$extensions": {
         "network.ome": {
           "dark": [
-            {
-              "color": "rgba(255, 255, 255, 0.05)",
-              "offsetX": {
-                "value": 0,
-                "unit": "px"
-              },
-              "offsetY": {
-                "value": 1,
-                "unit": "px"
-              },
-              "blur": {
-                "value": 0,
-                "unit": "px"
-              },
-              "spread": {
-                "value": 0,
-                "unit": "px"
-              },
-              "inset": true
-            },
             {
               "color": "rgba(255, 255, 255, 0.06)",
               "offsetX": {
@@ -101,25 +62,6 @@
               },
               "spread": {
                 "value": 1,
-                "unit": "px"
-              }
-            },
-            {
-              "color": "rgba(0, 0, 0, 0.4)",
-              "offsetX": {
-                "value": 0,
-                "unit": "px"
-              },
-              "offsetY": {
-                "value": 1,
-                "unit": "px"
-              },
-              "blur": {
-                "value": 2,
-                "unit": "px"
-              },
-              "spread": {
-                "value": 0,
                 "unit": "px"
               }
             }
@@ -150,7 +92,7 @@
           }
         },
         {
-          "color": "rgba(16, 24, 48, 0.05)",
+          "color": "rgba(16, 24, 48, 0.04)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -164,26 +106,26 @@
             "unit": "px"
           },
           "spread": {
-            "value": 0,
+            "value": -1,
             "unit": "px"
           }
         },
         {
-          "color": "rgba(16, 24, 48, 0.14)",
+          "color": "rgba(16, 24, 48, 0.1)",
           "offsetX": {
             "value": 0,
             "unit": "px"
           },
           "offsetY": {
-            "value": 8,
+            "value": 6,
             "unit": "px"
           },
           "blur": {
-            "value": 24,
+            "value": 16,
             "unit": "px"
           },
           "spread": {
-            "value": -4,
+            "value": -6,
             "unit": "px"
           }
         }
@@ -193,7 +135,7 @@
         "network.ome": {
           "dark": [
             {
-              "color": "rgba(255, 255, 255, 0.06)",
+              "color": "rgba(255, 255, 255, 0.04)",
               "offsetX": {
                 "value": 0,
                 "unit": "px"
@@ -232,7 +174,7 @@
               }
             },
             {
-              "color": "rgba(0, 0, 0, 0.6)",
+              "color": "rgba(0, 0, 0, 0.5)",
               "offsetX": {
                 "value": 0,
                 "unit": "px"
@@ -242,11 +184,11 @@
                 "unit": "px"
               },
               "blur": {
-                "value": 24,
+                "value": 20,
                 "unit": "px"
               },
               "spread": {
-                "value": -4,
+                "value": -6,
                 "unit": "px"
               }
             }
@@ -277,7 +219,7 @@
           }
         },
         {
-          "color": "rgba(16, 24, 48, 0.06)",
+          "color": "rgba(16, 24, 48, 0.05)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -287,30 +229,30 @@
             "unit": "px"
           },
           "blur": {
-            "value": 10,
+            "value": 8,
             "unit": "px"
           },
           "spread": {
-            "value": 0,
+            "value": -2,
             "unit": "px"
           }
         },
         {
-          "color": "rgba(16, 24, 48, 0.18)",
+          "color": "rgba(16, 24, 48, 0.14)",
           "offsetX": {
             "value": 0,
             "unit": "px"
           },
           "offsetY": {
-            "value": 16,
+            "value": 12,
             "unit": "px"
           },
           "blur": {
-            "value": 40,
+            "value": 28,
             "unit": "px"
           },
           "spread": {
-            "value": -8,
+            "value": -10,
             "unit": "px"
           }
         }
@@ -320,262 +262,7 @@
         "network.ome": {
           "dark": [
             {
-              "color": "rgba(255, 255, 255, 0.06)",
-              "offsetX": {
-                "value": 0,
-                "unit": "px"
-              },
-              "offsetY": {
-                "value": 1,
-                "unit": "px"
-              },
-              "blur": {
-                "value": 0,
-                "unit": "px"
-              },
-              "spread": {
-                "value": 0,
-                "unit": "px"
-              },
-              "inset": true
-            },
-            {
-              "color": "rgba(255, 255, 255, 0.08)",
-              "offsetX": {
-                "value": 0,
-                "unit": "px"
-              },
-              "offsetY": {
-                "value": 0,
-                "unit": "px"
-              },
-              "blur": {
-                "value": 0,
-                "unit": "px"
-              },
-              "spread": {
-                "value": 1,
-                "unit": "px"
-              }
-            },
-            {
-              "color": "rgba(0, 0, 0, 0.7)",
-              "offsetX": {
-                "value": 0,
-                "unit": "px"
-              },
-              "offsetY": {
-                "value": 16,
-                "unit": "px"
-              },
-              "blur": {
-                "value": 40,
-                "unit": "px"
-              },
-              "spread": {
-                "value": -8,
-                "unit": "px"
-              }
-            }
-          ]
-        }
-      }
-    },
-    "4": {
-      "$type": "shadow",
-      "$value": [
-        {
-          "color": "rgba(16, 24, 48, 0.06)",
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": 0,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 0,
-            "unit": "px"
-          },
-          "spread": {
-            "value": 1,
-            "unit": "px"
-          }
-        },
-        {
-          "color": "rgba(16, 24, 48, 0.08)",
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": 8,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 20,
-            "unit": "px"
-          },
-          "spread": {
-            "value": 0,
-            "unit": "px"
-          }
-        },
-        {
-          "color": "rgba(16, 24, 48, 0.3)",
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": 30,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 80,
-            "unit": "px"
-          },
-          "spread": {
-            "value": -12,
-            "unit": "px"
-          }
-        }
-      ],
-      "$description": "Dialogs, sheets",
-      "$extensions": {
-        "network.ome": {
-          "dark": [
-            {
-              "color": "rgba(255, 255, 255, 0.07)",
-              "offsetX": {
-                "value": 0,
-                "unit": "px"
-              },
-              "offsetY": {
-                "value": 1,
-                "unit": "px"
-              },
-              "blur": {
-                "value": 0,
-                "unit": "px"
-              },
-              "spread": {
-                "value": 0,
-                "unit": "px"
-              },
-              "inset": true
-            },
-            {
-              "color": "rgba(255, 255, 255, 0.08)",
-              "offsetX": {
-                "value": 0,
-                "unit": "px"
-              },
-              "offsetY": {
-                "value": 0,
-                "unit": "px"
-              },
-              "blur": {
-                "value": 0,
-                "unit": "px"
-              },
-              "spread": {
-                "value": 1,
-                "unit": "px"
-              }
-            },
-            {
-              "color": "rgba(0, 0, 0, 0.8)",
-              "offsetX": {
-                "value": 0,
-                "unit": "px"
-              },
-              "offsetY": {
-                "value": 30,
-                "unit": "px"
-              },
-              "blur": {
-                "value": 80,
-                "unit": "px"
-              },
-              "spread": {
-                "value": -12,
-                "unit": "px"
-              }
-            }
-          ]
-        }
-      }
-    },
-    "control": {
-      "$type": "shadow",
-      "$value": [
-        {
-          "color": "rgba(16, 24, 48, 0.12)",
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": 0,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 0,
-            "unit": "px"
-          },
-          "spread": {
-            "value": 1,
-            "unit": "px"
-          }
-        },
-        {
-          "color": "rgba(16, 24, 48, 0.08)",
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": 1,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 2,
-            "unit": "px"
-          },
-          "spread": {
-            "value": 0,
-            "unit": "px"
-          }
-        },
-        {
-          "color": "rgba(16, 24, 48, 0.04)",
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": -1,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 0,
-            "unit": "px"
-          },
-          "spread": {
-            "value": 0,
-            "unit": "px"
-          },
-          "inset": true
-        }
-      ],
-      "$description": "Secondary controls on a surface: buttons, selects, the segmented control's thumb, the switch thumb",
-      "$extensions": {
-        "network.ome": {
-          "dark": [
-            {
-              "color": "rgba(255, 255, 255, 0.07)",
+              "color": "rgba(255, 255, 255, 0.05)",
               "offsetX": {
                 "value": 0,
                 "unit": "px"
@@ -614,7 +301,95 @@
               }
             },
             {
-              "color": "rgba(0, 0, 0, 0.5)",
+              "color": "rgba(0, 0, 0, 0.6)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 12,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 32,
+                "unit": "px"
+              },
+              "spread": {
+                "value": -8,
+                "unit": "px"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "4": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(16, 24, 48, 0.07)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "rgba(16, 24, 48, 0.06)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 8,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 16,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -4,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "rgba(16, 24, 48, 0.2)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 24,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 48,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -12,
+            "unit": "px"
+          }
+        }
+      ],
+      "$description": "Dialogs, sheets",
+      "$extensions": {
+        "network.ome": {
+          "dark": [
+            {
+              "color": "rgba(255, 255, 255, 0.06)",
               "offsetX": {
                 "value": 0,
                 "unit": "px"
@@ -624,11 +399,139 @@
                 "unit": "px"
               },
               "blur": {
-                "value": 2,
+                "value": 0,
                 "unit": "px"
               },
               "spread": {
                 "value": 0,
+                "unit": "px"
+              },
+              "inset": true
+            },
+            {
+              "color": "rgba(255, 255, 255, 0.1)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 1,
+                "unit": "px"
+              }
+            },
+            {
+              "color": "rgba(0, 0, 0, 0.7)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 24,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 64,
+                "unit": "px"
+              },
+              "spread": {
+                "value": -12,
+                "unit": "px"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "control": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(16, 24, 48, 0.1)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "rgba(16, 24, 48, 0.04)",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 1,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ],
+      "$description": "Secondary controls on a surface: buttons, selects, the segmented control's thumb, the switch thumb",
+      "$extensions": {
+        "network.ome": {
+          "dark": [
+            {
+              "color": "rgba(255, 255, 255, 0.04)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
+            },
+            {
+              "color": "rgba(255, 255, 255, 0.08)",
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 1,
                 "unit": "px"
               }
             }
@@ -640,7 +543,7 @@
       "$type": "shadow",
       "$value": [
         {
-          "color": "rgba(255, 255, 255, 0.2)",
+          "color": "rgba(255, 255, 255, 0.12)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -660,7 +563,7 @@
           "inset": true
         },
         {
-          "color": "rgba(0, 0, 0, 0.12)",
+          "color": "rgba(0, 0, 0, 0.08)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -680,7 +583,7 @@
           "inset": true
         },
         {
-          "color": "rgba(16, 24, 48, 0.24)",
+          "color": "rgba(16, 24, 48, 0.14)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -690,30 +593,11 @@
             "unit": "px"
           },
           "blur": {
-            "value": 2,
+            "value": 1,
             "unit": "px"
           },
           "spread": {
             "value": 0,
-            "unit": "px"
-          }
-        },
-        {
-          "color": "rgba(16, 24, 48, 0.28)",
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": 2,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 6,
-            "unit": "px"
-          },
-          "spread": {
-            "value": -2,
             "unit": "px"
           }
         }
@@ -723,7 +607,7 @@
         "network.ome": {
           "dark": [
             {
-              "color": "rgba(255, 255, 255, 0.18)",
+              "color": "rgba(255, 255, 255, 0.12)",
               "offsetX": {
                 "value": 0,
                 "unit": "px"
@@ -743,7 +627,7 @@
               "inset": true
             },
             {
-              "color": "rgba(0, 0, 0, 0.2)",
+              "color": "rgba(0, 0, 0, 0.15)",
               "offsetX": {
                 "value": 0,
                 "unit": "px"
@@ -761,44 +645,6 @@
                 "unit": "px"
               },
               "inset": true
-            },
-            {
-              "color": "rgba(0, 0, 0, 0.5)",
-              "offsetX": {
-                "value": 0,
-                "unit": "px"
-              },
-              "offsetY": {
-                "value": 1,
-                "unit": "px"
-              },
-              "blur": {
-                "value": 2,
-                "unit": "px"
-              },
-              "spread": {
-                "value": 0,
-                "unit": "px"
-              }
-            },
-            {
-              "color": "rgba(0, 0, 0, 0.5)",
-              "offsetX": {
-                "value": 0,
-                "unit": "px"
-              },
-              "offsetY": {
-                "value": 2,
-                "unit": "px"
-              },
-              "blur": {
-                "value": 6,
-                "unit": "px"
-              },
-              "spread": {
-                "value": -2,
-                "unit": "px"
-              }
             }
           ]
         }
@@ -808,7 +654,7 @@
       "$type": "shadow",
       "$value": [
         {
-          "color": "rgba(16, 24, 48, 0.18)",
+          "color": "rgba(16, 24, 48, 0.1)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -818,7 +664,7 @@
             "unit": "px"
           },
           "blur": {
-            "value": 2,
+            "value": 1,
             "unit": "px"
           },
           "spread": {
@@ -833,7 +679,7 @@
         "network.ome": {
           "dark": [
             {
-              "color": "rgba(0, 0, 0, 0.5)",
+              "color": "rgba(0, 0, 0, 0.4)",
               "offsetX": {
                 "value": 0,
                 "unit": "px"
@@ -843,7 +689,7 @@
                 "unit": "px"
               },
               "blur": {
-                "value": 2,
+                "value": 1,
                 "unit": "px"
               },
               "spread": {
@@ -860,7 +706,7 @@
       "$type": "shadow",
       "$value": [
         {
-          "color": "rgba(16, 24, 48, 0.06)",
+          "color": "rgba(16, 24, 48, 0.03)",
           "offsetX": {
             "value": 0,
             "unit": "px"
@@ -870,7 +716,7 @@
             "unit": "px"
           },
           "blur": {
-            "value": 2,
+            "value": 1,
             "unit": "px"
           },
           "spread": {
@@ -885,7 +731,7 @@
         "network.ome": {
           "dark": [
             {
-              "color": "rgba(0, 0, 0, 0.35)",
+              "color": "rgba(0, 0, 0, 0.2)",
               "offsetX": {
                 "value": 0,
                 "unit": "px"
@@ -895,7 +741,7 @@
                 "unit": "px"
               },
               "blur": {
-                "value": 2,
+                "value": 1,
                 "unit": "px"
               },
               "spread": {
@@ -912,7 +758,7 @@
       "$type": "shadow",
       "$value": [
         {
-          "color": "rgba(91, 127, 224, 0.35)",
+          "color": "rgba(91, 127, 224, 0.25)",
           "offsetX": {
             "value": 0,
             "unit": "px"

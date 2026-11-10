@@ -42,7 +42,7 @@ const textOnSurface: [string, string, number][] = [
   ["fg", "hover", 4.5],
   ["fg", "selected", 4.5],
   ["on-accent", "accent", 4.5],
-  ["fg-inverse", "danger-solid", 4.5],
+  ["on-accent", "danger-solid", 4.5],
   ["fg-inverse", "inverse", 4.5],
   ["success", "success-subtle", 4.5],
   ["warning", "warning-subtle", 4.5],

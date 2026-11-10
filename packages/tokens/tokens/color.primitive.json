@@ -45,6 +45,10 @@
         "$type": "color",
         "$value": "#15224A"
       },
+      "925": {
+        "$type": "color",
+        "$value": "#141B2F"
+      },
       "950": {
         "$type": "color",
         "$value": "#0F1F3D"
@@ -132,6 +136,56 @@
         "$value": "#FFFFFF"
       }
     },
+    "graphite": {
+      "1000": {
+        "$type": "color",
+        "$value": "#050506"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#08090A"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#0E0F11"
+      },
+      "850": {
+        "$type": "color",
+        "$value": "#131416"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#18191C"
+      },
+      "750": {
+        "$type": "color",
+        "$value": "#1E1F23"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#26272C"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#34363C"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#4E5058"
+      },
+      "350": {
+        "$type": "color",
+        "$value": "#7E818B"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#A3A6AE"
+      },
+      "50": {
+        "$type": "color",
+        "$value": "#EDEEF0"
+      }
+    },
     "sun": {
       "100": {
         "$type": "color",
@@ -190,6 +244,10 @@
       "400": {
         "$type": "color",
         "$value": "#F07167"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#C53A35"
       },
       "700": {
         "$type": "color",

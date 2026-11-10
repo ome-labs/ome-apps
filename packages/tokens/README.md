@@ -34,6 +34,10 @@ Both expose the same utility names, so a class reads the same on both platforms:
 | Sizes                       | `h-control-sm` (28) `h-control-md` (32) `h-control-lg` (40), `rounded-md`, …                                          |
 | Depth                       | `shadow-1`…`shadow-4` (surfaces), `shadow-control`, `shadow-accent`, `shadow-pressed`, `shadow-field`, `shadow-focus` |
 
+The light theme is built on the blue-tinted `ink` scale; the dark theme on `graphite`, a neutral
+near-black with no blue cast, so the lake accent is the only colour on screen. Solid danger takes white
+text in both themes (`text-on-accent`).
+
 Shadows follow the theme: in light they cast a soft shadow with a hairline ring; in dark, where a
 shadow on near-black barely reads, they show a faint lit top edge and ring instead. Controls use
 `shadow-control` (or `shadow-accent` on solid colour), `shadow-pressed` while held, and fields sit in
