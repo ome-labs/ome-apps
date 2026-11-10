@@ -1,7 +1,7 @@
 {
-  "name": "ome-landing",
+  "name": "ome-apps",
   "private": true,
-  "description": "The Ome website and documentation",
+  "description": "Ome's apps: desktop, mobile and the website, with their shared UI",
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
