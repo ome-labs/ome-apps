@@ -6,7 +6,6 @@ import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 import { callOme } from "../data/ome.ts";
-import { unwrap } from "../data/session.ts";
 import { StepHeading } from "./layout.tsx";
 import { Reveal } from "./motion.tsx";
 import { isLocal } from "./networks.ts";
@@ -40,7 +39,18 @@ function strength(passphrase: string): string {
  * Step 2: the passphrase that seals the signing key. Creating the profile seals a new key under it, makes the keeper's
  * master key and the member's Aztec account; then the app opens the profile.
  */
-export function PassphraseStep({ draft, onBack }: { draft: ProfileDraft; onBack: () => void }) {
+export function PassphraseStep({
+  draft,
+  position,
+  onBack,
+  onCreated,
+}: {
+  draft: ProfileDraft;
+  position: string;
+  onBack: () => void;
+  /** The profile exists; the first run decides what comes next (Touch ID, or the app). */
+  onCreated: (passphrase: string) => Promise<void>;
+}) {
   const {
     register,
     handleSubmit,
@@ -66,19 +76,18 @@ export function PassphraseStep({ draft, onBack }: { draft: ProfileDraft; onBack:
           // A local network has no prover worth running; Testnet proofs are real.
           await callOme("config.set", { proverEnabled: !isLocal(draft.nodeUrl) });
           setOpening(true);
-          const state = await window.ome.session.state();
-          if (state.phase !== "choose") await unwrap(window.ome.session.open(state.profile));
+          await onCreated(values.passphrase);
         } catch (failure) {
           setOpening(false);
           setError(failure instanceof Error ? failure.message : String(failure));
         }
       }),
-    [draft, handleSubmit],
+    [draft, handleSubmit, onCreated],
   );
 
   return (
     <form className="flex flex-col gap-6" onSubmit={create} noValidate>
-      <StepHeading step="Step 2 of 2" title="Choose a passphrase">
+      <StepHeading step={position} title="Choose a passphrase">
         It seals your signing key on this computer. Nobody can recover it, Ome included, so keep it
         somewhere safe.
       </StepHeading>

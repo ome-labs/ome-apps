@@ -1,19 +1,34 @@
 // The session on the member's own daemon: opens a profile (starting its `omed` when it isn't running), sets up a new
 // one the way `ome init` does, forwards calls and events, and starts the daemon again if it goes away.
-import type { DaemonEvent, DaemonParams, DaemonResult, NodeStatus } from "@ome-labs/api";
+import type {
+  DaemonEvent,
+  DaemonParams,
+  DaemonResult,
+  NodeStatus,
+  SignerStatus,
+} from "@ome-labs/api";
 
 import type {
   Preflight,
   RendererMethod,
   SessionState,
   SetupRequest,
+  TouchIdState,
 } from "../../../bridge/contract.ts";
 import { lastProfile, rememberProfile } from "../../preferences.ts";
 import { OmeError } from "../client.ts";
 import type { AppSession } from "../session.ts";
 import type { DaemonConnection } from "./connection.ts";
-import { listProfiles, omeHome, profileNameFor } from "./home.ts";
+import { listProfiles, omeHome, profileDir, profileNameFor } from "./home.ts";
 import { keeperPath, omedPath, restart, start } from "./launch.ts";
+import {
+  authenticate,
+  forgetSealingKey,
+  readSealingKey,
+  storeSealingKey,
+  touchIdAvailable,
+  touchIdEnabled,
+} from "./touch-id.ts";
 
 const message = (error: unknown) => (error instanceof Error ? error.message : String(error));
 
@@ -105,6 +120,31 @@ export class DaemonSession implements AppSession {
     this.#set({ phase: "choose", profiles: await listProfiles() });
   }
 
+  async touchId(): Promise<TouchIdState> {
+    const profile = this.#profile();
+    return {
+      available: touchIdAvailable(),
+      enabled: profile !== undefined && touchIdEnabled(profileDir(profile)),
+    };
+  }
+
+  async enableTouchId(passphrase: string): Promise<void> {
+    const profile = this.#openProfile();
+    await authenticate("turn on Touch ID for Ome");
+    const { key } = await this.call("signer.sealingKey", { passphrase });
+    await storeSealingKey(profileDir(profile), key);
+  }
+
+  async disableTouchId(): Promise<void> {
+    await forgetSealingKey(profileDir(this.#openProfile()));
+  }
+
+  async unlockWithTouchId(ttlSecs: number): Promise<SignerStatus> {
+    const profile = this.#openProfile();
+    const key = await readSealingKey(profileDir(profile), `unlock Ome profile ${profile}`);
+    return this.call("signer.unlock", { secret: { key }, ttlSecs });
+  }
+
   async call<M extends RendererMethod>(
     method: M,
     params: DaemonParams<M>,
@@ -116,6 +156,13 @@ export class DaemonSession implements AppSession {
   subscribe(listener: (event: DaemonEvent) => void): () => void {
     this.#eventListeners.add(listener);
     return () => this.#eventListeners.delete(listener);
+  }
+
+  /** The profile whose daemon answers now, set up or being set up. */
+  #openProfile(): string {
+    const profile = this.#profile();
+    if (!profile || !this.#connection) throw new OmeError("not-ready", "No profile is open.");
+    return profile;
   }
 
   #profile(): string | undefined {

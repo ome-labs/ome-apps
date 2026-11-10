@@ -31,6 +31,11 @@ The app runs each profile's daemon the way the `ome` CLI does, so both share it:
 - **The first run** does what `ome init` does: starts a daemon for the new member, points it at the node (restarting
   it when the URL changes), checks the node answers, then `profile.create` with the passphrase.
 
+- **Touch ID** (macOS) works like the CLI's `ome signer touch-id on`, so turning it on in one turns it on for both: the
+  signer's sealing key goes into the login keychain (service `ome.signer`, account the profile's folder) behind a
+  Touch ID check, with a `touch-id` marker in the profile. The key moves only between the keychain and the daemon in
+  the main process. The first run offers it as a last step, and the unlock sheet uses it when it's on.
+
 A local network for trying it: `aztec start --local-network`, then choose "Local network" in the first run.
 
 ## Fixtures
@@ -83,5 +88,6 @@ renderer (React)  ──window.ome.call──▶  preload  ──ipc "ome:call"�
 
 ## Not built yet
 
-Bundling `omed` and `ome-keeper` (the app needs them installed, or the core checkout, and Node 24 on `PATH`), Touch ID,
+Bundling `omed` and `ome-keeper` (the app needs them installed, or the core checkout, and Node 24 on `PATH`), turning
+Touch ID on or off from settings,
 code signing and notarization, auto-update, and the release workflow.

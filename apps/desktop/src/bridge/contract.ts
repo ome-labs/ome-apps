@@ -7,6 +7,7 @@ import type {
   DaemonResult,
   ErrorKind,
   NodeStatus,
+  SignerStatus,
 } from "@ome-labs/api";
 
 /** Methods only the main process uses: the session handshake, the event stream and stopping the daemon. */
@@ -125,6 +126,12 @@ export interface Preflight {
   keeper: string | null;
 }
 
+/** Whether this Mac can use Touch ID, and whether the open profile unlocks with it. */
+export interface TouchIdState {
+  available: boolean;
+  enabled: boolean;
+}
+
 /** The first step of setting up: who the member is and which node their account lives on. */
 export interface SetupRequest {
   member: string;
@@ -171,6 +178,16 @@ export interface OmeBridge {
     /** Leaves the profile for the list of profiles (or the first run). */
     leave(): Promise<Outcome<null>>;
   };
+  /**
+   * Touch ID for the open profile (macOS). The sealing key it guards stays in the main process: turning it on takes
+   * the passphrase once, and unlocking asks for a fingerprint, not the key.
+   */
+  touchId: {
+    state(): Promise<TouchIdState>;
+    enable(passphrase: string): Promise<Outcome<null>>;
+    disable(): Promise<Outcome<null>>;
+    unlock(ttlSecs: number): Promise<Outcome<SignerStatus>>;
+  };
   /** Development builds only: pick the data source and the fixture scenario. */
   dev?: {
     get(): Promise<DevState>;
@@ -201,6 +218,10 @@ export const CHANNELS = {
   sessionSetup: "ome:session:setup",
   sessionRetry: "ome:session:retry",
   sessionLeave: "ome:session:leave",
+  touchIdState: "ome:touch-id:state",
+  touchIdEnable: "ome:touch-id:enable",
+  touchIdDisable: "ome:touch-id:disable",
+  touchIdUnlock: "ome:touch-id:unlock",
   devGet: "ome:dev:get",
   devSet: "ome:dev:set",
 } as const;

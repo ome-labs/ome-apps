@@ -116,6 +116,12 @@ export class FixtureClient implements OmeClient {
       this.#emit({ type: "signer", signer: next });
       return next;
     },
+    "signer.sealingKey": ({ passphrase }) => {
+      if (passphrase === "wrong") {
+        throw new OmeError("auth", "The passphrase doesn't unseal this profile's signer.");
+      }
+      return { key: `0x${"5e".repeat(32)}` as Hex32 };
+    },
     "signer.lock": () => {
       this.#unlockedUntil = null;
       const next = signer(this.#scenario, now(), null);

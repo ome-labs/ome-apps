@@ -1,12 +1,13 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { UnlockSheet, type UnlockRequest } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
+import { unwrap } from "../data/session.ts";
 
 /**
- * Unlocking the signer with the passphrase, for as long as the member picks up to the daemon's ceiling. Touch ID needs
- * the sealing key kept in the keychain, which arrives with the real daemon (Phase 7).
+ * Unlocking the signer for as long as the member picks, up to the daemon's ceiling: with the passphrase, or with
+ * Touch ID when this profile keeps its sealing key in the keychain (the key never leaves the main process).
  */
 export function Unlock({
   open,
@@ -19,6 +20,21 @@ export function Unlock({
 }) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string>();
+  const [touchId, setTouchId] = useState(false);
+
+  // Asked each time the sheet opens: Touch ID can be turned on or off in the meantime (from the CLI too).
+  useEffect(() => {
+    if (!open) return;
+    let live = true;
+    const check = async (): Promise<void> => {
+      const state = await window.ome.touchId.state();
+      if (live) setTouchId(state.available && state.enabled);
+    };
+    void check();
+    return () => {
+      live = false;
+    };
+  }, [open]);
 
   const change = useCallback(
     (next: boolean) => {
@@ -30,13 +46,17 @@ export function Unlock({
 
   const unlock = useCallback(
     async (request: UnlockRequest) => {
-      if (request.method !== "passphrase") return;
       setPending(true);
+      setError(undefined);
       try {
-        await callOme("signer.unlock", {
-          secret: { passphrase: request.passphrase },
-          ttlSecs: request.ttlSecs,
-        });
+        if (request.method === "touchId") {
+          await unwrap(window.ome.touchId.unlock(request.ttlSecs));
+        } else {
+          await callOme("signer.unlock", {
+            secret: { passphrase: request.passphrase },
+            ttlSecs: request.ttlSecs,
+          });
+        }
         change(false);
       } catch (failure) {
         setError(failure instanceof Error ? failure.message : String(failure));
@@ -53,6 +73,7 @@ export function Unlock({
       onOpenChange={change}
       onUnlock={unlock}
       maxDuration={maxSeconds}
+      touchId={touchId}
       error={error}
       pending={pending}
     />

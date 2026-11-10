@@ -37,10 +37,12 @@ function defaultsFrom(draft: ProfileDraft | undefined): Values {
  */
 export function ProfileStep({
   draft,
+  position,
   onBack,
   onReady,
 }: {
   draft: ProfileDraft | undefined;
+  position: string;
   onBack: () => void;
   onReady: (draft: ProfileDraft) => void;
 }) {
@@ -83,7 +85,7 @@ export function ProfileStep({
 
   return (
     <form className="flex flex-col gap-6" onSubmit={submit} noValidate>
-      <StepHeading step="Step 1 of 2" title="Create your profile">
+      <StepHeading step={position} title="Create your profile">
         One profile is one member on this computer. Ome starts a daemon for it that keeps your
         wallet and signing key.
       </StepHeading>

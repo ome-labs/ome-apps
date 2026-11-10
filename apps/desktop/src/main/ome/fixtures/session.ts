@@ -1,12 +1,20 @@
 // The session on the sample data: one profile (Alice's) in the chosen scenario. "no-profile" starts at the first run
 // and "daemon-down" at the failed daemon; setting up a profile moves to "no-vaults", as a new member would be.
-import type { DaemonEvent, DaemonParams, DaemonResult, NodeStatus } from "@ome-labs/api";
+import type {
+  DaemonEvent,
+  DaemonParams,
+  DaemonResult,
+  Hex32,
+  NodeStatus,
+  SignerStatus,
+} from "@ome-labs/api";
 
 import type {
   Preflight,
   RendererMethod,
   SessionState,
   SetupRequest,
+  TouchIdState,
 } from "../../../bridge/contract.ts";
 import type { AppSession } from "../session.ts";
 import { FixtureClient } from "./client.ts";
@@ -14,6 +22,8 @@ import type { Scenario } from "./scenarios.ts";
 import { node } from "./status.ts";
 
 const PROFILE = "alice";
+/** What the fixtures keep behind "Touch ID": any key unlocks the fixture signer. */
+const SEALING_KEY = `0x${"5e".repeat(32)}` as Hex32;
 
 function stateFor(scenario: Scenario): SessionState {
   if (scenario === "no-profile") return { phase: "choose", profiles: [] };
@@ -30,6 +40,7 @@ function stateFor(scenario: Scenario): SessionState {
 export class FixtureSession implements AppSession {
   readonly client: FixtureClient;
   #state: SessionState;
+  #touchId = false;
   readonly #listeners = new Set<(state: SessionState) => void>();
 
   constructor(scenario: Scenario) {
@@ -73,6 +84,24 @@ export class FixtureSession implements AppSession {
 
   async leave(): Promise<void> {
     this.#set({ phase: "choose", profiles: [{ name: PROFILE, member: "Alice" }] });
+  }
+
+  // Touch ID is simulated as available everywhere, with no prompt, so its screens can be designed on any machine.
+  async touchId(): Promise<TouchIdState> {
+    return { available: true, enabled: this.#touchId };
+  }
+
+  async enableTouchId(passphrase: string): Promise<void> {
+    await this.client.call("signer.sealingKey", { passphrase });
+    this.#touchId = true;
+  }
+
+  async disableTouchId(): Promise<void> {
+    this.#touchId = false;
+  }
+
+  unlockWithTouchId(ttlSecs: number): Promise<SignerStatus> {
+    return this.client.call("signer.unlock", { secret: { key: SEALING_KEY }, ttlSecs });
   }
 
   call<M extends RendererMethod>(method: M, params: DaemonParams<M>): Promise<DaemonResult<M>> {

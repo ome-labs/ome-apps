@@ -1,8 +1,8 @@
 // The app's session: which profile it's on, whether that profile's daemon answers, and the calls and events of that
 // daemon. Two implementations: `daemon/session.ts` (the member's `omed`) and `fixtures/session.ts` (sample data).
-import type { NodeStatus } from "@ome-labs/api";
+import type { NodeStatus, SignerStatus } from "@ome-labs/api";
 
-import type { Preflight, SessionState, SetupRequest } from "../../bridge/contract.ts";
+import type { Preflight, SessionState, SetupRequest, TouchIdState } from "../../bridge/contract.ts";
 import type { OmeClient } from "./client.ts";
 
 export interface AppSession extends OmeClient {
@@ -16,4 +16,10 @@ export interface AppSession extends OmeClient {
   setup(request: SetupRequest): Promise<NodeStatus>;
   retry(): Promise<void>;
   leave(): Promise<void>;
+  touchId(): Promise<TouchIdState>;
+  /** Derives the sealing key from the passphrase (`signer.sealingKey`) and keeps it behind Touch ID. */
+  enableTouchId(passphrase: string): Promise<void>;
+  disableTouchId(): Promise<void>;
+  /** Asks for Touch ID, then unlocks the signer with the kept key. */
+  unlockWithTouchId(ttlSecs: number): Promise<SignerStatus>;
 }

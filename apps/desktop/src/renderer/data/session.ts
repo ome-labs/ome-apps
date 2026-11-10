@@ -29,3 +29,9 @@ export async function unwrap<T>(request: Promise<Outcome<T>>): Promise<T> {
   if (!outcome.ok) throw new OmeCallError(outcome.error.kind, outcome.error.message);
   return outcome.value;
 }
+
+/** Opens the profile the first run just set up, which moves the window into the app. */
+export async function openNewProfile(): Promise<void> {
+  const state = await window.ome.session.state();
+  if (state.phase !== "choose") await unwrap(window.ome.session.open(state.profile));
+}

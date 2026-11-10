@@ -43,6 +43,17 @@ const bridge: OmeBridge = {
     retry: () => ipcRenderer.invoke(CHANNELS.sessionRetry) as Promise<Outcome<null>>,
     leave: () => ipcRenderer.invoke(CHANNELS.sessionLeave) as Promise<Outcome<null>>,
   },
+  touchId: {
+    state: () =>
+      ipcRenderer.invoke(CHANNELS.touchIdState) as ReturnType<OmeBridge["touchId"]["state"]>,
+    enable: (passphrase) =>
+      ipcRenderer.invoke(CHANNELS.touchIdEnable, passphrase) as Promise<Outcome<null>>,
+    disable: () => ipcRenderer.invoke(CHANNELS.touchIdDisable) as Promise<Outcome<null>>,
+    unlock: (ttlSecs) =>
+      ipcRenderer.invoke(CHANNELS.touchIdUnlock, ttlSecs) as ReturnType<
+        OmeBridge["touchId"]["unlock"]
+      >,
+  },
   onEvent(listener) {
     const handler = (_event: IpcRendererEvent, event: DaemonEvent) => listener(event);
     ipcRenderer.on(CHANNELS.event, handler);

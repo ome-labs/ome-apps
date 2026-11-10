@@ -65,7 +65,7 @@ test("opens on the default vault's overview", async () => {
   await app.close();
 });
 
-test("sets up a profile from the first run", async () => {
+test("sets up a profile from the first run, with Touch ID", async () => {
   const app = await electron.launch({
     args: [join(import.meta.dirname, "..")],
     env: {
@@ -90,6 +90,16 @@ test("sets up a profile from the first run", async () => {
   await page.getByLabel("Passphrase again").fill("correct horse");
   await page.getByRole("button", { name: "Create profile" }).click();
 
+  // The fixtures offer Touch ID everywhere and simulate the fingerprint.
+  await expect(page.getByRole("heading", { name: "Unlock with Touch ID" })).toBeVisible();
+  await page.getByRole("button", { name: "Use Touch ID" }).click();
   await expect(page.getByRole("button", { name: /Alice/ })).toBeVisible();
+
+  await page
+    .getByRole("button", { name: /Unlock/ })
+    .first()
+    .click();
+  await page.getByRole("button", { name: /Touch ID/ }).click();
+  await expect(page.getByText(/Unlocked/)).toBeVisible();
   await app.close();
 });

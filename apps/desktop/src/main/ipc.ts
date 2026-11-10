@@ -77,7 +77,30 @@ function control(run: (window: BrowserWindow) => void) {
   };
 }
 
+function registerTouchId(): void {
+  ipcMain.handle(CHANNELS.touchIdState, (event) => (fromApp(event) ? session().touchId() : null));
+  ipcMain.handle(CHANNELS.touchIdEnable, (event, passphrase: unknown) =>
+    outcome(event, async () => {
+      if (typeof passphrase !== "string") throw new OmeError("invalid", "Give the passphrase.");
+      await session().enableTouchId(passphrase);
+      return null;
+    }),
+  );
+  ipcMain.handle(CHANNELS.touchIdDisable, (event) =>
+    outcome(event, async () => (await session().disableTouchId(), null)),
+  );
+  ipcMain.handle(CHANNELS.touchIdUnlock, (event, ttlSecs: unknown) =>
+    outcome(event, () => {
+      if (typeof ttlSecs !== "number" || !Number.isInteger(ttlSecs) || ttlSecs <= 0) {
+        throw new OmeError("invalid", "Say how long to stay unlocked, in seconds.");
+      }
+      return session().unlockWithTouchId(ttlSecs);
+    }),
+  );
+}
+
 export function registerIpc(): void {
+  registerTouchId();
   ipcMain.on(
     CHANNELS.windowMinimize,
     control((window) => window.minimize()),
