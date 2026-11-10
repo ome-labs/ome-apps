@@ -25,7 +25,8 @@ export function AppFrame() {
   const blocked = daemonStates(status);
   if (blocked || !status.data) return blocked;
 
-  const vault = routeVault ?? status.data.defaultVault ?? undefined;
+  // The vault in the address, else the default, else the first: a member who just founded one has no default yet.
+  const vault = routeVault ?? status.data.defaultVault ?? status.data.vaults[0]?.address;
   return (
     <>
       <AppShell
