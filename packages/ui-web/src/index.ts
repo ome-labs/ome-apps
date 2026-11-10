@@ -49,6 +49,7 @@ export { ReviewPanel, type ReviewPanelProps } from "./review/review-panel.tsx";
 
 export { CodeBox, type CodeBoxProps } from "./codes/code-box.tsx";
 export { QrCode, type QrCodeProps } from "./codes/qr-code.tsx";
+export { QrButton, type QrButtonProps } from "./codes/qr-button.tsx";
 
 export { Banner, type BannerProps } from "./feedback/banner.tsx";
 export { Toaster, toast } from "./feedback/toaster.tsx";

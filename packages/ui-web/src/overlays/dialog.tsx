@@ -58,15 +58,18 @@ export function Dialog({
             className,
           )}
         >
+          {/* The title and what it's about read as one heading, apart from the content below. */}
           <div className="flex items-start justify-between gap-4">
-            <BaseDialog.Title className="type-heading-m text-fg">{title}</BaseDialog.Title>
+            <div className="flex min-w-0 flex-col gap-1">
+              <BaseDialog.Title className="type-heading-m text-fg">{title}</BaseDialog.Title>
+              {description ? (
+                <BaseDialog.Description className="type-body-s text-fg-muted">
+                  {description}
+                </BaseDialog.Description>
+              ) : null}
+            </div>
             <BaseDialog.Close render={<IconButton icon="x" label="Close" size="sm" />} />
           </div>
-          {description ? (
-            <BaseDialog.Description className="type-body-s text-fg-muted">
-              {description}
-            </BaseDialog.Description>
-          ) : null}
           {children}
           {actions ? <div className="flex justify-end gap-2">{actions}</div> : null}
         </BaseDialog.Popup>
