@@ -1,0 +1,4 @@
+{
+  "extends": "klarity/tsconfig/app/react-native",
+  "include": ["src"]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@ome-labs/brand",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Ome brand assets: logo, mark, app icons, fonts, textures, pixel objects and illustrations",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "oxlint --deny-warnings .",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "klarity": "catalog:",
+    "oxlint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@ome-labs/ui-native",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Ome UI components for React Native: React Native Reusables on RN Primitives, Uniwind",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "oxlint --deny-warnings .",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "klarity": "catalog:",
+    "oxlint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

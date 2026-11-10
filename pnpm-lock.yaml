@@ -224,6 +224,78 @@ importers:
         specifier: 'catalog:'
         version: 7.0.2
 
+  packages/brand:
+    devDependencies:
+      klarity:
+        specifier: 'catalog:'
+        version: 0.3.0(@commitlint/cli@21.2.4(conventional-commits-parser@7.1.4)(typescript@7.0.2))(@commitlint/config-conventional@21.2.4)(lefthook@2.2.2)(oxfmt@0.77.0)(oxlint@1.92.0)(turbo@2.11.10)(typescript@7.0.2)
+      oxlint:
+        specifier: 'catalog:'
+        version: 1.92.0
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+
+  packages/format:
+    devDependencies:
+      klarity:
+        specifier: 'catalog:'
+        version: 0.3.0(@commitlint/cli@21.2.4(conventional-commits-parser@7.1.4)(typescript@7.0.2))(@commitlint/config-conventional@21.2.4)(lefthook@2.2.2)(oxfmt@0.77.0)(oxlint@1.92.0)(turbo@2.11.10)(typescript@7.0.2)
+      oxlint:
+        specifier: 'catalog:'
+        version: 1.92.0
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+
+  packages/icons:
+    devDependencies:
+      klarity:
+        specifier: 'catalog:'
+        version: 0.3.0(@commitlint/cli@21.2.4(conventional-commits-parser@7.1.4)(typescript@7.0.2))(@commitlint/config-conventional@21.2.4)(lefthook@2.2.2)(oxfmt@0.77.0)(oxlint@1.92.0)(turbo@2.11.10)(typescript@7.0.2)
+      oxlint:
+        specifier: 'catalog:'
+        version: 1.92.0
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+
+  packages/tokens:
+    devDependencies:
+      klarity:
+        specifier: 'catalog:'
+        version: 0.3.0(@commitlint/cli@21.2.4(conventional-commits-parser@7.1.4)(typescript@7.0.2))(@commitlint/config-conventional@21.2.4)(lefthook@2.2.2)(oxfmt@0.77.0)(oxlint@1.92.0)(turbo@2.11.10)(typescript@7.0.2)
+      oxlint:
+        specifier: 'catalog:'
+        version: 1.92.0
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+
+  packages/ui-native:
+    devDependencies:
+      klarity:
+        specifier: 'catalog:'
+        version: 0.3.0(@commitlint/cli@21.2.4(conventional-commits-parser@7.1.4)(typescript@7.0.2))(@commitlint/config-conventional@21.2.4)(lefthook@2.2.2)(oxfmt@0.77.0)(oxlint@1.92.0)(turbo@2.11.10)(typescript@7.0.2)
+      oxlint:
+        specifier: 'catalog:'
+        version: 1.92.0
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+
+  packages/ui-web:
+    devDependencies:
+      klarity:
+        specifier: 'catalog:'
+        version: 0.3.0(@commitlint/cli@21.2.4(conventional-commits-parser@7.1.4)(typescript@7.0.2))(@commitlint/config-conventional@21.2.4)(lefthook@2.2.2)(oxfmt@0.77.0)(oxlint@1.92.0)(turbo@2.11.10)(typescript@7.0.2)
+      oxlint:
+        specifier: 'catalog:'
+        version: 1.92.0
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+
 packages:
 
   '@babel/code-frame@7.29.7':

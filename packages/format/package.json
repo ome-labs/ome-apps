@@ -1,0 +1,20 @@
+{
+  "name": "@ome-labs/format",
+  "version": "0.0.0",
+  "private": true,
+  "description": "How Ome writes amounts, addresses, times, thresholds and statuses",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "oxlint --deny-warnings .",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "klarity": "catalog:",
+    "oxlint": "catalog:",
+    "typescript": "catalog:"
+  }
+}
