@@ -1,6 +1,6 @@
 // The only doors between the renderer and the main process: a daemon call (allowlisted), the event stream, the
 // session (which profile, and its daemon), preferences, and in development builds the dev switches.
-import { app, ipcMain, type IpcMainInvokeEvent } from "electron";
+import { app, BrowserWindow, type IpcMainEvent, ipcMain, type IpcMainInvokeEvent } from "electron";
 
 import {
   CHANNELS,
@@ -17,7 +17,7 @@ import { isAppUrl } from "./security.ts";
 import { devState, session, setDevState } from "./sources.ts";
 
 /** Calls must come from the app's own page, not from anything that got loaded into a frame. */
-function fromApp(event: IpcMainInvokeEvent): boolean {
+function fromApp(event: IpcMainInvokeEvent | IpcMainEvent): boolean {
   const url = event.senderFrame?.url;
   return url !== undefined && isAppUrl(url);
 }
@@ -69,7 +69,27 @@ function setupRequest(request: unknown): SetupRequest {
   return { member: name, nodeUrl };
 }
 
+/** Runs a window control on the window whose page asked. */
+function control(run: (window: BrowserWindow) => void) {
+  return (event: IpcMainEvent): void => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+    if (window && fromApp(event)) run(window);
+  };
+}
+
 export function registerIpc(): void {
+  ipcMain.on(
+    CHANNELS.windowMinimize,
+    control((window) => window.minimize()),
+  );
+  ipcMain.on(
+    CHANNELS.windowToggleMaximize,
+    control((window) => (window.isMaximized() ? window.unmaximize() : window.maximize())),
+  );
+  ipcMain.on(
+    CHANNELS.windowClose,
+    control((window) => window.close()),
+  );
   ipcMain.handle(CHANNELS.call, call);
   ipcMain.handle(CHANNELS.sessionState, (event) => (fromApp(event) ? session().state() : null));
   ipcMain.handle(CHANNELS.sessionPreflight, (event) =>

@@ -148,6 +148,16 @@ export interface OmeBridge {
     get(): Promise<Preferences>;
     set(patch: Partial<Preferences>): Promise<Preferences>;
   };
+  /**
+   * The window's own controls: the app draws its title bar on every platform. macOS keeps its traffic lights inset in
+   * it; elsewhere the app draws minimise, maximise and close.
+   */
+  window: {
+    platform: string;
+    minimize(): void;
+    toggleMaximize(): void;
+    close(): void;
+  };
   session: {
     state(): Promise<SessionState>;
     onState(listener: (state: SessionState) => void): () => void;
@@ -181,6 +191,9 @@ export const CHANNELS = {
   event: "ome:event",
   preferencesGet: "ome:preferences:get",
   preferencesSet: "ome:preferences:set",
+  windowMinimize: "ome:window:minimize",
+  windowToggleMaximize: "ome:window:toggle-maximize",
+  windowClose: "ome:window:close",
   sessionState: "ome:session:state",
   sessionChanged: "ome:session:changed",
   sessionPreflight: "ome:session:preflight",

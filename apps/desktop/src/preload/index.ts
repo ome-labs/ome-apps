@@ -21,6 +21,12 @@ const bridge: OmeBridge = {
     get: () => ipcRenderer.invoke(CHANNELS.preferencesGet) as Promise<Preferences>,
     set: (patch) => ipcRenderer.invoke(CHANNELS.preferencesSet, patch) as Promise<Preferences>,
   },
+  window: {
+    platform: process.platform,
+    minimize: () => ipcRenderer.send(CHANNELS.windowMinimize),
+    toggleMaximize: () => ipcRenderer.send(CHANNELS.windowToggleMaximize),
+    close: () => ipcRenderer.send(CHANNELS.windowClose),
+  },
   session: {
     state: () => ipcRenderer.invoke(CHANNELS.sessionState) as Promise<SessionState>,
     onState(listener) {

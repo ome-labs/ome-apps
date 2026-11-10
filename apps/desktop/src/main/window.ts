@@ -20,6 +20,15 @@ function restoredBounds(): Partial<Rectangle> {
   return visible ? saved : { width: saved.width, height: saved.height };
 }
 
+/**
+ * The app draws its own title bar on every platform, so they all look alike: macOS keeps its traffic lights, inset to
+ * sit in the app's 48-pixel top bar; Linux and Windows get a frameless window and the app's own controls.
+ */
+const chrome =
+  process.platform === "darwin"
+    ? ({ titleBarStyle: "hidden", trafficLightPosition: { x: 18, y: 18 } } as const)
+    : ({ frame: false } as const);
+
 /** The main window, sandboxed and isolated, its only access to Node being the preload's bridge. */
 export function createWindow(): BrowserWindow {
   const window = new BrowserWindow({
@@ -30,6 +39,7 @@ export function createWindow(): BrowserWindow {
     minHeight: 640,
     show: false,
     title: "Ome",
+    ...chrome,
     webPreferences: {
       preload: join(import.meta.dirname, "../preload/index.cjs"),
       contextIsolation: true,

@@ -16,3 +16,12 @@
     cursor: pointer;
   }
 }
+
+/* The app's title bar: its empty parts move the window, its controls stay clickable. */
+.app-drag {
+  -webkit-app-region: drag;
+}
+.app-drag
+  :is(button, a, input, select, textarea, [role="button"], [role="menuitem"], [role="combobox"]) {
+  -webkit-app-region: no-drag;
+}

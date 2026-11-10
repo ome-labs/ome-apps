@@ -7,6 +7,7 @@ import { Menu, MemberAvatar, TopBar, type NodeState } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
 import { useNow } from "./now.ts";
+import { IS_MAC, WindowControls } from "./window-chrome.tsx";
 
 const LOCAL_CHAIN = 31_337;
 
@@ -23,7 +24,10 @@ function nodeState(node: NodeStatus): NodeState {
 
 const lock = (): void => void callOme("signer.lock", {});
 
-/** The top bar: network and node, keeper, signer and the profile menu, from the daemon's status. */
+/**
+ * The top bar, which is also the window's title bar: network and node, keeper, signer and the profile menu, from the
+ * daemon's status. Its empty parts move the window.
+ */
 export function StatusBar({ status, onUnlock }: { status: Status; onUnlock: () => void }) {
   const now = useNow();
   const navigate = useNavigate();
@@ -51,30 +55,35 @@ export function StatusBar({ status, onUnlock }: { status: Status; onUnlock: () =
   );
 
   return (
-    <TopBar
-      node={nodeState(node)}
-      keeper={keeper.status}
-      signer={signerState}
-      now={now}
-      onLock={lock}
-      onUnlock={onUnlock}
-      profile={
-        profile ? (
-          <Menu
-            align="end"
-            items={menu}
-            trigger={
-              <button
-                type="button"
-                className="flex items-center gap-2 rounded-md px-1.5 py-1 type-label-m text-fg"
-              >
-                <MemberAvatar name={profile.name} index={1} size="sm" />
-                {profile.name}
-              </button>
-            }
-          />
-        ) : null
-      }
-    />
+    <div className="app-drag flex shrink-0 items-center bg-canvas pr-2">
+      <TopBar
+        className="min-w-0 flex-1"
+        windowControlsInset={IS_MAC}
+        node={nodeState(node)}
+        keeper={keeper.status}
+        signer={signerState}
+        now={now}
+        onLock={lock}
+        onUnlock={onUnlock}
+        profile={
+          profile ? (
+            <Menu
+              align="end"
+              items={menu}
+              trigger={
+                <button
+                  type="button"
+                  className="flex items-center gap-2 rounded-md px-1.5 py-1 type-label-m text-fg"
+                >
+                  <MemberAvatar name={profile.name} index={1} size="sm" />
+                  {profile.name}
+                </button>
+              }
+            />
+          ) : null
+        }
+      />
+      <WindowControls />
+    </div>
   );
 }
