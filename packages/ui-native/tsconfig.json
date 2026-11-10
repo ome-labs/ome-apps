@@ -1,4 +1,9 @@
 {
   "extends": "klarity/tsconfig/app/react-native",
-  "include": ["src"]
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "lib": ["ESNext"],
+    "types": ["jest"]
+  },
+  "include": ["src", "tests", "*.config.ts", "*.config.js", "jest.setup.ts"]
 }
