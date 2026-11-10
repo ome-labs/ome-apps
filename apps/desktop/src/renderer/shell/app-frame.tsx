@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { Navigate, Outlet, useParams } from "@tanstack/react-router";
+import { Outlet, useParams } from "@tanstack/react-router";
 
 import { AppShell } from "@ome-labs/ui-web";
 
@@ -13,8 +13,8 @@ import { StatusBar } from "./status-bar.tsx";
 import { Unlock } from "./unlock.tsx";
 
 /**
- * Every page inside the app: the top bar, the sidebar and what's wrong right now. Before that, the states that replace
- * the whole window: still reaching the daemon, no daemon, no profile yet.
+ * Every page inside the app: the top bar, the sidebar and what's wrong right now. Before the status is in, the states
+ * that replace the whole window.
  */
 export function AppFrame() {
   const status = useOme("status", {});
@@ -24,7 +24,6 @@ export function AppFrame() {
 
   const blocked = daemonStates(status);
   if (blocked || !status.data) return blocked;
-  if (!status.data.profile) return <Navigate to="/welcome" />;
 
   const vault = routeVault ?? status.data.defaultVault ?? undefined;
   return (

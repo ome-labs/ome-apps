@@ -5,11 +5,11 @@ import type { UseQueryResult } from "@tanstack/react-query";
 import type { Status } from "@ome-labs/api";
 
 import { failureKind } from "../data/failure.ts";
-import { FullScreen } from "./full-screen.tsx";
+import { FullScreen, RunButton } from "./full-screen.tsx";
 
 /**
- * The whole-window states before the app can show anything: still reaching the daemon, no daemon, or a failure.
- * `null` once the status is in, so the caller renders the app.
+ * The whole-window states while the status is on its way: still loading, no daemon, a failure, or a daemon with no
+ * member in it. `null` once the status is in, so the caller renders the app.
  */
 export function daemonStates(status: UseQueryResult<Status, Error>): ReactNode | null {
   if (status.isPending) {
@@ -20,7 +20,7 @@ export function daemonStates(status: UseQueryResult<Status, Error>): ReactNode |
       <FullScreen
         illustration="daemon-failed"
         title="Ome's daemon isn't running"
-        onRetry={status.refetch}
+        action={<RunButton run={status.refetch}>Try again</RunButton>}
       >
         The daemon keeps your wallet and signing key for this profile. Start it again; if it keeps
         stopping, its log says why.
@@ -29,8 +29,24 @@ export function daemonStates(status: UseQueryResult<Status, Error>): ReactNode |
   }
   if (status.isError) {
     return (
-      <FullScreen illustration="not-found" title="Something went wrong" onRetry={status.refetch}>
+      <FullScreen
+        illustration="not-found"
+        title="Something went wrong"
+        action={<RunButton run={status.refetch}>Try again</RunButton>}
+      >
         {status.error.message}
+      </FullScreen>
+    );
+  }
+  if (!status.data.profile) {
+    return (
+      <FullScreen
+        illustration="create-profile"
+        title="This profile isn't set up"
+        action={<RunButton run={window.ome.session.leave}>Use another profile</RunButton>}
+      >
+        Its daemon runs, but no member was created in it. Set it up from the first run, or open
+        another profile.
       </FullScreen>
     );
   }

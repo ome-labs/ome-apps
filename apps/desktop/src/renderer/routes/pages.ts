@@ -14,15 +14,6 @@ export interface Page {
   methods: readonly RendererMethod[];
 }
 
-/** First run, shown without the shell. */
-export const WELCOME_PAGE: Page = {
-  path: "/welcome",
-  icon: "home",
-  title: "Welcome",
-  section: "5.1–5.3",
-  methods: ["profile.create", "signer.sealingKey"],
-};
-
 export const APP_PAGES: readonly Page[] = [
   {
     path: "/home",

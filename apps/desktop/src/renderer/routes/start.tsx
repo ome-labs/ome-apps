@@ -5,7 +5,7 @@ import { Navigate } from "@tanstack/react-router";
 import { useOme } from "../data/ome.ts";
 import { daemonStates } from "../shell/daemon-states.tsx";
 
-/** `/`: first run without a profile, Home without a vault, else the default vault's overview. */
+/** `/`: Home without a vault, else the default vault's overview. */
 export function Start() {
   const status = useOme("status", {});
   const vault = status.data?.defaultVault ?? status.data?.vaults[0]?.address;
@@ -14,7 +14,6 @@ export function Start() {
   const blocked = daemonStates(status);
   if (blocked || !status.data) return blocked;
 
-  if (!status.data.profile) return <Navigate to="/welcome" />;
   if (!vault) return <Navigate to="/home" />;
   return <Navigate to="/vaults/$vault" params={params} />;
 }
