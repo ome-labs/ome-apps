@@ -14,7 +14,7 @@ export function Page({
 }) {
   return (
     <div className="flex flex-col gap-7">
-      <header className="flex items-end justify-between gap-6">
+      <header className="flex items-start justify-between gap-6">
         <div className="flex min-w-0 flex-col gap-1.5">
           <h1 className="type-heading-xl text-fg">{title}</h1>
           {lead ? <p className="type-body-m text-fg-muted">{lead}</p> : null}

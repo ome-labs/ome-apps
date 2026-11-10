@@ -20,7 +20,7 @@ export function FullScreen({
   return (
     <div className="relative grid h-dvh place-items-center bg-canvas p-10">
       <TitleStrip />
-      <EmptyState scene={scene} large title={title} action={action} className="max-w-md">
+      <EmptyState scene={scene} size="lg" title={title} action={action} className="max-w-md">
         {children}
       </EmptyState>
     </div>

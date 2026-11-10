@@ -11,9 +11,16 @@ export type EmptyStateProps = {
   title: string;
   children?: ReactNode | undefined;
   action?: ReactNode | undefined;
-  /** A bigger picture, for states that fill a whole window. */
-  large?: boolean | undefined;
+  /** The picture: `md` inside a card, `lg` for states that fill a window, `xl` for a page that is only this. */
+  size?: "md" | "lg" | "xl" | undefined;
   className?: string | undefined;
+};
+
+// Scenes are drawn on a 320 × 200 grid, so each size keeps that shape.
+const PICTURE = {
+  md: "h-[120px] w-48",
+  lg: "h-[200px] w-80",
+  xl: "aspect-[8/5] w-[480px] max-w-full",
 };
 
 /** Page 39's empty state: a small scene, what's missing, and the one thing to do about it. */
@@ -23,13 +30,10 @@ export function EmptyState({
   title,
   children,
   action,
-  large,
+  size = "md",
   className,
 }: EmptyStateProps) {
-  const picture = cn(
-    "rounded-md object-cover shadow-1",
-    large ? "h-[200px] w-80" : "h-[120px] w-48",
-  );
+  const picture = cn("rounded-md object-cover shadow-1", PICTURE[size]);
   return (
     <div className={cn("flex flex-col items-center gap-3 px-6 py-7 text-center", className)}>
       {/* The title says what the scene shows, so the image is decorative here. */}

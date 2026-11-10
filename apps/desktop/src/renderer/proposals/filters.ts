@@ -11,10 +11,10 @@ const MATCHES: Record<ProposalFilter, (status: ProposalStatus) => boolean> = {
 };
 
 export const FILTERS: { id: ProposalFilter; label: string }[] = [
+  { id: "all", label: "All" },
   { id: "open", label: "Open" },
   { id: "ready", label: "Ready" },
   { id: "done", label: "Done" },
-  { id: "all", label: "All" },
 ];
 
 export function matching(proposals: ProposalView[], filter: ProposalFilter): ProposalView[] {

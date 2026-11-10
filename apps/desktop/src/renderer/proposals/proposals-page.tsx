@@ -20,13 +20,13 @@ const EMPTY = {
   },
 } as const;
 
-/** `/vaults/$vault/proposals`: every proposal in the vault, open ones first. */
+/** `/vaults/$vault/proposals`: every proposal in the vault, newest first. */
 export function ProposalsPage() {
   const { vault } = useParams({ strict: false }) as { vault: Hex32 };
   const navigate = useNavigate();
   const now = useNow();
   const list = useOme("proposals.list", { vault });
-  const [filter, setFilter] = useState<ProposalFilter>("open");
+  const [filter, setFilter] = useState<ProposalFilter>("all");
 
   const proposals = useMemo(() => list.data ?? [], [list.data]);
   const shown = useMemo(() => matching(proposals, filter), [proposals, filter]);
@@ -67,6 +67,7 @@ export function ProposalsPage() {
         {list.data && shown.length === 0 ? (
           <EmptyState
             scene="no-proposals"
+            size="xl"
             title={EMPTY[filter].title}
             action={
               filter === "open" || filter === "all" ? (
