@@ -81,8 +81,9 @@ export function vaultDetails(scenario: Scenario, now: number): VaultDetails {
         addresses: [`/ip4/127.0.0.1/udp/${54_010 + m.index * 2}/quic-v1`],
         you: m.you,
       })),
-      serving: true,
-      keeperStatus: "active",
+      // The removed scenario: a rotation left this member out, and its keeper destroyed its share.
+      serving: scenario !== "removed",
+      keeperStatus: scenario === "removed" ? "removed" : "active",
     },
     founding: {
       session: sampleHex("treasury.dkg"),

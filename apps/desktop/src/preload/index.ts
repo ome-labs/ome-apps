@@ -3,26 +3,20 @@ import type { DaemonEvent } from "@ome-labs/api";
 // process checks every call.
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from "electron";
 
-import { CHANNELS, type CallOutcome, type DevState, type OmeBridge } from "../bridge/contract.ts";
-
-/** A daemon error with its kind, rebuilt on this side of the boundary. */
-class OmeCallError extends Error {
-  constructor(
-    readonly kind: string,
-    message: string,
-  ) {
-    super(message);
-    this.name = "OmeCallError";
-  }
-}
+import {
+  CHANNELS,
+  type CallOutcome,
+  type DevState,
+  type OmeBridge,
+  type Preferences,
+} from "../bridge/contract.ts";
 
 const bridge: OmeBridge = {
-  async call(method, params) {
-    const outcome = (await ipcRenderer.invoke(CHANNELS.call, method, params)) as CallOutcome<
-      typeof method
-    >;
-    if (!outcome.ok) throw new OmeCallError(outcome.error.kind, outcome.error.message);
-    return outcome.value;
+  call: (method, params) =>
+    ipcRenderer.invoke(CHANNELS.call, method, params) as Promise<CallOutcome<typeof method>>,
+  preferences: {
+    get: () => ipcRenderer.invoke(CHANNELS.preferencesGet) as Promise<Preferences>,
+    set: (patch) => ipcRenderer.invoke(CHANNELS.preferencesSet, patch) as Promise<Preferences>,
   },
   onEvent(listener) {
     const handler = (_event: IpcRendererEvent, event: DaemonEvent) => listener(event);

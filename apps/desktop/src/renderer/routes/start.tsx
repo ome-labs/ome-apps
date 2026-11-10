@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { Navigate } from "@tanstack/react-router";
 
 import { useOme } from "../data/ome.ts";
+import { daemonStates } from "../shell/daemon-states.tsx";
 
 /** `/`: first run without a profile, Home without a vault, else the default vault's overview. */
 export function Start() {
@@ -10,8 +11,8 @@ export function Start() {
   const vault = status.data?.defaultVault ?? status.data?.vaults[0]?.address;
   const params = useMemo(() => ({ vault: vault ?? "" }), [vault]);
 
-  if (status.isPending) return null;
-  if (status.isError) return <p className="p-8 text-sm text-red-700">{status.error.message}</p>;
+  const blocked = daemonStates(status);
+  if (blocked || !status.data) return blocked;
 
   if (!status.data.profile) return <Navigate to="/welcome" />;
   if (!vault) return <Navigate to="/home" />;

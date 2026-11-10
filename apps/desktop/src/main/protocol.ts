@@ -7,11 +7,13 @@ import { net, protocol } from "electron";
 
 const SCHEME = "app";
 
-/** No inline script, no remote anything: the renderer talks to the world only through the preload's bridge. */
+/** No inline or remote script, no remote anything: the renderer talks to the world only through the preload's bridge. */
 const CSP = [
   "default-src 'self'",
   "script-src 'self'",
-  "style-src 'self'",
+  // Sonner (toasts) injects its stylesheet at runtime. Inline styles can't run code, so this is allowed while
+  // scripts stay locked to the app's own files.
+  "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data:",
   "font-src 'self'",
   "connect-src 'self'",

@@ -10,7 +10,11 @@ import { denyPermissions, enforceSecurity } from "./security.ts";
 import { forwardEvents } from "./sources.ts";
 import { createWindow } from "./window.ts";
 
-// One instance per user: a second launch focuses the first window.
+// Tests run beside the member's own copy with their own data folder, which also gives them their own lock.
+const testData = process.env["OME_DESKTOP_USER_DATA"];
+if (testData) app.setPath("userData", testData);
+
+// One instance per data folder: a second launch focuses the first window.
 if (!app.requestSingleInstanceLock()) app.quit();
 
 registerScheme();

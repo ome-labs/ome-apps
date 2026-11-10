@@ -2,8 +2,15 @@
 // development builds the dev switches.
 import { app, ipcMain, type IpcMainInvokeEvent } from "electron";
 
-import { CHANNELS, type CallOutcome, type DevState, isRendererMethod } from "../bridge/contract.ts";
+import {
+  CHANNELS,
+  type CallOutcome,
+  type DevState,
+  type Preferences,
+  isRendererMethod,
+} from "../bridge/contract.ts";
 import { OmeError } from "./ome/client.ts";
+import { preferences, setPreferences } from "./preferences.ts";
 import { isAppUrl } from "./security.ts";
 import { client, devState, setDevState } from "./sources.ts";
 
@@ -43,6 +50,10 @@ async function call(
 
 export function registerIpc(): void {
   ipcMain.handle(CHANNELS.call, call);
+  ipcMain.handle(CHANNELS.preferencesGet, (event) => (fromApp(event) ? preferences() : null));
+  ipcMain.handle(CHANNELS.preferencesSet, (event, patch: Partial<Preferences>) =>
+    fromApp(event) ? setPreferences(patch) : null,
+  );
 
   if (app.isPackaged) return;
   ipcMain.handle(CHANNELS.devGet, (event) => (fromApp(event) ? devState() : null));

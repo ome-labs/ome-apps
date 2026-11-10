@@ -8,6 +8,8 @@ export const SCENARIOS = [
   "syncing",
   "keeper-failed",
   "alarm",
+  "removed",
+  "daemon-down",
 ] as const;
 
 export type Scenario = (typeof SCENARIOS)[number];

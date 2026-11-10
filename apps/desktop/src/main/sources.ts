@@ -1,5 +1,6 @@
 // Which client answers the renderer. Packaged builds will use the member's daemon; until its client exists, every
-// build uses the fixtures. Development builds can switch scenario from the renderer's dev panel.
+// build uses the fixtures. Development builds can switch scenario from the devtools console:
+// `window.ome.dev.set({ scenario })`.
 import type { DaemonEvent } from "@ome-labs/api";
 
 import type { DevState, Source } from "../bridge/contract.ts";

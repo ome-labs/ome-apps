@@ -6,13 +6,21 @@ import { PROPOSALS, VAULT } from "./sample.ts";
 import { SCENARIOS } from "./scenarios.ts";
 
 describe("FixtureClient", () => {
-  it.each(SCENARIOS)("answers status in the %s scenario", async (scenario) => {
+  const answering = SCENARIOS.filter((scenario) => scenario !== "daemon-down");
+
+  it.each(answering)("answers status in the %s scenario", async (scenario) => {
     const status = await new FixtureClient(scenario).call("status", {});
 
     expect(status.profile === null).toBe(scenario === "no-profile");
     expect(status.vaults.length === 0).toBe(scenario === "no-profile" || scenario === "no-vaults");
     expect(status.node.reachable).toBe(scenario !== "node-unreachable");
     expect(status.signer.locked).toBe(true);
+  });
+
+  it("fails every call as unreachable when the daemon is down", async () => {
+    await expect(new FixtureClient("daemon-down").call("status", {})).rejects.toMatchObject({
+      kind: "unreachable",
+    });
   });
 
   it("tells the shell what changed when the scenario switches", async () => {

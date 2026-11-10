@@ -42,6 +42,12 @@ export default defineConfig({
       },
     },
     {
+      // The desktop renderer fills ui-web's slots (`topBar`, `sidebar`, `render={<Link />}`) with elements; those
+      // components don't memoise, so wrapping each slot in useMemo would add code and save no renders.
+      files: ["apps/desktop/src/renderer/**"],
+      rules: { "react-perf/jsx-no-jsx-as-prop": "off" },
+    },
+    {
       // The icons package is the one place that wraps Hugeicons.
       files: ["packages/icons/**"],
       rules: {

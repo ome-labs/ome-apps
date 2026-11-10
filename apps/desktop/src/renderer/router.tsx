@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 // The app's routes, built from the page table. Hash history: the app is served from one `index.html`.
 import {
   Outlet,
@@ -7,43 +5,26 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
-  useParams,
 } from "@tanstack/react-router";
 
-import { DevPanel } from "./dev/dev-panel.tsx";
-import { APP_PAGES, type Page, VAULT_PAGES, WELCOME_PAGE } from "./routes/pages.ts";
-import { Placeholder } from "./routes/placeholder.tsx";
+import { APP_PAGES, VAULT_PAGES, WELCOME_PAGE } from "./routes/pages.ts";
 import { Start } from "./routes/start.tsx";
-import { AppShell } from "./shell/app-shell.tsx";
+import { AppFrame } from "./shell/app-frame.tsx";
 
-function PageRoute({ page }: { page: Page }) {
-  const { vault = "", id = "" } = useParams({ strict: false }) as { vault?: string; id?: string };
-  const route = useMemo(() => ({ vault, id }), [vault, id]);
-  return <Placeholder page={page} route={route} />;
-}
-
-const root = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      {import.meta.env.DEV && <DevPanel />}
-    </>
-  ),
-});
+// Pages are empty until their screens are built, so their routes have no component yet.
+const root = createRootRoute({ component: Outlet });
 
 const start = createRoute({ getParentRoute: () => root, path: "/", component: Start });
 const welcome = createRoute({
   getParentRoute: () => root,
   path: WELCOME_PAGE.path,
-  component: () => <PageRoute page={WELCOME_PAGE} />,
 });
 
-const shell = createRoute({ getParentRoute: () => root, id: "shell", component: AppShell });
+const shell = createRoute({ getParentRoute: () => root, id: "shell", component: AppFrame });
 const appPages = APP_PAGES.map((page) =>
   createRoute({
     getParentRoute: () => shell,
     path: page.path,
-    component: () => <PageRoute page={page} />,
   }),
 );
 
@@ -52,7 +33,6 @@ const vaultPages = VAULT_PAGES.map((page) =>
   createRoute({
     getParentRoute: () => vault,
     path: page.path,
-    component: () => <PageRoute page={page} />,
   }),
 );
 

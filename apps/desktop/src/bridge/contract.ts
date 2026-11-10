@@ -82,9 +82,15 @@ export function isRendererMethod(method: unknown): method is RendererMethod {
   return typeof method === "string" && Object.hasOwn(ALLOWED, method);
 }
 
+/**
+ * Why a call failed: one of the daemon's error kinds, or `unreachable` when no daemon answered at all (it isn't
+ * running, or its socket refused us), which the renderer shows as a full-screen state rather than an error.
+ */
+export type FailureKind = ErrorKind | "unreachable";
+
 /** A failed call, as it crosses from the main process to the renderer (Electron keeps only an Error's message). */
 export interface CallFailure {
-  kind: ErrorKind;
+  kind: FailureKind;
   message: string;
 }
 
@@ -96,10 +102,20 @@ export type CallOutcome<M extends RendererMethod> =
 /** Where the main process gets its answers: the sample data, or the member's daemon. */
 export type Source = "fixtures" | "daemon";
 
+/** What the app remembers between launches. The window's size and position are kept by the main process alone. */
+export interface Preferences {
+  theme: "light" | "dark" | "system";
+}
+
 /** The API `src/preload` exposes as `window.ome`. */
 export interface OmeBridge {
-  call<M extends RendererMethod>(method: M, params: DaemonParams<M>): Promise<DaemonResult<M>>;
+  /** Resolves with the outcome, never rejects: contextBridge would strip a thrown error down to its message. */
+  call<M extends RendererMethod>(method: M, params: DaemonParams<M>): Promise<CallOutcome<M>>;
   onEvent(listener: (event: DaemonEvent) => void): () => void;
+  preferences: {
+    get(): Promise<Preferences>;
+    set(patch: Partial<Preferences>): Promise<Preferences>;
+  };
   /** Development builds only: pick the data source and the fixture scenario. */
   dev?: {
     get(): Promise<DevState>;
@@ -118,6 +134,8 @@ export interface DevState {
 export const CHANNELS = {
   call: "ome:call",
   event: "ome:event",
+  preferencesGet: "ome:preferences:get",
+  preferencesSet: "ome:preferences:set",
   devGet: "ome:dev:get",
   devSet: "ome:dev:set",
 } as const;

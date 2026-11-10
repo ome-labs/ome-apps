@@ -1,5 +1,8 @@
-/* A neutral stand-in until @ome-labs/tokens and @ome-labs/ui-web exist; the shell and pages then switch to them. */
-@import "tailwindcss";
+/* The app is drawn with the kit: ui-web's stylesheet brings Tailwind, the token theme and the brand fonts. */
+@import "@ome-labs/ui-web/styles.css";
+
+/* Tailwind only generates classes it finds; the app's pages are outside ui-web's own sources. */
+@source "./";
 
 @layer base {
   html,
@@ -7,8 +10,9 @@
   #root {
     height: 100%;
   }
-  body {
-    @apply bg-white text-neutral-900 antialiased;
-    font-family: ui-sans-serif, system-ui, sans-serif;
+
+  button:not(:disabled),
+  [role="option"] {
+    cursor: pointer;
   }
 }

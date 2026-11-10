@@ -35,6 +35,9 @@ export class FixtureClient implements OmeClient {
     this.#emit({ type: "keeper", keeper: keeper(scenario) });
     this.#emit({ type: "signer", signer: signer(scenario, now(), this.#unlockedUntil) });
     this.#emit({ type: "vaultActivity", vault: VAULT });
+    if (scenario === "removed") {
+      this.#emit({ type: "keeperEvent", event: { type: "removed", vault: VAULT } });
+    }
     if (scenario === "alarm") {
       this.#emit({
         type: "keeperEvent",
@@ -52,6 +55,10 @@ export class FixtureClient implements OmeClient {
     method: M,
     params: DaemonParams<M>,
   ): Promise<DaemonResult<M>> {
+    if (this.#scenario === "daemon-down") {
+      throw new OmeError("unreachable", "Ome's daemon isn't running for this profile.");
+    }
+
     const handler = this.#handlers[method] as
       | ((params: DaemonParams<M>) => DaemonResult<M>)
       | undefined;

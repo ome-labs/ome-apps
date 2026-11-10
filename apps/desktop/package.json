@@ -18,7 +18,11 @@
   },
   "devDependencies": {
     "@ome-labs/api": "catalog:",
+    "@ome-labs/brand": "workspace:*",
     "@ome-labs/format": "workspace:*",
+    "@ome-labs/icons": "workspace:*",
+    "@ome-labs/tokens": "workspace:*",
+    "@ome-labs/ui-web": "workspace:*",
     "@playwright/test": "1.65.0",
     "@tailwindcss/vite": "catalog:",
     "@tanstack/react-query": "5.107.1",
