@@ -12,6 +12,8 @@ export type MenuItem =
       shortcut?: string;
       danger?: boolean;
       disabled?: boolean;
+      /** The current choice among the rows, marked with a check (the theme, a sort order). */
+      checked?: boolean;
       onSelect: () => void;
     }
   | "separator";
@@ -20,10 +22,12 @@ export type MenuProps = {
   trigger: ReactElement;
   items: MenuItem[];
   align?: "start" | "center" | "end" | undefined;
+  /** Where it opens; `top` for a trigger at the bottom of the window. */
+  side?: "top" | "bottom" | undefined;
 };
 
 /** Page 37's menu: icon, label and shortcut per row; a danger row in red, last, after a separator. */
-export function Menu({ trigger, items, align = "end" }: MenuProps) {
+export function Menu({ trigger, items, align = "end", side = "bottom" }: MenuProps) {
   // Separators have no identity of their own, so they are keyed by where they sit.
   const rows = items.map((item, position) => ({
     item,
@@ -34,10 +38,10 @@ export function Menu({ trigger, items, align = "end" }: MenuProps) {
     <BaseMenu.Root>
       <BaseMenu.Trigger render={trigger} />
       <BaseMenu.Portal>
-        <BaseMenu.Positioner align={align} sideOffset={4} className="z-50 outline-none">
+        <BaseMenu.Positioner align={align} side={side} sideOffset={6} className="z-50 outline-none">
           <BaseMenu.Popup
             className={cn(
-              "flex w-60 flex-col gap-0.5 rounded-[10px] bg-raised p-1 shadow-2 outline-none",
+              "flex w-max min-w-52 flex-col gap-0.5 rounded-[10px] bg-raised p-1 shadow-2 outline-none",
               "origin-[var(--transform-origin)] transition-[opacity,scale] duration-base ease-standard",
               "data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
             )}
@@ -63,6 +67,7 @@ export function Menu({ trigger, items, align = "end" }: MenuProps) {
                   {item.shortcut ? (
                     <kbd className="type-mono-s text-fg-subtle">{item.shortcut}</kbd>
                   ) : null}
+                  {item.checked ? <Icon name="check" size={16} tone="accent-fg" /> : null}
                 </BaseMenu.Item>
               ),
             )}
