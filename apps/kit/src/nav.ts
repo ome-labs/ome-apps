@@ -66,6 +66,18 @@ export const nav = [
         icon: "sun-water",
       },
       {
+        to: "/brand/scenes",
+        title: "Scenes",
+        description: "In-app scenes, drawn after the onboarding ones",
+        icon: "sun",
+      },
+      {
+        to: "/brand/avatars",
+        title: "Avatars",
+        description: "Pixel avatars for vaults and profiles",
+        icon: "user",
+      },
+      {
         to: "/brand/textures-objects",
         title: "Textures & objects",
         description: "Dither textures and 32-grid pixel objects",

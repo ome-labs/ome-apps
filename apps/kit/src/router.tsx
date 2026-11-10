@@ -9,6 +9,7 @@ import {
 
 import { ExamplesPage } from "./bench/examples-page.tsx";
 import { exampleLoaders } from "./examples/catalog.ts";
+import { AvatarsPage } from "./pages/avatars.tsx";
 import { ColourPage } from "./pages/colour.tsx";
 import { DepthPage } from "./pages/depth.tsx";
 import { IconsPage } from "./pages/icons.tsx";
@@ -17,6 +18,7 @@ import { LogoPage } from "./pages/logo.tsx";
 import { MotionPage } from "./pages/motion.tsx";
 import { NotFound } from "./pages/not-found.tsx";
 import { OverviewPage } from "./pages/overview.tsx";
+import { ScenesPage } from "./pages/scenes.tsx";
 import { TexturesObjectsPage } from "./pages/textures-objects.tsx";
 import { TypographyPage } from "./pages/typography.tsx";
 import { Shell } from "./shell/shell.tsx";
@@ -44,6 +46,8 @@ const pages: [string, ComponentType][] = [
   ["/brand/logo", LogoPage],
   ["/brand/icons", IconsPage],
   ["/brand/illustrations", IllustrationsPage],
+  ["/brand/scenes", ScenesPage],
+  ["/brand/avatars", AvatarsPage],
   ["/brand/textures-objects", TexturesObjectsPage],
 ];
 
