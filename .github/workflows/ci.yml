@@ -1,0 +1,36 @@
+# Fast checks on every push and pull request: format, lint, types, unit tests and builds. Nothing here launches an app,
+# packages one or talks to a network; the desktop smoke test runs locally (`pnpm --filter @ome-labs/desktop test:smoke`).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Unit tests and builds don't need the Electron binary; skipping it saves the download.
+      ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec oxfmt --check .
+      - run: pnpm exec oxlint --deny-warnings .
+      - run: pnpm exec tsc -p tsconfig.json
+      - run: pnpm exec turbo run typecheck test build
