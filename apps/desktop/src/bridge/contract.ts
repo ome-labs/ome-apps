@@ -13,8 +13,11 @@ import type {
 /** Methods only the main process uses: the session handshake, the event stream and stopping the daemon. */
 type MainOnly = "session.auth" | "events.subscribe" | "daemon.stop";
 
+/** What a connected app calls through the daemon's app page; the member's own app never makes those calls. */
+type AppOnly = "apps.call";
+
 /** A daemon method the renderer may call. */
-export type RendererMethod = Exclude<DaemonMethod, MainOnly>;
+export type RendererMethod = Exclude<DaemonMethod, MainOnly | AppOnly>;
 
 /**
  * Every renderer method, checked at runtime. `satisfies` keeps it complete: a method the daemon adds fails the
@@ -24,6 +27,8 @@ const ALLOWED = {
   "daemon.info": true,
   status: true,
   "profile.create": true,
+  "profile.rename": true,
+  "profile.delete": true,
   "config.get": true,
   "config.set": true,
   "relays.set": true,
@@ -32,7 +37,9 @@ const ALLOWED = {
   "signer.unlock": true,
   "signer.lock": true,
   "signer.sealingKey": true,
+  "signer.changePassphrase": true,
   "node.status": true,
+  "fees.status": true,
   "lobby.inspect": true,
   "lobby.create": true,
   "lobby.join": true,
@@ -40,6 +47,8 @@ const ALLOWED = {
   "lobby.list": true,
   "lobby.start": true,
   "lobby.leave": true,
+  "lobby.remove": true,
+  "lobby.update": true,
   "founding.begin": true,
   "founding.get": true,
   "vault.list": true,
@@ -48,7 +57,10 @@ const ALLOWED = {
   "vault.audit": true,
   "vault.activity": true,
   "vault.counterparties": true,
+  "vault.receiving": true,
+  "vault.request": true,
   "vault.alias": true,
+  "vault.rename": true,
   "vault.retire": true,
   "vault.use": true,
   "tokens.list": true,
@@ -65,6 +77,9 @@ const ALLOWED = {
   "proposals.execute": true,
   "proposals.cancel": true,
   "contracts.functions": true,
+  "contracts.register": true,
+  "contracts.list": true,
+  "contracts.remove": true,
   "aztec.aliases": true,
   "aztec.alias": true,
   "membership.request": true,
@@ -78,6 +93,9 @@ const ALLOWED = {
   "devices.revoke": true,
   "devices.enroll": true,
   "devices.forward": true,
+  "apps.list": true,
+  "apps.allow": true,
+  "apps.revoke": true,
 } as const satisfies Record<RendererMethod, true>;
 
 export function isRendererMethod(method: unknown): method is RendererMethod {

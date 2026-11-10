@@ -4,7 +4,7 @@ packages:
 
 # Versions shared by two or more packages. A dependency of one package is pinned in that package.
 catalog:
-  "@ome-labs/api": 0.1.0
+  "@ome-labs/api": 0.3.0
   "@tailwindcss/vite": 4.3.5
   "@tanstack/react-router": 1.170.46
   "@testing-library/react": 16.3.3
@@ -46,7 +46,7 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - oxfmt@0.78.0
   - oxlint@1.93.0
-  - "@ome-labs/api@0.1.0"
+  - "@ome-labs/api@0.3.0"
   - "@rolldown/binding-android-arm-eabi@1.2.18"
   - "@rolldown/binding-android-arm64@1.2.18"
   - "@rolldown/binding-darwin-arm64@1.2.18"

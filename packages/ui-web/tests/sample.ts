@@ -11,7 +11,7 @@ export const reviewOfAuditDeposit: Review = {
   proposal: {
     ...proposals.auditDeposit,
     status: "collecting",
-    approvals: proposals.auditDeposit.approvals.slice(0, 1),
+    votes: proposals.auditDeposit.votes.slice(0, 1),
     approvedByMe: false,
   },
   vaultName: "Treasury",
@@ -25,7 +25,14 @@ export const reviewOfAuditDeposit: Review = {
   },
   action: "transfer 250 OMET (250000000000000000000 base units)",
   recipient: { address: aliases.dave, label: "accounts:dave", source: "aztecWallet" },
-  simulation: { ok: true, gas: { da: 1536, l2: 412_800 }, error: null },
+  change: null,
+  simulation: {
+    ok: true,
+    gas: { da: 1536, l2: 412_800 },
+    error: null,
+    effects: null,
+    fee: null,
+  },
   signs: {
     message: "0x2b9f0e7c41d35a86f1c2e4b8d7a9036c5e1f4a2b8c7d6e5f4a3b2c1d0e9f8a7b",
     formula: 'Poseidon2("ome.approval.v0", [vault, outer hash, 1, deadline])',

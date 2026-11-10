@@ -11,6 +11,10 @@ import { Page } from "../shell/page.tsx";
 import { FILTERS, type ProposalFilter, matching } from "./filters.ts";
 
 const EMPTY = {
+  needsMe: {
+    title: "Nothing needs you",
+    text: "You've voted on every proposal that is collecting.",
+  },
   open: { title: "Nothing waiting", text: "Every proposal is done. Start one to move funds." },
   ready: { title: "Nothing ready", text: "A proposal is ready once enough members approve it." },
   done: { title: "Nothing done yet", text: "Executed, cancelled and expired proposals show here." },
@@ -28,7 +32,7 @@ export function ProposalsPage() {
   const list = useOme("proposals.list", { vault });
   const [filter, setFilter] = useState<ProposalFilter>("all");
 
-  const proposals = useMemo(() => list.data ?? [], [list.data]);
+  const proposals = useMemo(() => list.data?.items ?? [], [list.data]);
   const shown = useMemo(() => matching(proposals, filter), [proposals, filter]);
   const hrefFor = useCallback(
     (proposal: ProposalView) => `#/vaults/${vault}/proposals/${proposal.id}`,

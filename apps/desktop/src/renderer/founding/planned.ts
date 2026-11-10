@@ -1,27 +1,7 @@
-// What the host chose for a vault before it exists: how many members it's for, and its picture. The daemon's lobby
-// keeps neither, so the host's app keeps them, per lobby, in this window's storage. A lobby whose size isn't known here
-// falls back to checking only the thresholds; a picture is saved for the vault once founding finishes.
+// The picture the host chose for a vault before it exists. The daemon's lobby doesn't keep it, so the host's app keeps
+// it, per lobby, in this window's storage; it is saved for the vault once founding finishes.
 import type { Hex16 } from "@ome-labs/api";
 import { type AvatarId, manifest } from "@ome-labs/brand/web";
-
-const key = (lobby: Hex16) => `ome:lobby-size:${lobby}`;
-
-export function rememberPlanned(lobby: Hex16, members: number): void {
-  try {
-    localStorage.setItem(key(lobby), String(members));
-  } catch {
-    // Storage can be unavailable; the lobby then works without a planned size.
-  }
-}
-
-export function plannedFor(lobby: Hex16): number | undefined {
-  try {
-    const value = Number(localStorage.getItem(key(lobby)));
-    return Number.isInteger(value) && value >= 2 ? value : undefined;
-  } catch {
-    return undefined;
-  }
-}
 
 const pictureKey = (lobby: Hex16) => `ome:lobby-picture:${lobby}`;
 

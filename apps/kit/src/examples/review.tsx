@@ -1,10 +1,14 @@
 import { Button, CheckRow, ReviewPanel } from "@ome-labs/ui-web";
 
 import type { ExampleSet } from "../bench/examples-page.tsx";
-import { reviewOfAuditDeposit } from "../sample/story.ts";
+import { omet, reviewOfAuditDeposit, reviewOfSwap } from "../sample/story.ts";
 
 export function Passing() {
   return <ReviewPanel review={reviewOfAuditDeposit} />;
+}
+
+export function ContractCalls() {
+  return <ReviewPanel review={reviewOfSwap} />;
 }
 
 export function OlderConfig() {
@@ -24,7 +28,16 @@ export function SimulationFailed() {
     <ReviewPanel
       review={{
         ...reviewOfAuditDeposit,
-        simulation: { ok: false, gas: null, error: "balance too low" },
+        simulation: {
+          ok: false,
+          gas: null,
+          error: {
+            failure: { kind: "insufficientBalance", token: null, contract: omet.address },
+            message: "Assertion failed: Balance too low 'subtracted > 0'",
+          },
+          effects: null,
+          fee: null,
+        },
       }}
     />
   );
@@ -65,6 +78,14 @@ export const review: ExampleSet = {
       title: "Everything checks out",
       description: "The recipient is an unverified alias, so it carries a warning.",
       Component: Passing,
+      wide: true,
+    },
+    {
+      name: "ContractCalls",
+      title: "A swap with an authwit",
+      description:
+        "Contract calls show each decoded argument, the authwit the AMM uses to pull the OMET, and the balances the simulation moves.",
+      Component: ContractCalls,
       wide: true,
     },
     {

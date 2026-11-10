@@ -30,7 +30,7 @@ describe("FixtureClient", () => {
 
     client.setScenario("alarm");
 
-    expect(events).toEqual(["node", "keeper", "signer", "vaultActivity", "keeperEvent"]);
+    expect(events).toEqual(["node", "keeper", "signer", "vaultUpdated", "keeperEvent"]);
   });
 
   it("unlocks with a passphrase and refuses the wrong one", async () => {
@@ -71,6 +71,7 @@ describe("FixtureClient", () => {
       name: "Treasury",
       threshold: 2,
       viewingThreshold: 2,
+      members: 3,
     });
     expect(lobby).toMatchObject({
       role: "host",

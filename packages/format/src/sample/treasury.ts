@@ -8,6 +8,7 @@ export const omet: TokenInfo = {
   name: "Ome Test",
   symbol: "OMET",
   decimals: 18,
+  standard: true,
 };
 
 export const treasury = {
@@ -25,10 +26,18 @@ export const aliases = {
 
 const created = 1_794_220_800; // 2026-11-09 10:40 UTC, when the sample vault was founded
 
+/** Each member's Aztec account, which the founding lobby records. */
+export const accounts = {
+  alice: "0x2a7f1d93c40b5e86f1a2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718",
+  bob: aliases.bob,
+  carol: "0x1c9e5a07b3d2f4e6081a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f70",
+} as const;
+
 export const peers: MemberReachability[] = [
   {
     index: 1,
     name: "Alice",
+    account: accounts.alice,
     identity: "0x01",
     peerId: "12D3KooWAlice",
     you: true,
@@ -40,6 +49,7 @@ export const peers: MemberReachability[] = [
   {
     index: 2,
     name: "Bob",
+    account: accounts.bob,
     identity: "0x02",
     peerId: "12D3KooWBob",
     you: false,
@@ -51,6 +61,7 @@ export const peers: MemberReachability[] = [
   {
     index: 3,
     name: "Carol",
+    account: accounts.carol,
     identity: "0x03",
     peerId: "12D3KooWCarol",
     you: false,
@@ -75,7 +86,9 @@ const base = {
   feeMethod: "external",
   calls: [],
   cancelledBy: null,
+  authwits: [],
   execution: null,
+  executing: null,
 } satisfies Partial<ProposalView>;
 
 export const proposals = {
@@ -91,11 +104,27 @@ export const proposals = {
     },
     proposer: { index: 1, name: "Alice" },
     status: "ready",
-    approvals: [
-      { slot: 0, index: 1, name: "Alice", valid: true, reason: null },
-      { slot: 1, index: 2, name: "Bob", valid: true, reason: null },
+    createdAt: created + 3600,
+    votes: [
+      {
+        slot: 0,
+        index: 1,
+        name: "Alice",
+        approve: true,
+        valid: true,
+        reason: null,
+        at: created + 3600,
+      },
+      {
+        slot: 1,
+        index: 2,
+        name: "Bob",
+        approve: true,
+        valid: true,
+        reason: null,
+        at: created + 5400,
+      },
     ],
-    rejections: [],
     approvedByMe: true,
     rejectedByMe: false,
     token: omet,
@@ -112,8 +141,18 @@ export const proposals = {
     },
     proposer: { index: 2, name: "Bob" },
     status: "collecting",
-    approvals: [{ slot: 1, index: 2, name: "Bob", valid: true, reason: null }],
-    rejections: [],
+    createdAt: created + 7200,
+    votes: [
+      {
+        slot: 1,
+        index: 2,
+        name: "Bob",
+        approve: true,
+        valid: true,
+        reason: null,
+        at: created + 7200,
+      },
+    ],
     approvedByMe: false,
     rejectedByMe: false,
     token: omet,
@@ -131,10 +170,26 @@ export const proposals = {
     },
     proposer: { index: 3, name: "Carol" },
     status: "blocked",
-    approvals: [],
-    rejections: [
-      { slot: 0, index: 1, name: "Alice", valid: true, reason: "Too large" },
-      { slot: 1, index: 2, name: "Bob", valid: true, reason: null },
+    createdAt: created + 9000,
+    votes: [
+      {
+        slot: 0,
+        index: 1,
+        name: "Alice",
+        approve: false,
+        valid: true,
+        reason: "Too large",
+        at: created + 9600,
+      },
+      {
+        slot: 1,
+        index: 2,
+        name: "Bob",
+        approve: false,
+        valid: true,
+        reason: null,
+        at: created + 9900,
+      },
     ],
     approvedByMe: false,
     rejectedByMe: true,

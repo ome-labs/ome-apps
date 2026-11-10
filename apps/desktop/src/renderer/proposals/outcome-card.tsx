@@ -13,12 +13,20 @@ const PHASES: { id: Exclude<ExecutionPhase, "failed">; label: string }[] = [
   { id: "mined", label: "Included in a block" },
 ];
 
+const PHASE_WORDS: Record<ExecutionPhase, string> = {
+  rebuilding: "rebuilding the transaction",
+  proving: "proving it",
+  sending: "sending it to the network",
+  mined: "included in a block",
+  failed: "it failed",
+};
+
 /** What the proposal's picture shows: where it is, or the execution's phase while one runs here. */
 function sceneFor(proposal: ProposalView, progress: ExecutionProgress | undefined): SceneId {
   if (progress && progress.phase !== "mined" && progress.phase !== "failed") {
     return progress.phase === "sending" ? "sending" : "proving";
   }
-  return proposal.status;
+  return proposal.status === "unknown" ? "stale" : proposal.status;
 }
 
 /** Where the proposal stands and what happens next, with Execute once it has its approvals. */
@@ -50,6 +58,8 @@ export function OutcomeCard({
   }, [onExecute]);
 
   const running = progress !== undefined && proposal.status === "ready";
+  // Another member's daemon claimed the execution: running it here too would only race them.
+  const elsewhere = proposal.executing && !proposal.executing.mine ? proposal.executing : null;
   const failed = progress?.phase === "failed" ? progress.error : null;
 
   return (
@@ -70,12 +80,19 @@ export function OutcomeCard({
             />
           ))}
         </StepList>
+      ) : elsewhere && elsewhere.phase !== "failed" ? (
+        <Text>
+          {elsewhere.member.name} is executing it: {PHASE_WORDS[elsewhere.phase]}. It shows here as
+          soon as it lands.
+        </Text>
       ) : (
         <Explanation proposal={proposal} now={now} />
       )}
       {failed ? <Banner kind="alarm">{failed}</Banner> : null}
       {error ? <Banner kind="alarm">{error}</Banner> : null}
-      {proposal.status === "ready" && (!running || failed) ? (
+      {proposal.status === "ready" &&
+      (!running || failed) &&
+      !(elsewhere && elsewhere.phase !== "failed") ? (
         <Button variant="primary" icon="play" onClick={execute} pending={pending}>
           {failed ? "Try again" : "Execute"}
         </Button>
@@ -118,7 +135,11 @@ function Explanation({ proposal, now }: { proposal: ProposalView; now: number })
     case "executed":
       return proposal.execution ? (
         <div className="flex flex-col gap-1.5">
-          <Text>Executed {formatAbsoluteTime(proposal.execution.at)}.</Text>
+          <Text>
+            Executed {formatAbsoluteTime(proposal.execution.at)}
+            {proposal.execution.executor ? ` by ${proposal.execution.executor.name}` : ""}
+            {proposal.execution.block === null ? "" : `, in block ${proposal.execution.block}`}.
+          </Text>
           <Hash value={proposal.execution.txHash} noun="transaction" />
         </div>
       ) : (
@@ -134,6 +155,10 @@ function Explanation({ proposal, now }: { proposal: ProposalView; now: number })
           The vault's members or thresholds changed after it was made, so it can't run. Propose it
           again.
         </Text>
+      );
+    case "unknown":
+      return (
+        <Text>A newer release of Ome gave it a status this one doesn't know. Update Ome.</Text>
       );
   }
 }

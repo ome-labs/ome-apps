@@ -165,8 +165,8 @@ settings:
 catalogs:
   default:
     '@ome-labs/api':
-      specifier: 0.1.0
-      version: 0.1.0
+      specifier: 0.3.0
+      version: 0.3.0
     '@tailwindcss/vite':
       specifier: 4.3.5
       version: 4.3.5
@@ -279,7 +279,7 @@ importers:
         version: 7.0.5(ajv@8.20.0)(react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.0))(zod@4.6.7)
       '@ome-labs/api':
         specifier: 'catalog:'
-        version: 0.1.0
+        version: 0.3.0
       '@ome-labs/brand':
         specifier: workspace:*
         version: link:../../packages/brand
@@ -363,7 +363,7 @@ importers:
     dependencies:
       '@ome-labs/api':
         specifier: 'catalog:'
-        version: 0.1.0
+        version: 0.3.0
       '@ome-labs/brand':
         specifier: workspace:*
         version: link:../../packages/brand
@@ -485,7 +485,7 @@ importers:
     dependencies:
       '@ome-labs/api':
         specifier: 'catalog:'
-        version: 0.1.0
+        version: 0.3.0
     devDependencies:
       klarity:
         specifier: 'catalog:'
@@ -574,7 +574,7 @@ importers:
     dependencies:
       '@ome-labs/api':
         specifier: 'catalog:'
-        version: 0.1.0
+        version: 0.3.0
       '@ome-labs/brand':
         specifier: workspace:*
         version: link:../brand
@@ -704,7 +704,7 @@ importers:
         version: 1.9.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@ome-labs/api':
         specifier: 'catalog:'
-        version: 0.1.0
+        version: 0.3.0
       '@ome-labs/brand':
         specifier: workspace:*
         version: link:../brand
@@ -2320,8 +2320,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@ome-labs/api@0.1.0':
-    resolution: {integrity: sha512-ftdIaIMgpVR/srzI1dbJqioTMbDEuQJKieQzLKyMQx62rIRE2n0/lOigjKDF3U7JZhNruBhHWDwgIuQ4oAwClw==}
+  '@ome-labs/api@0.3.0':
+    resolution: {integrity: sha512-RT9mklWMb7/bXKD2yKkkEHwhrq0n2KKlLx7YModkoPICa81lyPG47cfEYLAN9fW4smpK/ZsZPgIH46YiJ3fAlA==}
     engines: {node: '>=24'}
 
   '@oxc-project/types@0.154.0':
@@ -9806,7 +9806,7 @@ snapshots:
   '@noxcturnal/noxcturnal-win32-x64-msvc@0.1.12':
     optional: true
 
-  '@ome-labs/api@0.1.0': {}
+  '@ome-labs/api@0.3.0': {}
 
   '@oxc-project/types@0.154.0': {}
 

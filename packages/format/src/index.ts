@@ -4,6 +4,7 @@ export * from "./count.ts";
 export * from "./health.ts";
 export * from "./proposal.ts";
 export * from "./review.ts";
+export * from "./simulation.ts";
 export * from "./status.ts";
 export * from "./threshold.ts";
 export * from "./time.ts";

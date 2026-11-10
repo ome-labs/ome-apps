@@ -23,7 +23,8 @@ const review: Review = {
   },
   action: "transfer 250 OMET (250000000000000000000 base units)",
   recipient: null,
-  simulation: { ok: true, gas: null, error: null },
+  change: null,
+  simulation: { ok: true, gas: null, error: null, effects: null, fee: null },
   signs: { message: treasury.address, formula: "Poseidon2(…)" },
   rejects: { message: treasury.address, formula: "Poseidon2(…)" },
 };
@@ -127,8 +128,8 @@ test("ReviewPanel disables Approve when a check fails, but not Reject", async ()
 });
 
 test("ReviewPanel says when a vote's signature doesn't verify", async () => {
-  const [bob] = review.proposal.approvals;
-  const forged = { ...review.proposal, approvals: bob ? [{ ...bob, valid: false }] : [] };
+  const [bob] = review.proposal.votes;
+  const forged = { ...review.proposal, votes: bob ? [{ ...bob, valid: false }] : [] };
 
   await render(<ReviewPanel review={{ ...review, proposal: forged }} />);
 

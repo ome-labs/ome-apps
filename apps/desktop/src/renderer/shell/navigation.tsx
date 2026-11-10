@@ -126,7 +126,8 @@ function useWaitingCount(vault: string | undefined): number {
     { enabled: vault !== undefined },
   );
   return (
-    proposals.data?.filter((p) => p.status === "collecting" && !p.approvedByMe && !p.rejectedByMe)
-      .length ?? 0
+    proposals.data?.items.filter(
+      (p) => p.status === "collecting" && !p.approvedByMe && !p.rejectedByMe,
+    ).length ?? 0
   );
 }

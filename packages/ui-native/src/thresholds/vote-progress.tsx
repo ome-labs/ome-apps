@@ -8,7 +8,7 @@ import { depth } from "../styling/depth.ts";
 import { Text } from "../styling/text.tsx";
 
 export type VoteProgressProps = {
-  proposal: Pick<ProposalView, "approvals" | "rejections" | "threshold" | "members">;
+  proposal: Pick<ProposalView, "votes" | "threshold" | "members">;
   className?: string | undefined;
 };
 

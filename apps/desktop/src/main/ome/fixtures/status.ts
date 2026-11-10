@@ -8,7 +8,15 @@ import type {
   Status,
 } from "@ome-labs/api";
 
-import { ACCOUNTS, NODE_URL, VAULT, sampleHex, samplePeerId, samplePoint } from "./sample.ts";
+import {
+  ACCOUNTS,
+  FEE_PAYER,
+  NODE_URL,
+  VAULT,
+  sampleHex,
+  samplePeerId,
+  samplePoint,
+} from "./sample.ts";
 import type { Scenario } from "./scenarios.ts";
 import { vaultSummary } from "./vault.ts";
 
@@ -33,6 +41,8 @@ export function settings(): Settings {
     remoteKeeper: null,
     aztecWalletDir: null,
     aztecWalletSync: false,
+    appsEnabled: true,
+    updateCheck: true,
   };
 }
 
@@ -70,7 +80,7 @@ export function keeper(scenario: Scenario): KeeperState {
       identity: null,
       peerId: null,
       addresses: [],
-      version: "0.1.0",
+      version: "0.3.0",
       error: "ome-keeper exited with code 1: the data directory is locked by another keeper",
       remote: null,
     };
@@ -80,7 +90,7 @@ export function keeper(scenario: Scenario): KeeperState {
     identity: sampleHex("alice.keeper"),
     peerId: samplePeerId("alice"),
     addresses: ["/ip4/127.0.0.1/udp/54012/quic-v1", "/ip4/127.0.0.1/tcp/54013"],
-    version: "0.1.0",
+    version: "0.3.0",
     error: null,
     remote: null,
   };
@@ -108,5 +118,14 @@ export function status(scenario: Scenario, now: number, unlockedUntil: number | 
     signer: signer(scenario, now, unlockedUntil),
     vaults: hasVaults ? [vaultSummary(now)] : [],
     defaultVault: hasVaults ? VAULT : null,
+    fees: hasProfile
+      ? {
+          payer: FEE_PAYER,
+          kind: "sponsored",
+          feeJuice: null,
+          healthy: scenario !== "node-unreachable",
+        }
+      : null,
+    newerRelease: null,
   };
 }

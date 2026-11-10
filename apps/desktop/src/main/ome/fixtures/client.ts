@@ -5,9 +5,10 @@ import type { DaemonEvent, DaemonParams, DaemonResult, Hex32, Settings } from "@
 
 import type { RendererMethod } from "../../../bridge/contract.ts";
 import { type OmeClient, OmeError } from "../client.ts";
+import { FixtureContracts, aztecAliases } from "./contracts.ts";
 import { FixtureFounding } from "./founding.ts";
 import { FixtureProposals } from "./proposal-state.ts";
-import { ACCOUNTS, VAULT } from "./sample.ts";
+import { VAULT } from "./sample.ts";
 import type { Scenario } from "./scenarios.ts";
 import { keeper, node, settings, signer, status } from "./status.ts";
 import { activity, audit, counterparties, peers, tokens, vaultDetails } from "./vault.ts";
@@ -23,7 +24,9 @@ export class FixtureClient implements OmeClient {
   #settings: Settings = settings();
   readonly #listeners = new Set<(event: DaemonEvent) => void>();
   /** A founded vault makes this a profile with Treasury, as the sample story has it. */
+  readonly #contracts = new FixtureContracts();
   readonly #proposals = new FixtureProposals(
+    this.#contracts,
     (event) => this.#emit(event),
     () =>
       this.#unlockedUntil !== null && this.#unlockedUntil > now() && this.#scenario !== "locked",
@@ -47,7 +50,7 @@ export class FixtureClient implements OmeClient {
     this.#emit({ type: "node", node: node(scenario, now()) });
     this.#emit({ type: "keeper", keeper: keeper(scenario) });
     this.#emit({ type: "signer", signer: signer(scenario, now(), this.#unlockedUntil) });
-    this.#emit({ type: "vaultActivity", vault: VAULT });
+    this.#emit({ type: "vaultUpdated", vault: VAULT });
     if (scenario === "removed") {
       this.#emit({ type: "keeperEvent", event: { type: "removed", vault: VAULT } });
     }
@@ -101,12 +104,22 @@ export class FixtureClient implements OmeClient {
   readonly #handlers: Handlers = {
     "daemon.info": () => ({
       apiVersion: 0,
-      version: "0.1.0",
+      version: "0.3.0",
       pid: 4242,
       profile: "alice",
       profileDir: "~/.ome/profiles/alice",
       startedAt: now() - 3 * 3600,
       node: settings().nodeUrl,
+      limits: {
+        maxCalls: 4,
+        maxAuthwits: 4,
+        maxSummaryBytes: 4096,
+        maxArtifactBytes: 32 << 20,
+        memoChars: 280,
+        minExpiryHours: 1,
+        maxExpiryHours: 720,
+      },
+      capabilities: ["authwits", "apps", "capabilities"],
     }),
     status: () => ({
       ...status(this.#scenario, now(), this.#unlockedUntil),
@@ -162,11 +175,14 @@ export class FixtureClient implements OmeClient {
     "vault.list": () => status(this.#scenario, now(), this.#unlockedUntil).vaults,
     "vault.details": ({ vault }) => (this.#vault(vault), vaultDetails(this.#scenario, now())),
     "vault.peers": ({ vault }) => (this.#vault(vault), peers(this.#scenario, now())),
-    "vault.activity": ({ vault }) => (this.#vault(vault), activity(now())),
+    "vault.activity": ({ vault }) => (this.#vault(vault), activity(now(), this.#proposals.all())),
     "vault.counterparties": ({ vault }) => (this.#vault(vault), counterparties(now())),
-    "vault.audit": ({ vault, limit }) => (this.#vault(vault), audit(now()).slice(0, limit)),
+    "vault.audit": ({ vault, limit }) => (this.#vault(vault), audit(now(), limit)),
     "tokens.list": ({ vault }) => (this.#vault(vault), tokens()),
-    "proposals.list": ({ vault }) => (this.#vault(vault), this.#proposals.list()),
+    "proposals.list": ({ vault, filter, limit }) => (
+      this.#vault(vault),
+      this.#proposals.list(filter, limit)
+    ),
     "proposals.get": ({ vault, id }) => (this.#vault(vault), this.#proposals.get(id)),
     "proposals.review": ({ vault, id }) => (this.#vault(vault), this.#proposals.review(id)),
     "proposals.approve": ({ vault, id }) => (this.#vault(vault), this.#proposals.approve(id)),
@@ -181,11 +197,19 @@ export class FixtureClient implements OmeClient {
       this.#proposals.preview(intent)
     ),
     "proposals.create": (params) => (this.#vault(params.vault), this.#proposals.create(params)),
-    "aztec.aliases": () => [
-      { key: "accounts:alice", value: ACCOUNTS.alice },
-      { key: "accounts:bob", value: ACCOUNTS.bob },
-      { key: "accounts:dave", value: ACCOUNTS.dave },
-    ],
+    "aztec.aliases": () => aztecAliases(),
+    "contracts.list": () => this.#contracts.list(),
+    "contracts.functions": ({ contract, includeUtility }) =>
+      this.#contracts.functions(contract.toLowerCase() as Hex32, includeUtility ?? false),
+    "contracts.register": ({ address }) => {
+      const view = this.#contracts.register(address.toLowerCase() as Hex32);
+      this.#emit({ type: "contractAvailable", vault: VAULT, classId: view.classId });
+      return view;
+    },
+    "contracts.remove": ({ contract }) => (
+      this.#contracts.remove(contract.toLowerCase() as Hex32),
+      null
+    ),
     "devices.list": () => [],
     "lobby.list": () => this.#founding.list(),
     "lobby.create": (params) => this.#founding.create(params),
@@ -194,6 +218,8 @@ export class FixtureClient implements OmeClient {
     "lobby.get": ({ lobby }) => this.#founding.get(lobby),
     "lobby.start": (params) => this.#founding.start(params),
     "lobby.leave": ({ lobby }) => (this.#founding.leave(lobby), null),
+    "lobby.remove": (params) => this.#founding.remove(params),
+    "lobby.update": (params) => this.#founding.update(params),
     "founding.begin": ({ lobby }) => this.#founding.begin(lobby),
     "founding.get": ({ lobby }) => this.#founding.founding(lobby),
     "membership.list": ({ vault }) => (this.#vault(vault), []),

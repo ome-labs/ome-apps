@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useParams } from "@tanstack/react-router";
 
 import type { Hex32, ProposalView } from "@ome-labs/api";
-import { formatExpiry, proposalSummary, shortProposalId } from "@ome-labs/format";
+import { formatExpiry, proposalMemo, proposalSummary, shortProposalId } from "@ome-labs/format";
 import { Banner, Button, EmptyState, ReviewPanel, StatusBadge } from "@ome-labs/ui-web";
 
 import { callOme, useOme } from "../data/ome.ts";
@@ -145,7 +145,7 @@ export function ProposalPage() {
 }
 
 function Lead({ proposal, now }: { proposal: ProposalView; now: number }) {
-  const memo = proposal.intent.memo;
+  const memo = proposalMemo(proposal.intent);
   return (
     <span>
       <StatusBadge kind="proposal" status={proposal.status} className="mr-2 align-middle" />

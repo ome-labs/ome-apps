@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 
 import type { Hex32, ProposalPreview } from "@ome-labs/api";
-import { formatTokenAmount, proposalSummary } from "@ome-labs/format";
+import { failureText, formatArg, formatTokenAmount, proposalSummary } from "@ome-labs/format";
 import {
   Banner,
   Button,
@@ -81,7 +81,9 @@ export function NewProposalPage() {
         label: `${entry.token.name} · ${entry.token.symbol}`,
         leading: <TokenMonogram token={entry.token} size="sm" />,
         meta:
-          entry.balance === null ? "balance unread" : formatTokenAmount(entry.balance, entry.token),
+          entry.private.state === "known"
+            ? formatTokenAmount(entry.private.amount, entry.token)
+            : "balance unread",
       })),
     [list],
   );
@@ -197,8 +199,8 @@ export function NewProposalPage() {
               onValueChange={setAmount}
               error={errors.amount}
               hint={
-                held?.balance
-                  ? `The vault holds ${formatTokenAmount(held.balance, held.token)}.`
+                held?.private.state === "known"
+                  ? `The vault holds ${formatTokenAmount(held.private.amount, held.token)} privately.`
                   : undefined
               }
               disabled={pending || !token}
@@ -321,14 +323,16 @@ function DryRun({
                 >
                   <span className="type-label-m text-fg">{call.toLabel ?? "Contract"}</span>
                   <code className="type-mono-s text-fg-muted [overflow-wrap:anywhere]">
-                    {call.fn}({call.args.join(", ")})
+                    {call.fn}({call.args.map(formatArg).join(", ")})
                   </code>
                 </li>
               ))}
             </ol>
           </>
         ) : (
-          <Banner kind="alarm">{preview.error ?? "The simulation failed."}</Banner>
+          <Banner kind="alarm">
+            {preview.error ? failureText(preview.error.failure) : "The simulation failed."}
+          </Banner>
         )
       ) : null}
       <p className="border-t border-line-subtle pt-4 type-caption text-fg-subtle">

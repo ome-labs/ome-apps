@@ -5,15 +5,19 @@ import type {
   FoundingState,
   FoundingStepId,
   Hex16,
+  Hex32,
   InvitePreview,
+  LobbyChangeKind,
   LobbyCreateParams,
+  LobbyRemoveParams,
+  LobbyUpdateParams,
   LobbyView,
   LobbyViewMember,
   StartLobbyParams,
 } from "@ome-labs/api";
 
 import { OmeError } from "../client.ts";
-import { VAULT, sampleHex, samplePeerId, samplePoint } from "./sample.ts";
+import { ACCOUNTS, VAULT, sampleHex, samplePeerId, samplePoint } from "./sample.ts";
 
 const STEPS: FoundingStepId[] = ["agree", "dkg", "derive", "register", "deploy", "verify"];
 const NETWORK = "aztec:31337:1337000001";
@@ -40,6 +44,7 @@ function member(index: number, name: string, you: boolean): LobbyViewMember {
   return {
     index,
     name,
+    account: key in ACCOUNTS ? ACCOUNTS[key as keyof typeof ACCOUNTS] : sampleHex(`${key}.account`),
     signerKey: samplePoint(`${key}.signer`),
     identity: sampleHex(`${key}.identity`),
     peerId: samplePeerId(key),
@@ -74,14 +79,18 @@ export class FixtureFounding {
       name: params.name,
       threshold: params.threshold,
       viewingThreshold: params.viewingThreshold,
+      expected: params.members,
       network: NETWORK,
       members: [member(1, "Alice", true)],
+      removed: false,
       invite: invite(id),
       session: null,
     };
     this.#lobbies.set(id, view);
-    this.#later(1800, () => this.#arrive(id, "Bob"));
-    this.#later(4000, () => this.#arrive(id, "Carol"));
+    // Co-founders arrive one by one until the lobby is full: Bob, Carol, then Dave and Erin for larger vaults.
+    ["Bob", "Carol", "Dave", "Erin", "Frank", "Grace"]
+      .slice(0, params.members - 1)
+      .forEach((name, at) => this.#later(1800 + at * 2200, () => this.#arrive(id, name)));
     return view;
   }
 
@@ -94,6 +103,7 @@ export class FixtureFounding {
       hostName: "Bob",
       threshold: 2,
       viewingThreshold: 2,
+      members: 3,
       network: sameNetwork ? NETWORK : "aztec:11155111:679261766",
       sameNetwork,
       host: { identity: sampleHex("bob.identity"), peerId: samplePeerId("bob"), addresses: [] },
@@ -110,8 +120,10 @@ export class FixtureFounding {
       name: preview.name,
       threshold: preview.threshold,
       viewingThreshold: preview.viewingThreshold,
+      expected: preview.members,
       network: preview.network,
       members: [member(1, "Bob", false), member(2, "Alice", true)],
+      removed: false,
       invite: null,
       session: null,
     };
@@ -141,7 +153,48 @@ export class FixtureFounding {
   leave(id: Hex16): void {
     const view = this.get(id);
     this.#lobbies.set(id, { ...view, status: "closed" });
-    this.#emitLobby(id);
+    this.#emitLobby(id, "closed");
+  }
+
+  /** The host removes a joiner before starting; the rest keep their places, renumbered. */
+  remove({ lobby, identity }: LobbyRemoveParams): LobbyView {
+    const view = this.#host(lobby);
+    const gone = view.members.find((m) => m.identity === identity);
+    if (!gone) throw new OmeError("not-found", "That member isn't in the lobby.");
+    if (gone.you)
+      throw new OmeError("invalid", "The host can't remove themselves; close the lobby instead.");
+    const next: LobbyView = {
+      ...view,
+      members: view.members.filter((m) => m.identity !== identity),
+    };
+    this.#lobbies.set(lobby, next);
+    this.#emitLobby(lobby, "removed", identity);
+    return next;
+  }
+
+  /** The host changes the lobby's size or thresholds before starting. */
+  update({ lobby, members, threshold, viewingThreshold }: LobbyUpdateParams): LobbyView {
+    const view = this.#host(lobby);
+    const next: LobbyView = {
+      ...view,
+      expected: members ?? view.expected,
+      threshold: threshold ?? view.threshold,
+      viewingThreshold: viewingThreshold ?? view.viewingThreshold,
+    };
+    if (next.expected < next.members.length)
+      throw new OmeError("invalid", `${next.members.length} members have already joined.`);
+    if (next.threshold > next.expected || next.viewingThreshold > next.expected)
+      throw new OmeError("invalid", "A threshold can't be more than the members.");
+    this.#lobbies.set(lobby, next);
+    this.#emitLobby(lobby, "updated");
+    return next;
+  }
+
+  #host(lobby: Hex16): LobbyView {
+    const view = this.get(lobby);
+    if (view.role !== "host") throw new OmeError("invalid", "Only the host changes the lobby.");
+    if (view.status !== "open") throw new OmeError("invalid", "The lobby has started.");
+    return view;
   }
 
   begin(id: Hex16): FoundingState {
@@ -172,11 +225,10 @@ export class FixtureFounding {
   #arrive(id: Hex16, name: string): void {
     const view = this.#lobbies.get(id);
     if (!view || view.status !== "open" || view.members.some((m) => m.name === name)) return;
-    this.#lobbies.set(id, {
-      ...view,
-      members: [...view.members, member(view.members.length + 1, name, false)],
-    });
-    this.#emitLobby(id);
+    if (view.members.length >= view.expected) return;
+    const joined = member(Math.max(...view.members.map((m) => m.index)) + 1, name, false);
+    this.#lobbies.set(id, { ...view, members: [...view.members, joined] });
+    this.#emitLobby(id, "joined", joined.identity);
   }
 
   #start(id: Hex16, threshold: number, viewingThreshold: number): LobbyView {
@@ -189,7 +241,7 @@ export class FixtureFounding {
       session: sampleHex(`session:${id}`),
     };
     this.#lobbies.set(id, started);
-    this.#emitLobby(id);
+    this.#emitLobby(id, "started");
     return started;
   }
 
@@ -248,12 +300,8 @@ export class FixtureFounding {
     this.#emit({ type: "founding", founding: next });
   }
 
-  #emitLobby(id: Hex16): void {
-    const view = this.get(id);
-    this.#emit({
-      type: "keeperEvent",
-      event: { type: "lobby", lobby: id, status: view.status, members: view.members.length },
-    });
+  #emitLobby(id: Hex16, kind: LobbyChangeKind, about: Hex32 | null = null): void {
+    this.#emit({ type: "lobby", lobby: this.get(id), change: { kind, member: about } });
   }
 
   #later(ms: number, run: () => void): void {

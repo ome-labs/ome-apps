@@ -5,7 +5,7 @@ import { Tag } from "../status/tag.tsx";
 import { cn } from "../styling/class-names.ts";
 
 export type VoteProgressProps = {
-  proposal: Pick<ProposalView, "approvals" | "rejections" | "threshold" | "members">;
+  proposal: Pick<ProposalView, "votes" | "threshold" | "members">;
   className?: string | undefined;
 };
 

@@ -1,11 +1,18 @@
 import type { Gas, Review } from "@ome-labs/api";
 
 import { formatCount } from "./count.ts";
+import { failureText } from "./simulation.ts";
 
 export type CheckState = "pass" | "fail" | "warning";
 
 export type ReviewCheck = {
-  id: "rebuilt" | "config-current" | "not-expired" | "simulation" | "recipient-label";
+  id:
+    | "rebuilt"
+    | "config-current"
+    | "not-expired"
+    | "simulation"
+    | "recipient-label"
+    | "review-failure";
   state: CheckState;
   label: string;
 };
@@ -40,9 +47,13 @@ export function reviewChecks(
       state: simulation.ok ? "pass" : "warning",
       label: simulation.ok
         ? simulationLabel(simulation.gas)
-        : `Simulation failed${simulation.error ? `: ${simulation.error}` : ""}`,
+        : `Simulation failed${simulation.error ? `: ${failureText(simulation.error.failure)}` : ""}`,
     },
   ];
+
+  if (checks.failure) {
+    list.push({ id: "review-failure", state: "fail", label: checks.failure.message });
+  }
 
   if (recipient && recipient.source !== "member") {
     list.push({
@@ -59,11 +70,11 @@ export function reviewChecks(
 export function canApprove(review: Pick<Review, "checks">): boolean {
   const { checks } = review;
 
-  return checks.rebuilt && checks.configCurrent && checks.notExpired;
+  return checks.rebuilt && checks.configCurrent && checks.notExpired && !checks.failure;
 }
 
-/** Fees are always sponsored; this is the only fee line Ome shows. */
-export const feeLine = "Sponsored, not paid by the vault.";
+/** Fees are never paid from the vault: a sponsor or the member's own fee payer pays them. */
+export const feeLine = "Paid by the fee payer, never from the vault.";
 
 function simulationLabel(gas: Gas | null): string {
   if (!gas) return "Simulation ok";

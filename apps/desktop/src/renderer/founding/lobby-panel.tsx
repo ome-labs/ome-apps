@@ -1,40 +1,40 @@
-import { useCallback, useState } from "react";
+import { type ReactNode, useCallback, useState } from "react";
 
 import { useNavigate } from "@tanstack/react-router";
 
-import type { LobbyView } from "@ome-labs/api";
+import type { LobbyView, LobbyViewMember } from "@ome-labs/api";
 import { Scene } from "@ome-labs/brand/web";
 import {
+  Address,
   Banner,
   Button,
   CopyButton,
+  IconButton,
   MemberAvatar,
+  NumberStepper,
   QrCode,
   Tag,
   ThresholdChip,
+  Tooltip,
 } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
 import { Page } from "../shell/page.tsx";
-import { plannedFor } from "./planned.ts";
-import { blocker, networkName } from "./thresholds.ts";
+import { LIMITS, blocker, networkName } from "./thresholds.ts";
 
-/** Stage 2: who has joined. The host shares the invite and starts once the planned members are in; a guest waits. */
+/** Stage 2: who has joined. The host shares the invite and starts once the vault is full; a guest waits. */
 export function LobbyPanel({ lobby }: { lobby: LobbyView }) {
   const host = lobby.members.find((member) => member.index === 1);
   const isHost = lobby.role === "host";
-  // Only the host's app knows how many the vault is for.
-  const planned = isHost ? plannedFor(lobby.lobby) : undefined;
+  const planned = lobby.expected;
 
   return (
     <Page
       title={lobby.name}
       lead={
         isHost
-          ? planned
-            ? `Send the invite to each co-founder. Start once ${planned === 2 ? "your co-founder has" : `all ${planned} have`} joined.`
-            : "Send the invite to each co-founder. Start once everyone has joined."
-          : `You've joined. ${host?.name ?? "The host"} starts the founding once everyone is here.`
+          ? `Send the invite to each co-founder. Start once ${planned === 2 ? "your co-founder has" : `all ${planned} have`} joined.`
+          : `You've joined. ${host?.name ?? "The host"} starts the founding once all ${planned} are here.`
       }
     >
       <div className="grid grid-cols-1 items-start gap-6 @3xl:grid-cols-[minmax(0,1fr)_380px]">
@@ -75,32 +75,34 @@ function Invite({ invite, network }: { invite: string; network: string }) {
   );
 }
 
-function Roster({ lobby, planned }: { lobby: LobbyView; planned: number | undefined }) {
+function Roster({ lobby, planned }: { lobby: LobbyView; planned: number }) {
   const joined = lobby.members.length;
-  const waiting = lobby.status === "open" && (planned === undefined || joined < planned);
+  const waiting = lobby.status === "open" && joined < planned;
+  const canRemove = lobby.role === "host" && lobby.status === "open";
   return (
     <section className="flex flex-col rounded-lg bg-surface px-6 shadow-1">
       <header className="flex items-center justify-between border-b border-line-subtle py-4">
         <h2 className="type-heading-s text-fg">Co-founders</h2>
         <span className="type-body-s text-fg-muted tabular-nums">
-          {planned === undefined
-            ? `${joined} joined`
-            : joined > planned
-              ? `${joined} joined · ${planned} planned`
-              : `${joined} of ${planned} joined`}
+          {joined > planned
+            ? `${joined} joined · ${planned} planned`
+            : `${joined} of ${planned} joined`}
         </span>
       </header>
       <ul className="flex flex-col py-2">
         {lobby.members.map((member) => (
-          <li key={member.identity} className="flex items-center gap-3 py-2.5">
+          <li key={member.identity} className="group flex items-center gap-3 py-2.5">
             <span className="w-4 type-mono-s text-fg-subtle tabular-nums">{member.index}</span>
             <MemberAvatar name={member.name} index={member.index} size="sm" />
-            <span className="flex-1 type-label-m text-fg">{member.name}</span>
+            <span className="flex min-w-0 flex-1 flex-col">
+              <span className="type-label-m text-fg">{member.name}</span>
+              {/* The account they'll use with the vault: worth checking against what they sent you. */}
+              <Address address={member.account} className="type-caption" />
+            </span>
             {member.you ? <Tag tone="accent">You</Tag> : null}
             {member.index === 1 && !member.you ? <Tag>Host</Tag> : null}
-            {planned !== undefined && member.index > planned ? (
-              <Tag tone="warning">Extra</Tag>
-            ) : null}
+            {member.index > planned ? <Tag tone="warning">Extra</Tag> : null}
+            {canRemove && !member.you ? <RemoveButton lobby={lobby} member={member} /> : null}
           </li>
         ))}
         {waiting ? (
@@ -110,11 +112,7 @@ function Roster({ lobby, planned }: { lobby: LobbyView; planned: number | undefi
               <span className="absolute size-2 animate-ping rounded-full bg-accent opacity-40 motion-reduce:hidden" />
               <span className="size-2 rounded-full bg-accent" />
             </span>
-            <span className="type-body-s">
-              {planned
-                ? `Waiting for ${planned - joined} more to join…`
-                : "Waiting for more to join…"}
-            </span>
+            <span className="type-body-s">Waiting for {planned - joined} more to join…</span>
           </li>
         ) : null}
       </ul>
@@ -122,16 +120,41 @@ function Roster({ lobby, planned }: { lobby: LobbyView; planned: number | undefi
   );
 }
 
-function StartCard({ lobby, planned }: { lobby: LobbyView; planned: number | undefined }) {
+function StartCard({ lobby, planned }: { lobby: LobbyView; planned: number }) {
   const navigate = useNavigate();
   const joined = lobby.members.length;
-  const members = planned ?? joined;
   const [pending, setPending] = useState<"start" | "cancel">();
   const [error, setError] = useState<string>();
   const stop = blocker(
     { approvals: lobby.threshold, read: lobby.viewingThreshold },
     joined,
     planned,
+  );
+  // Every member sees the change at once: the daemon sends the updated lobby to them.
+  const update = useCallback(
+    async (patch: { members?: number; threshold?: number; viewingThreshold?: number }) => {
+      setError(undefined);
+      try {
+        await callOme("lobby.update", { lobby: lobby.lobby, ...patch });
+      } catch (failure) {
+        setError(failure instanceof Error ? failure.message : String(failure));
+      }
+    },
+    [lobby.lobby],
+  );
+  const setMembers = useCallback(
+    (members: number) =>
+      void update({
+        members,
+        threshold: Math.min(lobby.threshold, members),
+        viewingThreshold: Math.min(lobby.viewingThreshold, members),
+      }),
+    [lobby.threshold, lobby.viewingThreshold, update],
+  );
+  const setThreshold = useCallback((threshold: number) => void update({ threshold }), [update]);
+  const setRead = useCallback(
+    (viewingThreshold: number) => void update({ viewingThreshold }),
+    [update],
   );
 
   const start = useCallback(async () => {
@@ -159,18 +182,51 @@ function StartCard({ lobby, planned }: { lobby: LobbyView; planned: number | und
     <section className="flex flex-col rounded-lg bg-surface px-6 shadow-1">
       <header className="flex flex-col gap-3 border-b border-line-subtle py-4">
         <div className="flex flex-col gap-1">
-          <h2 className="type-heading-s text-fg">Thresholds</h2>
+          <h2 className="type-heading-s text-fg">The vault</h2>
           <p className="type-body-s text-fg-muted">
-            {planned ? `A vault for ${planned} members.` : `For the ${joined} who joined.`}
+            You can change these until you start. Co-founders see each change.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <ThresholdChip kind="spend" threshold={lobby.threshold} members={members} />
-          <ThresholdChip kind="read" threshold={lobby.viewingThreshold} members={members} />
+          <ThresholdChip kind="spend" threshold={lobby.threshold} members={planned} />
+          <ThresholdChip kind="read" threshold={lobby.viewingThreshold} members={planned} />
         </div>
       </header>
 
-      <div className="flex flex-col gap-3 py-4">
+      <dl className="flex flex-col divide-y divide-line-subtle">
+        <Setting label="Members" hint="Host included">
+          <NumberStepper
+            aria-label="Members"
+            value={planned}
+            min={Math.max(LIMITS.members.min, joined)}
+            max={LIMITS.members.max}
+            disabled={pending !== undefined}
+            onValueChange={setMembers}
+          />
+        </Setting>
+        <Setting label="Approvals to spend" hint={`of ${planned}`}>
+          <NumberStepper
+            aria-label="Approvals to spend"
+            value={lobby.threshold}
+            min={LIMITS.approvals.min}
+            max={planned}
+            disabled={pending !== undefined}
+            onValueChange={setThreshold}
+          />
+        </Setting>
+        <Setting label="Keepers to read" hint={`of ${planned}`}>
+          <NumberStepper
+            aria-label="Keepers to read"
+            value={lobby.viewingThreshold}
+            min={LIMITS.read.min}
+            max={planned}
+            disabled={pending !== undefined}
+            onValueChange={setRead}
+          />
+        </Setting>
+      </dl>
+
+      <div className="flex flex-col gap-3 border-t border-line-subtle py-4">
         {error ? <Banner kind="alarm">{error}</Banner> : null}
         {stop ? <p className="type-body-s text-fg-subtle">{stop}</p> : null}
         <div className="flex items-center justify-end gap-2">
@@ -192,6 +248,42 @@ function StartCard({ lobby, planned }: { lobby: LobbyView; planned: number | und
   );
 }
 
+function Setting({ label, hint, children }: { label: string; hint: string; children: ReactNode }) {
+  return (
+    <div className="flex items-center justify-between gap-4 py-3">
+      <dt className="flex flex-col">
+        <span className="type-label-m text-fg">{label}</span>
+        <span className="type-caption text-fg-subtle">{hint}</span>
+      </dt>
+      <dd>{children}</dd>
+    </div>
+  );
+}
+
+/** The host takes someone off the roster: a stranger with the invite, or someone joined twice. */
+function RemoveButton({ lobby, member }: { lobby: LobbyView; member: LobbyViewMember }) {
+  const [pending, setPending] = useState(false);
+  const remove = useCallback(async () => {
+    setPending(true);
+    await callOme("lobby.remove", { lobby: lobby.lobby, identity: member.identity }).catch(() =>
+      setPending(false),
+    );
+  }, [lobby.lobby, member.identity]);
+
+  return (
+    <Tooltip content={`Remove ${member.name}`}>
+      <IconButton
+        icon="x"
+        label={`Remove ${member.name}`}
+        size="sm"
+        onClick={remove}
+        disabled={pending}
+        className="opacity-60 transition-opacity duration-fast group-hover:opacity-100 focus-visible:opacity-100"
+      />
+    </Tooltip>
+  );
+}
+
 function WaitingCard({ lobby, hostName }: { lobby: LobbyView; hostName: string | undefined }) {
   const navigate = useNavigate();
   const [leaving, setLeaving] = useState(false);
@@ -200,7 +292,7 @@ function WaitingCard({ lobby, hostName }: { lobby: LobbyView; hostName: string |
     await callOme("lobby.leave", { lobby: lobby.lobby }).catch(() => undefined);
     await navigate({ to: "/home" });
   }, [lobby.lobby, navigate]);
-  const members = lobby.members.length;
+  const members = lobby.expected;
 
   return (
     <section className="flex flex-col gap-5 rounded-lg bg-surface p-5 shadow-1">

@@ -22,6 +22,11 @@ const proposal: Record<ProposalStatus, StatusDisplay> = {
     meaning: "Made under an older vault config (members changed)",
     tone: "neutral",
   },
+  unknown: {
+    label: "Unknown",
+    meaning: "A status from a newer release of Ome; update to see it",
+    tone: "neutral",
+  },
 };
 
 const service: Record<ServiceStatus, StatusDisplay> = {

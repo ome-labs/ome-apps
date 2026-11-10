@@ -4,6 +4,7 @@ import type { Review } from "@ome-labs/api";
 import {
   canApprove,
   feeLine,
+  formatArg,
   proposalSummary,
   reviewChecks,
   shortProposalId,
@@ -39,10 +40,11 @@ export function ReviewPanel({ review, onApprove, onReject, className }: ReviewPa
   const progress = voteProgress(proposal);
   // Calls are positional: the payload executes them in this order, and the same call can appear twice.
   const calls = proposal.calls.map((call, position) => ({ call, key: `call-${position + 1}` }));
-  const votes = [
-    ...proposal.approvals.map((vote) => ({ vote, approved: true, key: `approved-${vote.slot}` })),
-    ...proposal.rejections.map((vote) => ({ vote, approved: false, key: `rejected-${vote.slot}` })),
-  ];
+  const votes = proposal.votes.map((vote) => ({
+    vote,
+    approved: vote.approve,
+    key: `${vote.approve ? "approved" : "rejected"}-${vote.slot}`,
+  }));
 
   return (
     <View
@@ -59,7 +61,7 @@ export function ReviewPanel({ review, onApprove, onReject, className }: ReviewPa
             <View key={key} className={cn("gap-1 rounded-md bg-sunken px-3 py-2.5", depth.field)}>
               <Text className="type-label-m">{call.toLabel ?? "Contract"}</Text>
               <Hash value={call.to} noun="contract" tone="quiet" />
-              <Text className="type-mono-s text-fg-muted">{`${call.fn}(${call.args.join(", ")})${call.isStatic ? " · static" : ""}`}</Text>
+              <Text className="type-mono-s text-fg-muted">{`${call.fn}(${call.args.map(formatArg).join(", ")})${call.isStatic ? " · static" : ""}`}</Text>
             </View>
           ))}
         </Section>
@@ -134,7 +136,7 @@ function WhatHappens({ review }: { review: Review }) {
   if (intent.kind === "cancel") {
     return <Text>{`${proposalSummary(review.proposal)}, so it can never execute.`}</Text>;
   }
-  if (intent.kind === "calls") {
+  if (intent.kind !== "transfer") {
     return <Text>{`${proposalSummary(review.proposal)} from the vault.`}</Text>;
   }
 

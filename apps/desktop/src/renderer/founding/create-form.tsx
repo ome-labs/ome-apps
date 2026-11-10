@@ -13,7 +13,7 @@ import { AvatarPicker } from "../avatars/avatar-picker.tsx";
 import { VAULT_ART } from "../avatars/avatars.ts";
 import { callOme } from "../data/ome.ts";
 import { Page } from "../shell/page.tsx";
-import { rememberPicture, rememberPlanned } from "./planned.ts";
+import { rememberPicture } from "./planned.ts";
 import { LIMITS } from "./thresholds.ts";
 
 const schema = z
@@ -68,8 +68,8 @@ export function CreateForm() {
             name: values.name.trim(),
             threshold: values.approvals,
             viewingThreshold: values.read,
+            members: values.members,
           });
-          rememberPlanned(lobby.lobby, values.members);
           rememberPicture(lobby.lobby, picture);
           await navigate({ to: "/create", search: { lobby: lobby.lobby } });
         } catch (failure) {

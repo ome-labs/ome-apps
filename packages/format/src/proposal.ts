@@ -47,7 +47,24 @@ export function proposalSummary(
     case "cancel": {
       return `Cancel proposal ${shortProposalId(intent.cancels)}`;
     }
+    case "setThreshold": {
+      return `Require ${intent.threshold} ${intent.threshold === 1 ? "approval" : "approvals"} to spend`;
+    }
+    case "invalidatePending": {
+      return "Invalidate every pending proposal";
+    }
+    case "app": {
+      return `Transaction from ${intent.name ?? intent.origin}`;
+    }
+    case "unknown": {
+      return "A proposal from a newer release of Ome";
+    }
   }
+}
+
+/** The intent's memo, if it has one: a proposal from a newer release has none this release can read. */
+export function proposalMemo(intent: ProposalView["intent"]): string | null {
+  return intent.kind === "unknown" ? null : intent.memo;
 }
 
 export type MyVote = "approved" | "rejected" | "none";

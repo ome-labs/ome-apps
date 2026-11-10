@@ -12,7 +12,7 @@ const passing: Pick<Review, "checks" | "simulation" | "recipient"> = {
     notExpired: true,
     failure: null,
   },
-  simulation: { ok: true, gas: { da: 1536, l2: 412_800 }, error: null },
+  simulation: { ok: true, gas: { da: 1536, l2: 412_800 }, error: null, effects: null, fee: null },
   recipient: { address: aliases.dave, label: "accounts:dave", source: "aztecWallet" },
 };
 
@@ -29,13 +29,25 @@ test("lists the checks in the CLI's order and flags an alias", () => {
 
 test("a failed check blocks approval; a failed simulation only warns", () => {
   const stale = { ...passing, checks: { ...passing.checks, configCurrent: false } };
-  const unsimulated = { ...passing, simulation: { ok: false, gas: null, error: "out of gas" } };
+  const unsimulated = {
+    ...passing,
+    simulation: {
+      ok: false,
+      gas: null,
+      error: {
+        failure: { kind: "reverted" as const, contract: null, function: "transfer_in_private" },
+        message: "Assertion failed: Balance too low",
+      },
+      effects: null,
+      fee: null,
+    },
+  };
 
   expect(canApprove(stale)).toBe(false);
   expect(canApprove(unsimulated)).toBe(true);
   expect(reviewChecks(unsimulated)[3]).toMatchObject({
     state: "warning",
-    label: "Simulation failed: out of gas",
+    label: "Simulation failed: transfer_in_private reverted.",
   });
 });
 

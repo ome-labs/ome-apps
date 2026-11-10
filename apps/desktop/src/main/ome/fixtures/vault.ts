@@ -2,20 +2,23 @@
 // approved but not executed yet, so all 1,000 are still there.
 import type {
   ActivityEntry,
+  ActivityPage,
+  AuditPage,
   AuditView,
-  Counterparty,
+  CounterpartyPage,
   MemberReachability,
+  ProposalView,
   TokenBalance,
   VaultDetails,
   VaultSummary,
 } from "@ome-labs/api";
 
-import { createdAt, proposals } from "./proposals.ts";
 import {
   ACCOUNTS,
   FUNDING_TX,
   MEMBERS,
   OMET,
+  USDC,
   VAULT,
   sampleHex,
   samplePeerId,
@@ -36,6 +39,7 @@ export function vaultSummary(now: number): VaultSummary {
     members: 3,
     myIndex: 1,
     foundedAt: now - 2 * HOUR,
+    counts: { open: 2, ready: 1, needsMe: 1 },
   };
 }
 
@@ -68,17 +72,20 @@ export function vaultDetails(scenario: Scenario, now: number): VaultDetails {
     },
     committee: {
       epoch: 1,
+      protocolVersion: 0,
       viewingThreshold: 2,
       groupKey: samplePoint("treasury.group-key"),
       members: MEMBERS.map((m) => ({
         index: m.index,
         name: m.name,
+        account: ACCOUNTS[m.key],
         signerKey: samplePoint(`${m.key}.signer`),
         verificationShare: samplePoint(`treasury.share.${m.index}`),
         identity: sampleHex(`${m.key}.keeper`),
         transport: sampleHex(`${m.key}.transport`),
         peerId: samplePeerId(m.key),
         addresses: [`/ip4/127.0.0.1/udp/${54_010 + m.index * 2}/quic-v1`],
+        release: "0.3.0",
         you: m.you,
       })),
       // The removed scenario: a rotation left this member out, and its keeper destroyed its share.
@@ -99,6 +106,7 @@ export function peers(scenario: Scenario, now: number): MemberReachability[] {
     {
       index: 1,
       name: "Alice",
+      account: ACCOUNTS.alice,
       identity: sampleHex("alice.keeper"),
       peerId: samplePeerId("alice"),
       you: true,
@@ -110,6 +118,7 @@ export function peers(scenario: Scenario, now: number): MemberReachability[] {
     {
       index: 2,
       name: "Bob",
+      account: ACCOUNTS.bob,
       identity: sampleHex("bob.keeper"),
       peerId: samplePeerId("bob"),
       you: false,
@@ -121,6 +130,7 @@ export function peers(scenario: Scenario, now: number): MemberReachability[] {
     {
       index: 3,
       name: "Carol",
+      account: ACCOUNTS.carol,
       identity: sampleHex("carol.keeper"),
       peerId: samplePeerId("carol"),
       you: false,
@@ -132,14 +142,32 @@ export function peers(scenario: Scenario, now: number): MemberReachability[] {
   ];
 }
 
+/** What the vault holds of each token: 1,000 OMET in private notes, 25 public, and USDC it can't read yet. */
 export function tokens(): TokenBalance[] {
-  return [{ token: OMET, balance: "1000000000000000000000", error: null }];
+  return [
+    {
+      token: OMET,
+      private: { state: "known", amount: "1000000000000000000000" },
+      public: { state: "known", amount: "25000000000000000000" },
+    },
+    {
+      token: USDC,
+      private: { state: "unreadable", answered: 1, needed: 2 },
+      public: { state: "known", amount: "0" },
+    },
+  ];
 }
 
-export function activity(now: number): ActivityEntry[] {
-  const proposalEntries: ActivityEntry[] = proposals(now).map((proposal) => ({
+/** The vault's private balance of `token`, when it is known. */
+export function privateBalance(token: string): bigint | null {
+  const entry = tokens().find((t) => t.token.address === token);
+  return entry?.private.state === "known" ? BigInt(entry.private.amount) : null;
+}
+
+export function activity(now: number, proposals: ProposalView[]): ActivityPage {
+  const proposalEntries: ActivityEntry[] = proposals.map((proposal) => ({
     kind: "proposal",
-    at: createdAt(proposal),
+    at: proposal.createdAt,
     proposal,
   }));
   const funded: ActivityEntry = {
@@ -151,23 +179,26 @@ export function activity(now: number): ActivityEntry[] {
     txHash: FUNDING_TX,
     block: 1_182,
   };
-  return [...proposalEntries, funded].toSorted((a, b) => b.at - a.at);
+  return { items: [...proposalEntries, funded].toSorted((a, b) => b.at - a.at), next: null };
 }
 
-export function counterparties(now: number): Counterparty[] {
-  return [
-    {
-      address: ACCOUNTS.alice,
-      label: "alice",
-      received: 1,
-      firstAt: now - 110 * 60,
-      lastAt: now - 110 * 60,
-      exposed: false,
-    },
-  ];
+export function counterparties(now: number): CounterpartyPage {
+  return {
+    next: null,
+    items: [
+      {
+        address: ACCOUNTS.alice,
+        label: "alice",
+        received: 1,
+        firstAt: now - 110 * 60,
+        lastAt: now - 110 * 60,
+        exposed: false,
+      },
+    ],
+  };
 }
 
-export function audit(now: number): AuditView[] {
+export function audit(now: number, limit = 50): AuditPage {
   const entry = (
     minutesAgo: number,
     requester: "local" | "bob" | "carol",
@@ -181,10 +212,11 @@ export function audit(now: number): AuditView[] {
     points,
     outcome: "served",
   });
-  return [
+  const items: AuditView[] = [
     entry(2, "bob", "decryption", 4),
     entry(15, "local", "decryption", 2),
     entry(31, "carol", "recipient-tag", 1),
     entry(108, "local", "handshake", 1),
   ];
+  return { items: items.slice(0, limit), next: null };
 }

@@ -2,16 +2,17 @@
 // adds what a running daemon would have on top: well-formed ids for the values the story leaves out.
 import { createHash } from "node:crypto";
 
-import type { Hex32, Point } from "@ome-labs/api";
-import { aliases, omet, proposals, treasury } from "@ome-labs/format/sample";
+import type { Hex32, Point, TokenInfo } from "@ome-labs/api";
+import { accounts, aliases, omet, proposals, treasury } from "@ome-labs/format/sample";
 
 export { omet as OMET };
 
 export const VAULT = treasury.address;
 
 export const ACCOUNTS = {
-  alice: "0x51d85d773ad9865e0173d205de87e4dcb016caa9755277583b6815f8aa640d31",
-  bob: aliases.bob,
+  alice: accounts.alice,
+  bob: accounts.bob,
+  carol: accounts.carol,
   dave: aliases.dave,
 } as const;
 
@@ -56,3 +57,15 @@ export function samplePeerId(label: string): string {
 
 /** The canonical SponsoredFPC on the local network and Testnet, which pays every transaction. */
 export const FEE_PAYER = sampleHex("sponsored-fpc");
+
+/** A second token the vault tracks, for swaps. */
+export const USDC: TokenInfo = {
+  address: sampleHex("usdc.token"),
+  name: "USD Coin",
+  symbol: "USDC",
+  decimals: 6,
+  standard: true,
+};
+
+/** An AMM pool of OMET and USDC that `aztec-wallet` deployed as `amm`; the member hasn't registered it yet. */
+export const AMM = sampleHex("amm.contract");

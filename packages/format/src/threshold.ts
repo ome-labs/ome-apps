@@ -22,10 +22,10 @@ export type VoteProgress = {
 
 /** How far a proposal is from passing, and from being blocked. */
 export function voteProgress(
-  proposal: Pick<ProposalView, "approvals" | "rejections" | "threshold" | "members">,
+  proposal: Pick<ProposalView, "votes" | "threshold" | "members">,
 ): VoteProgress {
-  const approvals = proposal.approvals.filter((vote) => vote.valid).length;
-  const rejections = proposal.rejections.filter((vote) => vote.valid).length;
+  const approvals = proposal.votes.filter((vote) => vote.valid && vote.approve).length;
+  const rejections = proposal.votes.filter((vote) => vote.valid && !vote.approve).length;
 
   return {
     approvals,

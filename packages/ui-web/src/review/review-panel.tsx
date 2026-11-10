@@ -5,6 +5,8 @@ import type { Review } from "@ome-labs/api";
 import {
   canApprove,
   feeLine,
+  formatFee,
+  proposalMemo,
   proposalSummary,
   reviewChecks,
   shortProposalId,
@@ -18,6 +20,7 @@ import { cn } from "../styling/class-names.ts";
 import { Address } from "../values/address.tsx";
 import { Amount } from "../values/amount.tsx";
 import { Hash } from "../values/hash.tsx";
+import { AuthwitList, CallList, EffectsList } from "./call-list.tsx";
 import { CheckRow } from "./check-row.tsx";
 
 export type ReviewPanelProps = {
@@ -38,8 +41,6 @@ export function ReviewPanel({ review, onApprove, onReject, actions, className }:
   const checks = reviewChecks(review);
   const approvable = canApprove(review);
   const progress = voteProgress(proposal);
-  // Calls are positional: the payload executes them in this order, and the same call can appear twice.
-  const calls = proposal.calls.map((call, position) => ({ call, key: `call-${position + 1}` }));
 
   return (
     <section
@@ -51,26 +52,20 @@ export function ReviewPanel({ review, onApprove, onReject, actions, className }:
       </Section>
 
       {proposal.calls.length > 0 ? (
-        <Section title="Calls, as rebuilt">
-          <ol className="flex flex-col gap-2">
-            {calls.map(({ call, key }) => (
-              <li
-                key={key}
-                className="flex flex-col gap-1 rounded-md bg-sunken px-3 py-2.5 shadow-field"
-              >
-                <span className="flex flex-wrap items-center gap-2 type-label-m text-fg">
-                  {call.toLabel ?? "Contract"}
-                  <Hash value={call.to} noun="contract" tone="quiet" />
-                  {call.isStatic ? (
-                    <span className="type-caption text-fg-subtle">static</span>
-                  ) : null}
-                </span>
-                <code className="type-mono-s text-fg-muted [overflow-wrap:anywhere]">
-                  {call.fn}({call.args.join(", ")})
-                </code>
-              </li>
-            ))}
-          </ol>
+        <Section title={`Calls, as rebuilt · ${proposal.calls.length}`}>
+          <CallList calls={proposal.calls} />
+        </Section>
+      ) : null}
+
+      {proposal.authwits.length > 0 ? (
+        <Section title={`Authwits granted · ${proposal.authwits.length}`}>
+          <AuthwitList authwits={proposal.authwits} />
+        </Section>
+      ) : null}
+
+      {review.simulation.effects ? (
+        <Section title="Effects, from the simulation">
+          <EffectsList effects={review.simulation.effects} />
         </Section>
       ) : null}
 
@@ -83,29 +78,30 @@ export function ReviewPanel({ review, onApprove, onReject, actions, className }:
       </Section>
 
       <Section title={`Votes so far · ${progress.label}`}>
-        {proposal.approvals.length + proposal.rejections.length === 0 ? (
+        {proposal.votes.length === 0 ? (
           <p className="type-body-s text-fg-subtle">No votes yet.</p>
         ) : (
           <ul className="flex flex-col gap-2">
-            {[
-              ...proposal.approvals.map((vote) => ({ vote, approved: true })),
-              ...proposal.rejections.map((vote) => ({ vote, approved: false })),
-            ].map(({ vote, approved }) => (
-              <li
-                key={`${approved}-${vote.slot}`}
-                className="flex items-center gap-2 type-body-s text-fg"
-              >
-                <MemberAvatar name={vote.name} index={vote.index} size="sm" />
-                <span>{vote.name}</span>
-                <span className={approved ? "text-success" : "text-danger"}>
-                  {approved ? "approved" : "rejected"}
-                </span>
-                {vote.reason ? (
-                  <span className="truncate text-fg-muted">“{vote.reason}”</span>
-                ) : null}
-                {vote.valid ? null : <span className="text-danger">signature doesn't verify</span>}
-              </li>
-            ))}
+            {proposal.votes
+              .map((vote) => ({ vote, approved: vote.approve }))
+              .map(({ vote, approved }) => (
+                <li
+                  key={`${approved}-${vote.slot}`}
+                  className="flex items-center gap-2 type-body-s text-fg"
+                >
+                  <MemberAvatar name={vote.name} index={vote.index} size="sm" />
+                  <span>{vote.name}</span>
+                  <span className={approved ? "text-success" : "text-danger"}>
+                    {approved ? "approved" : "rejected"}
+                  </span>
+                  {vote.reason ? (
+                    <span className="truncate text-fg-muted">“{vote.reason}”</span>
+                  ) : null}
+                  {vote.valid ? null : (
+                    <span className="text-danger">signature doesn't verify</span>
+                  )}
+                </li>
+              ))}
           </ul>
         )}
       </Section>
@@ -157,17 +153,33 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 
 function WhatHappens({ review }: { review: Review }) {
   const { intent, token } = review.proposal;
-
-  if (intent.kind === "cancel") {
-    return (
-      <p className="type-body-m text-fg">
-        {proposalSummary(review.proposal)}, so it can never execute.
+  const memo = proposalMemo(intent);
+  const fee = review.simulation.fee;
+  const footer = (
+    <>
+      {memo ? <p className="type-body-s text-fg-muted">Memo: {memo}</p> : null}
+      <p className="type-body-s text-fg-muted">
+        Fee: {fee ? `about ${formatFee(fee)}, at most ${formatFee({ fee: fee.maxFee })}. ` : ""}
+        {feeLine}
       </p>
-    );
-  }
-  if (intent.kind === "calls") {
+    </>
+  );
+
+  if (intent.kind !== "transfer") {
+    const sentence =
+      intent.kind === "cancel"
+        ? `${proposalSummary(review.proposal)}, so it can never execute.`
+        : intent.kind === "calls"
+          ? `${proposalSummary(review.proposal)} from the vault.`
+          : intent.kind === "unknown"
+            ? `${proposalSummary(review.proposal)}. Its calls below are what you sign.`
+            : review.action || proposalSummary(review.proposal);
+
     return (
-      <p className="type-body-m text-fg">{proposalSummary(review.proposal)} from the vault.</p>
+      <div className="flex flex-col gap-2">
+        <p className="type-body-m text-fg">{sentence}</p>
+        {footer}
+      </div>
     );
   }
 
@@ -186,8 +198,7 @@ function WhatHappens({ review }: { review: Review }) {
       {token ? (
         <p className="type-mono-s text-fg-subtle">{BigInt(intent.amount).toString()} base units</p>
       ) : null}
-      {intent.memo ? <p className="type-body-s text-fg-muted">Memo: {intent.memo}</p> : null}
-      <p className="type-body-s text-fg-muted">Fee: {feeLine}</p>
+      {footer}
     </div>
   );
 }

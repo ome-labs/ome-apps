@@ -28,6 +28,18 @@ export function LobbyFlow({ lobby: id }: { lobby: Hex16 }) {
       </EmptyState>
     );
   }
+  if (lobby.data.removed) {
+    return (
+      <EmptyState
+        scene="cancelled"
+        title="You were removed from the lobby"
+        action={<Button onClick={home}>Back to Home</Button>}
+      >
+        {lobby.data.name}'s host removed you before founding. If that was a mistake, ask them for
+        the invite again.
+      </EmptyState>
+    );
+  }
   if (lobby.data.status === "closed" && !founding) {
     return (
       <EmptyState
