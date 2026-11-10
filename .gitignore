@@ -21,6 +21,8 @@ coverage/
 # Expo and React Native: generated native projects and local state
 .expo/
 expo-env.d.ts
+# Uniwind writes its theme types when Metro starts
+uniwind-types.d.ts
 apps/*/ios/
 apps/*/android/
 *.jks

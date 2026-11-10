@@ -6,13 +6,15 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build",
-    "check": "pnpm format:check && pnpm lint && pnpm typecheck",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test",
     "dev": "turbo run dev",
     "format": "oxfmt --write . && turbo run format",
     "format:check": "oxfmt --check . && turbo run format:check",
+    "kit": "turbo run kit --filter=@ome-labs/kit",
     "lint": "oxlint --deny-warnings . && turbo run lint",
     "lint:fix": "oxlint --fix .",
     "prepare": "lefthook install",
+    "storybook": "turbo run storybook --filter=@ome-labs/ui-web",
     "test": "turbo run test",
     "typecheck": "tsc -p tsconfig.json && turbo run typecheck"
   },
