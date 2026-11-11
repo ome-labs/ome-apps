@@ -26,11 +26,14 @@ import {
   cn,
 } from "@ome-labs/ui-web";
 
-import { callOme, omeQueryKey } from "../data/ome.ts";
+import { callOme, omeQueryKey, useOme } from "../data/ome.ts";
 import { useNow } from "../shell/now.ts";
 import { Page } from "../shell/page.tsx";
 
 const PAGE = 50;
+
+/** A keeper identity without its `0x`, lower-case: the audit log names keepers without the prefix. */
+const bare = (identity: string) => identity.toLowerCase().replace(/^0x/u, "");
 const ALL = "all";
 
 /**
@@ -52,14 +55,28 @@ export function AuditPage() {
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (last) => last.next ?? undefined,
   });
+  const details = useOme("vault.details", { vault });
+  // The keeper doesn't always know who a requesting keeper belongs to; the committee does.
+  const members = useMemo(
+    () => new Map((details.data?.committee.members ?? []).map((m) => [bare(m.identity), m.name])),
+    [details.data],
+  );
+  const named = useCallback(
+    (entry: AuditView) =>
+      auditRequester({
+        requester: entry.requester,
+        requesterName: entry.requesterName ?? members.get(bare(entry.requester)) ?? null,
+      }),
+    [members],
+  );
   const [who, setWho] = useState<string>(ALL);
   const entries = useMemo(() => log.data?.pages.flatMap((page) => page.items) ?? [], [log.data]);
   // The filter offers whoever appears in what's loaded, this member first.
   const requesters = useMemo(() => {
     const names = new Map<string, string>();
-    for (const entry of entries) names.set(entry.requester, auditRequester(entry));
+    for (const entry of entries) names.set(entry.requester, named(entry));
     return [...names].toSorted(([a], [b]) => (a === "local" ? -1 : b === "local" ? 1 : 0));
-  }, [entries]);
+  }, [entries, named]);
   const shown = useMemo(
     () => (who === ALL ? entries : entries.filter((entry) => entry.requester === who)),
     [entries, who],
@@ -114,6 +131,7 @@ export function AuditPage() {
                 <AuditRow
                   key={`${entry.at}:${entry.requester}:${entry.purpose}`}
                   entry={entry}
+                  who={named(entry)}
                   now={now}
                 />
               ))}
@@ -148,7 +166,7 @@ function WhoChip({
   return <FilterChip label={label} pressed={pressed} onPressedChange={press} />;
 }
 
-function AuditRow({ entry, now }: { entry: AuditView; now: number }) {
+function AuditRow({ entry, who, now }: { entry: AuditView; who: string; now: number }) {
   const outcome = auditOutcome(entry.outcome);
   return (
     <TableRow className={outcome.refused ? "bg-danger-subtle/40" : undefined}>
@@ -158,7 +176,7 @@ function AuditRow({ entry, now }: { entry: AuditView; now: number }) {
       <TableCell
         className={cn("type-label-m", entry.requester === "local" ? "text-fg-muted" : "text-fg")}
       >
-        {auditRequester(entry)}
+        {who}
       </TableCell>
       <TableCell className="type-body-s text-fg">
         {auditPurpose(entry.purpose)}

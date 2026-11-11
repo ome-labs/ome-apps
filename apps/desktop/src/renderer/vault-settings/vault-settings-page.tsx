@@ -64,7 +64,7 @@ export function VaultSettingsPage() {
             <OnThisComputer vault={vault} summary={summary} />
           </>
         ) : null}
-        <Contracts />
+        <Contracts vault={vault} />
         {details.data ? <Internals details={details.data} /> : null}
         {summary && details.data ? (
           <Leave
@@ -258,10 +258,17 @@ function OnThisComputer({ vault, summary }: { vault: Hex32; summary: VaultSummar
         title="Alias"
         description={
           <>
-            A short name for the command line:{" "}
-            <code className="type-mono-s">
-              ome --vault {summary.alias ?? (alias || "treasury")}
-            </code>
+            {summary.alias ? (
+              <>
+                The vault's short name for the command line:{" "}
+                <code className="type-mono-s">ome --vault {summary.alias}</code>
+              </>
+            ) : (
+              <>
+                None yet. A short name for the command line, like{" "}
+                <code className="type-mono-s">ome --vault treasury</code>
+              </>
+            )}
           </>
         }
         below={
@@ -306,8 +313,14 @@ function OnThisComputer({ vault, summary }: { vault: Hex32; summary: VaultSummar
 const SOURCES = { registered: "Added by you", token: "A vault token", vault: "The vault" } as const;
 
 /** The contracts this member's proposals can call; a member's list is their own. */
-function Contracts() {
+function Contracts({ vault }: { vault: Hex32 }) {
   const contracts = useOme("contracts.list", {});
+  const tokens = useOme("tokens.list", { vault });
+  // A token's contract is named "Token" in its artifact; its symbol says which.
+  const symbols = useMemo(
+    () => new Map((tokens.data ?? []).map((entry) => [entry.token.address, entry.token.symbol])),
+    [tokens.data],
+  );
   const list = useMemo(() => contracts.data ?? [], [contracts.data]);
   const added = useCallback((contract: ContractView) => toast(`Added ${contract.name}`), []);
 
@@ -323,7 +336,11 @@ function Contracts() {
       ) : null}
       <ul className="flex flex-col">
         {list.map((contract) => (
-          <ContractRow key={contract.address} contract={contract} />
+          <ContractRow
+            key={contract.address}
+            contract={contract}
+            symbol={symbols.get(contract.address)}
+          />
         ))}
       </ul>
       <div className="flex items-center justify-between gap-3 py-4">
@@ -338,7 +355,7 @@ function Contracts() {
   );
 }
 
-function ContractRow({ contract }: { contract: ContractView }) {
+function ContractRow({ contract, symbol }: { contract: ContractView; symbol: string | undefined }) {
   const [pending, setPending] = useState(false);
   const remove = useCallback(async () => {
     setPending(true);
@@ -355,7 +372,7 @@ function ContractRow({ contract }: { contract: ContractView }) {
     <li className="flex items-center gap-3 border-b border-line-subtle py-3">
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="flex items-center gap-2">
-          <span className="type-label-m text-fg">{contract.name}</span>
+          <span className="type-label-m text-fg">{symbol ?? contract.name}</span>
           <span className="type-caption text-fg-subtle">{SOURCES[contract.source]}</span>
         </span>
         <span className="flex items-center gap-2 type-caption text-fg-subtle">
