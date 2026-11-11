@@ -183,4 +183,45 @@ describe("FixtureClient", () => {
     expect(latest?.kind).toBe("received");
     expect(events).toEqual(["received", "balanceChanged"]);
   });
+
+  it("renames a vault for every member, and sets its alias and the default", async () => {
+    const client = new FixtureClient("normal");
+    const events: string[] = [];
+    client.subscribe((event) => events.push(event.type));
+    await client.call("vault.rename", { vault: VAULT, name: "Treasury 2026" });
+    await expect(client.call("vault.rename", { vault: VAULT, name: " " })).rejects.toMatchObject({
+      kind: "invalid",
+    });
+    const ops = (await client.call("vault.list", {})).find((v) => v.name === "Ops fund");
+    await client.call("vault.alias", { vault: ops?.address ?? VAULT, alias: "ops-2" });
+    await client.call("vault.use", { vault: ops?.address ?? VAULT });
+    const status = await client.call("status", {});
+    expect(status.vaults.map((v) => [v.name, v.alias, v.isDefault])).toEqual([
+      ["Treasury 2026", "treasury", false],
+      ["Ops fund", "ops-2", true],
+    ]);
+    expect(status.defaultVault).toBe(ops?.address);
+    expect(events).toContain("vaultRenamed");
+  });
+
+  it("retires a share only once the member was removed", async () => {
+    await expect(
+      new FixtureClient("normal").call("vault.retire", { vault: VAULT }),
+    ).rejects.toMatchObject({ kind: "invalid" });
+    const left = await new FixtureClient("removed").call("vault.retire", { vault: VAULT });
+    expect(left.map((v) => v.name)).toEqual(["Ops fund"]);
+  });
+
+  it("pages the keeper audit log, with a refusal in it", async () => {
+    const client = new FixtureClient("normal");
+    const first = await client.call("vault.audit", { vault: VAULT, limit: 50 });
+    expect(first.items).toHaveLength(50);
+    expect(first.items.some((entry) => entry.outcome.startsWith("refused"))).toBe(true);
+    const second = await client.call("vault.audit", {
+      vault: VAULT,
+      limit: 50,
+      ...(first.next ? { before: first.next } : {}),
+    });
+    expect(second.items[0]?.at).toBeLessThan(first.items.at(-1)?.at ?? 0);
+  });
 });

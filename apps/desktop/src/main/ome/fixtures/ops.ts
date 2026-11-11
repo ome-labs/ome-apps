@@ -90,10 +90,13 @@ export class FixtureOps {
     const answers: Partial<Record<RendererMethod, () => unknown>> = {
       "vault.details": () => {
         const details = vaultDetails(scenario, now);
+        // The scenarios about one vault (removed, alarm) are Treasury's; Ops fund stays well.
         return {
           ...details,
           summary: opsSummary(now),
           contract: { ...details.contract, address: OPS },
+          config: details.config ? { ...details.config, matchesCommittee: true } : null,
+          committee: { ...details.committee, serving: true, keeperStatus: "active" },
         };
       },
       "vault.peers": () => peers(scenario, now),
@@ -112,6 +115,7 @@ export class FixtureOps {
       "vault.counterparties": () => ({ items: [], next: null }),
       "vault.receiving": () => ({ handshakes: true, senders: 3, lastReceivedAt: null }),
       "membership.list": () => [],
+      "vault.audit": () => ({ items: [], next: null }),
     };
     const answer = answers[method];
     if (!answer)

@@ -6,6 +6,7 @@ import { EmptyState } from "@ome-labs/ui-web";
 
 import { ActivityPage } from "../activity/activity-page.tsx";
 import { CounterpartiesPage } from "../activity/counterparties-page.tsx";
+import { AuditPage } from "../audit/audit-page.tsx";
 import { HomePage } from "../home/home-page.tsx";
 import { HealthPage } from "../members/health-page.tsx";
 import { MembersPage } from "../members/members-page.tsx";
@@ -16,6 +17,7 @@ import { ProposalsPage } from "../proposals/proposals-page.tsx";
 import { ReceivePage } from "../receive/receive-page.tsx";
 import { Page } from "../shell/page.tsx";
 import { BalancesPage } from "../tokens/balances-page.tsx";
+import { VaultSettingsPage } from "../vault-settings/vault-settings-page.tsx";
 import type { Page as PageEntry } from "./pages.ts";
 
 type Screen = () => ReactNode;
@@ -35,6 +37,8 @@ export const VAULT_SCREENS: Partial<Record<string, Screen>> = {
   "/health": HealthPage,
   "/activity": ActivityPage,
   "/counterparties": CounterpartiesPage,
+  "/settings": VaultSettingsPage,
+  "/audit": AuditPage,
 };
 
 /** App pages with their own routes, which count as built. */

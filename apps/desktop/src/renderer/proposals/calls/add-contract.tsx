@@ -50,10 +50,13 @@ export function AddContract({
   registered,
   onAdded,
   disabled,
+  label,
 }: {
   registered: ContractView[];
   onAdded: (contract: ContractView) => void;
   disabled?: boolean | undefined;
+  /** A labelled button instead of the "+" beside a contract picker. */
+  label?: string | undefined;
 }) {
   const [open, setOpen] = useState(false);
   const aliases = useOme("aztec.aliases", {}, { enabled: open });
@@ -74,15 +77,21 @@ export function AddContract({
 
   return (
     <>
-      <Tooltip content="Add a contract">
-        <IconButton
-          icon="plus"
-          label="Add a contract"
-          variant="secondary"
-          disabled={disabled}
-          onClick={show}
-        />
-      </Tooltip>
+      {label ? (
+        <Button icon="plus" onClick={show} disabled={disabled}>
+          {label}
+        </Button>
+      ) : (
+        <Tooltip content="Add a contract">
+          <IconButton
+            icon="plus"
+            label="Add a contract"
+            variant="secondary"
+            disabled={disabled}
+            onClick={show}
+          />
+        </Tooltip>
+      )}
       <Dialog
         title="Add a contract"
         description="Ome checks the artifact is the code at the address, then the other members' daemons can rebuild calls to it."

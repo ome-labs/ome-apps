@@ -14,11 +14,15 @@ import { VAULT } from "./sample.ts";
 import type { Scenario } from "./scenarios.ts";
 import { keeper, node, settings, signer, status } from "./status.ts";
 import { FixtureTokens } from "./tokens.ts";
-import { audit, peers, vaultDetails } from "./vault.ts";
+import { FixtureVaultSettings, auditLog } from "./vault-settings.ts";
+import { peers, vaultDetails } from "./vault.ts";
 
 type Handlers = { [M in RendererMethod]?: (params: DaemonParams<M>) => DaemonResult<M> };
 
 const now = () => Math.floor(Date.now() / 1000);
+
+/** What a member changes about any vault, Ops fund included: answered by the shared settings, not its fixture. */
+const SETTINGS = new Set<RendererMethod>(["vault.alias", "vault.use", "vault.rename"]);
 
 export class FixtureClient implements OmeClient {
   #scenario: Scenario;
@@ -31,6 +35,7 @@ export class FixtureClient implements OmeClient {
   readonly #tokens = new FixtureTokens((event) => this.#emit(event));
   readonly #history = new FixtureHistory(now(), (event) => this.#emit(event));
   readonly #ops = new FixtureOps(this.#contracts);
+  readonly #vaultSettings = new FixtureVaultSettings((event) => this.#emit(event));
   readonly #proposals = new FixtureProposals(
     this.#contracts,
     (event) => this.#emit(event),
@@ -82,10 +87,18 @@ export class FixtureClient implements OmeClient {
 
     if (
       vaultOf(params) === OPS &&
+      !SETTINGS.has(method) &&
       this.#scenario !== "no-vaults" &&
       this.#scenario !== "no-profile"
     ) {
-      return this.#ops.call(method, params, this.#scenario, now());
+      const answer = this.#ops.call(method, params, this.#scenario, now());
+      // Its name, alias and default are this session's, like Treasury's.
+      if (method !== "vault.details") return answer;
+      const summary = this.#vaults().find((v) => v.address === OPS);
+      return {
+        ...(answer as DaemonResult<"vault.details">),
+        ...(summary ? { summary } : {}),
+      } as DaemonResult<M>;
     }
     const handler = this.#handlers[method] as
       | ((params: DaemonParams<M>) => DaemonResult<M>)
@@ -116,6 +129,16 @@ export class FixtureClient implements OmeClient {
     );
   }
 
+  /** The sample vaults before this session's changes. */
+  #baseVaults() {
+    return status(this.#scenario, now(), this.#unlockedUntil).vaults;
+  }
+
+  /** The vaults as the member sees them now: renamed, aliased, the default, without a retired one. */
+  #vaults() {
+    return this.#vaultSettings.apply(this.#baseVaults());
+  }
+
   /** The vault a request names must be Treasury, and the profile must have it. */
   #vault(address: Hex32): void {
     if (this.#scenario === "no-profile")
@@ -144,10 +167,16 @@ export class FixtureClient implements OmeClient {
       },
       capabilities: ["authwits", "apps", "capabilities"],
     }),
-    status: () => ({
-      ...status(this.#scenario, now(), this.#unlockedUntil),
-      settings: this.#settings,
-    }),
+    status: () => {
+      const base = status(this.#scenario, now(), this.#unlockedUntil);
+      const vaults = this.#vaults();
+      return {
+        ...base,
+        settings: this.#settings,
+        vaults,
+        defaultVault: vaults.find((v) => v.isDefault)?.address ?? vaults[0]?.address ?? null,
+      };
+    },
     "config.get": () => this.#settings,
     "config.set": (patch) => {
       const defined = Object.entries(patch).filter(([, value]) => value !== undefined);
@@ -195,8 +224,24 @@ export class FixtureClient implements OmeClient {
       this.#emit({ type: "signer", signer: next });
       return next;
     },
-    "vault.list": () => status(this.#scenario, now(), this.#unlockedUntil).vaults,
-    "vault.details": ({ vault }) => (this.#vault(vault), vaultDetails(this.#scenario, now())),
+    "vault.list": () => this.#vaults(),
+    "vault.details": ({ vault }) => {
+      this.#vault(vault);
+      const details = vaultDetails(this.#scenario, now());
+      const summary = this.#vaults().find((v) => v.address === vault) ?? details.summary;
+      return { ...details, summary };
+    },
+    "vault.rename": ({ vault, name }) => {
+      if (vault !== OPS) this.#vault(vault);
+      return this.#vaultSettings.rename(vault, name, this.#baseVaults());
+    },
+    "vault.alias": ({ vault, alias }) =>
+      this.#vaultSettings.alias(vault, alias, this.#baseVaults()),
+    "vault.use": ({ vault }) => this.#vaultSettings.use(vault, this.#baseVaults()),
+    "vault.retire": ({ vault }) => (
+      this.#vault(vault),
+      this.#vaultSettings.retire(vault, this.#scenario, this.#baseVaults())
+    ),
     "vault.peers": ({ vault }) => (this.#vault(vault), peers(this.#scenario, now())),
     "vault.activity": (params) => (
       this.#vault(params.vault),
@@ -206,7 +251,7 @@ export class FixtureClient implements OmeClient {
       this.#vault(params.vault),
       this.#history.counterparties(now(), params)
     ),
-    "vault.audit": ({ vault, limit }) => (this.#vault(vault), audit(now(), limit)),
+    "vault.audit": (params) => (this.#vault(params.vault), auditLog(now(), params)),
     "tokens.list": ({ vault }) => (this.#vault(vault), this.#tokens.list(this.#scenario)),
     "tokens.add": ({ vault, token, deployment }) => (
       this.#vault(vault),
