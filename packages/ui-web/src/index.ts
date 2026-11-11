@@ -104,6 +104,7 @@ export {
 export { Card, CardHeader, DetailRow, type CardHeaderProps } from "./surfaces/card.tsx";
 export { EmptyState, type EmptyStateProps } from "./surfaces/empty-state.tsx";
 export { Scene, type SceneProps } from "./surfaces/scene.tsx";
+export { StateArt, type StateArtProps } from "./surfaces/state-art.tsx";
 
 export {
   AppShell,

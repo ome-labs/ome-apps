@@ -34,6 +34,43 @@
   }
 }
 
+/* State objects come in a light and a dark drawing (StateArt renders both); show the one for the theme in
+   effect. Nested frames (a light panel inside a dark page, as the kit's split view draws) win over the page. */
+@layer components {
+  .ome-art-dark {
+    display: none;
+  }
+  [data-theme="dark"] .ome-art-light,
+  [data-theme="light"] [data-theme="dark"] .ome-art-light {
+    display: none;
+  }
+  [data-theme="dark"] .ome-art-dark,
+  [data-theme="light"] [data-theme="dark"] .ome-art-dark {
+    display: revert;
+  }
+  [data-theme="dark"] [data-theme="light"] .ome-art-light {
+    display: revert;
+  }
+  [data-theme="dark"] [data-theme="light"] .ome-art-dark {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .ome-art-light {
+      display: none;
+    }
+    :root:not([data-theme]) .ome-art-dark {
+      display: revert;
+    }
+    :root:not([data-theme]) [data-theme="light"] .ome-art-light {
+      display: revert;
+    }
+    :root:not([data-theme]) [data-theme="light"] .ome-art-dark {
+      display: none;
+    }
+  }
+}
+
 /* Square controls (icon buttons) share the control heights. */
 @utility size-control-* {
   width: --value(--height-control-*);

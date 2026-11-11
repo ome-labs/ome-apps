@@ -176,6 +176,7 @@ const cases: [string, ReactElement][] = [
         </dl>
       </Card>
       <EmptyState illustration="no-proposals" title="Nothing waiting for you." />
+      <EmptyState state="no-vaults" size="lg" title="No vaults yet" />
     </>,
   ],
   [
