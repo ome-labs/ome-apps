@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { OmeError } from "../client.ts";
 import { FixtureClient } from "./client.ts";
-import { PROPOSALS, VAULT } from "./sample.ts";
+import { OMET, PROPOSALS, VAULT, sampleHex } from "./sample.ts";
 import { SCENARIOS } from "./scenarios.ts";
 
 describe("FixtureClient", () => {
@@ -88,5 +88,56 @@ describe("FixtureClient", () => {
     await expect(client.call("lobby.join", { invite: "ome-invite:wrong" })).rejects.toMatchObject({
       kind: "invalid",
     });
+  });
+
+  it("adds, stops tracking and deploys tokens, with the events the daemon sends", async () => {
+    const client = new FixtureClient("normal");
+    const events: string[] = [];
+    client.subscribe((event) => events.push(event.type));
+    const jade = sampleHex("jade.token");
+
+    await expect(client.call("tokens.add", { vault: VAULT, token: jade })).resolves.toMatchObject({
+      symbol: "JADE",
+    });
+    await expect(
+      client.call("tokens.add", { vault: VAULT, token: sampleHex("unknown") }),
+    ).rejects.toMatchObject({ kind: "invalid" });
+    const left = await client.call("tokens.remove", { vault: VAULT, token: jade });
+    expect(left.map((token) => token.symbol)).toEqual(["OMET", "USDC"]);
+    await expect(client.call("tokens.deployTest", { vault: VAULT })).rejects.toMatchObject({
+      kind: "locked",
+    });
+    await client.call("signer.unlock", { secret: { passphrase: "correct horse" }, ttlSecs: 60 });
+    await client.call("tokens.deployTest", { vault: VAULT });
+    expect((await client.call("tokens.list", { vault: VAULT })).length).toBe(3);
+    expect(events).toEqual(
+      expect.arrayContaining(["tokenAdded", "tokenRemoved", "balanceChanged"]),
+    );
+  });
+
+  it("reads private balances as the scenario allows", async () => {
+    const [keeperDown] = await new FixtureClient("keeper-failed").call("tokens.list", {
+      vault: VAULT,
+    });
+    expect(keeperDown?.private).toEqual({ state: "unreadable", answered: 0, needed: 2 });
+    const [nodeDown] = await new FixtureClient("node-unreachable").call("tokens.list", {
+      vault: VAULT,
+    });
+    expect(nodeDown?.private.state).toBe("failed");
+  });
+
+  it("makes payment links with the token and amount", async () => {
+    const client = new FixtureClient("normal");
+    const request = await client.call("vault.request", {
+      vault: VAULT,
+      token: OMET.address,
+      amount: "250000000000000000000",
+      memo: "Audit",
+    });
+    expect(request.uri).toMatch(new RegExp(`^ome-pay:${VAULT}\\?v=0&`, "u"));
+    expect(request.uri).toContain("amount=250000000000000000000");
+    await expect(
+      client.call("vault.request", { vault: VAULT, token: sampleHex("not-tracked") }),
+    ).rejects.toMatchObject({ kind: "invalid" });
   });
 });

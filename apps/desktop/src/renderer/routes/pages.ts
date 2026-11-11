@@ -121,7 +121,7 @@ export const VAULT_PAGES: readonly Page[] = [
     icon: "receive",
     title: "Receive",
     section: "5.13",
-    methods: ["vault.details", "tokens.list", "config.get"],
+    methods: ["tokens.list", "vault.receiving", "vault.request"],
   },
   {
     path: "/members",

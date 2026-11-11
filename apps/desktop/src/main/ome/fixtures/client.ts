@@ -11,7 +11,8 @@ import { FixtureProposals } from "./proposal-state.ts";
 import { VAULT } from "./sample.ts";
 import type { Scenario } from "./scenarios.ts";
 import { keeper, node, settings, signer, status } from "./status.ts";
-import { activity, audit, counterparties, peers, tokens, vaultDetails } from "./vault.ts";
+import { FixtureTokens } from "./tokens.ts";
+import { activity, audit, counterparties, peers, vaultDetails } from "./vault.ts";
 
 type Handlers = { [M in RendererMethod]?: (params: DaemonParams<M>) => DaemonResult<M> };
 
@@ -25,11 +26,11 @@ export class FixtureClient implements OmeClient {
   readonly #listeners = new Set<(event: DaemonEvent) => void>();
   /** A founded vault makes this a profile with Treasury, as the sample story has it. */
   readonly #contracts = new FixtureContracts();
+  readonly #tokens = new FixtureTokens((event) => this.#emit(event));
   readonly #proposals = new FixtureProposals(
     this.#contracts,
     (event) => this.#emit(event),
-    () =>
-      this.#unlockedUntil !== null && this.#unlockedUntil > now() && this.#scenario !== "locked",
+    () => this.#unlocked(),
   );
   readonly #founding = new FixtureFounding(
     (event) => this.#emit(event),
@@ -91,6 +92,12 @@ export class FixtureClient implements OmeClient {
 
   #emit(event: DaemonEvent): void {
     for (const listener of this.#listeners) listener(event);
+  }
+
+  #unlocked(): boolean {
+    return (
+      this.#unlockedUntil !== null && this.#unlockedUntil > now() && this.#scenario !== "locked"
+    );
   }
 
   /** The vault a request names must be Treasury, and the profile must have it. */
@@ -178,7 +185,22 @@ export class FixtureClient implements OmeClient {
     "vault.activity": ({ vault }) => (this.#vault(vault), activity(now(), this.#proposals.all())),
     "vault.counterparties": ({ vault }) => (this.#vault(vault), counterparties(now())),
     "vault.audit": ({ vault, limit }) => (this.#vault(vault), audit(now(), limit)),
-    "tokens.list": ({ vault }) => (this.#vault(vault), tokens()),
+    "tokens.list": ({ vault }) => (this.#vault(vault), this.#tokens.list(this.#scenario)),
+    "tokens.add": ({ vault, token, deployment }) => (
+      this.#vault(vault),
+      this.#tokens.add(token, deployment)
+    ),
+    "tokens.remove": ({ vault, token }) => (this.#vault(vault), this.#tokens.remove(token)),
+    "tokens.deployTest": ({ vault }) => {
+      this.#vault(vault);
+      if (!this.#unlocked()) throw new OmeError("locked", "The signer is locked.");
+      return this.#tokens.deployTest(this.#scenario);
+    },
+    "vault.receiving": ({ vault }) => (
+      this.#vault(vault),
+      this.#tokens.receiving(now() - 110 * 60)
+    ),
+    "vault.request": (params) => (this.#vault(params.vault), this.#tokens.request(params)),
     "proposals.list": ({ vault, filter, limit }) => (
       this.#vault(vault),
       this.#proposals.list(filter, limit)

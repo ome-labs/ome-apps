@@ -14,12 +14,14 @@ import { Welcome } from "./onboarding/welcome.tsx";
 import { NewProposalPage } from "./proposals/new-proposal-page.tsx";
 import { ProposalPage } from "./proposals/proposal-page.tsx";
 import { ProposalsPage } from "./proposals/proposals-page.tsx";
+import { ReceivePage } from "./receive/receive-page.tsx";
 import { APP_PAGES, VAULT_PAGES } from "./routes/pages.ts";
 import { Start } from "./routes/start.tsx";
 import { SettingsLayout } from "./settings/layout.tsx";
 import { SETTINGS_PAGES } from "./settings/pages.tsx";
 import { AppFrame } from "./shell/app-frame.tsx";
 import { SessionGate } from "./shell/session-gate.tsx";
+import { BalancesPage } from "./tokens/balances-page.tsx";
 
 // The root decides between the first run, the profile list and the app. Pages are empty until their screens are
 // built; Settings has its own pages, one per section.
@@ -82,6 +84,8 @@ const VAULT_SCREENS: Partial<Record<string, () => React.ReactNode>> = {
   "/proposals": ProposalsPage,
   "/proposals/$id": ProposalPage,
   "/new": NewProposalPage,
+  "/tokens": BalancesPage,
+  "/receive": ReceivePage,
 };
 const vaultPages = VAULT_PAGES.map((page) => {
   const component = VAULT_SCREENS[page.path];

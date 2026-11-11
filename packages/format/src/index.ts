@@ -1,5 +1,6 @@
 export * from "./address.ts";
 export * from "./amount.ts";
+export * from "./balance.ts";
 export * from "./count.ts";
 export * from "./health.ts";
 export * from "./proposal.ts";
