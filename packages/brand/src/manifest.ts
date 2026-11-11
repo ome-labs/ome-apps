@@ -6,6 +6,8 @@ export type {
   ProfileAvatarId,
   SceneId,
   SpotId,
+  StateObjectGroup,
+  StateObjectId,
   TextureId,
   VaultAvatarId,
 } from "./generated/manifest.ts";

@@ -20,6 +20,10 @@ const listed = new Set<string>([
   ...manifest.objects.map((item) => item.file),
   ...manifest.scenes.flatMap((item) => [item.files["1x"], item.files["2x"]]),
   ...manifest.avatars.map((item) => item.file),
+  ...manifest.stateObjects.flatMap((item) => [
+    ...Object.values(item.light.files),
+    ...Object.values(item.dark.files),
+  ]),
   ...manifest.logos.map((item) => item.file),
 ]);
 
@@ -30,7 +34,7 @@ describe("manifest", () => {
     expect(missing).toEqual([]);
   });
 
-  test.each(["illustrations", "textures", "objects", "logo", "scenes", "avatars"])(
+  test.each(["illustrations", "textures", "objects", "logo", "scenes", "avatars", "state-objects"])(
     "every file in assets/%s is listed",
     (folder) => {
       const unlisted = filesUnder(folder).filter((file) => !listed.has(file));
@@ -48,6 +52,18 @@ describe("manifest", () => {
       manifest.avatars.filter((item) => item.kind === "vault").length,
       manifest.avatars.filter((item) => item.kind === "profile").length,
     ]).toEqual([67, 73, 12, 57, 30, 30]);
+  });
+
+  test("65 state objects, each with alt text, a use, and a light and a dark drawing", () => {
+    expect(manifest.stateObjects).toHaveLength(65);
+    expect(
+      manifest.stateObjects.filter((item) => item.alt.trim() === "" || item.use.trim() === ""),
+    ).toEqual([]);
+    const ids = manifest.stateObjects.map((item) => item.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(new Set(manifest.stateObjects.map((item) => item.group))).toEqual(
+      new Set(["empty", "states", "setup", "things"]),
+    );
   });
 
   test("scenes and avatars have alt text, and avatar ids are unique across both kinds", () => {

@@ -15,6 +15,7 @@ import {
   illustrationFile,
   objectFile,
   sceneFile,
+  stateObjectFile,
   textureFile,
 } from "../src/catalog/paths.ts";
 
@@ -134,6 +135,23 @@ const manifest = {
     height: grids.avatars.height,
     file: avatarFile(kind, id),
   })),
+  stateObjects: catalog.stateObjects.map(({ id, title, group, use, alt, size }) => ({
+    id,
+    title,
+    group,
+    use,
+    alt,
+    light: {
+      width: size.light[0],
+      height: size.light[1],
+      files: { "1x": stateObjectFile("light", id, "1x"), "2x": stateObjectFile("light", id, "2x") },
+    },
+    dark: {
+      width: size.dark[0],
+      height: size.dark[1],
+      files: { "1x": stateObjectFile("dark", id, "1x"), "2x": stateObjectFile("dark", id, "2x") },
+    },
+  })),
   logos: logos.map(({ file }) => ({
     id: file.replace(/\.svg$/, ""),
     alt: "Ome",
@@ -158,6 +176,8 @@ export type SceneId = (typeof manifest.scenes)[number]["id"];
 export type AvatarId = (typeof manifest.avatars)[number]["id"];
 export type VaultAvatarId = Extract<(typeof manifest.avatars)[number], { kind: "vault" }>["id"];
 export type ProfileAvatarId = Extract<(typeof manifest.avatars)[number], { kind: "profile" }>["id"];
+export type StateObjectId = (typeof manifest.stateObjects)[number]["id"];
+export type StateObjectGroup = (typeof manifest.stateObjects)[number]["group"];
 `,
 );
 
@@ -183,6 +203,10 @@ ${manifest.scenes.map((item) => `  "${item.id}": { "1x": ${url(item.files["1x"])
 
 export const avatarUrls = {
 ${manifest.avatars.map((item) => `  "${item.id}": ${url(item.file)},`).join("\n")}
+} as const;
+
+export const stateObjectUrls = {
+${manifest.stateObjects.map((item) => `  "${item.id}": { light: { "1x": ${url(item.light.files["1x"])}, "2x": ${url(item.light.files["2x"])} }, dark: { "1x": ${url(item.dark.files["1x"])}, "2x": ${url(item.dark.files["2x"])} } },`).join("\n")}
 } as const;
 `,
 );
@@ -215,9 +239,13 @@ ${manifest.scenes.map((item) => `  "${item.id}": ${asset(item.files["1x"])},`).j
 export const avatarXml = {
 ${manifest.avatars.map((item) => `  "${item.id}": ${JSON.stringify(readFileSync(join(assetsDirectory, item.file), "utf8").trim())},`).join("\n")}
 } as const;
+
+export const stateObjectSources = {
+${manifest.stateObjects.map((item) => `  "${item.id}": { light: ${asset(item.light.files["1x"])}, dark: ${asset(item.dark.files["1x"])} },`).join("\n")}
+} as const;
 `,
 );
 
 console.log(
-  `brand: ${logos.length} logo components per platform, manifest of ${manifest.illustrations.length + manifest.textures.length + manifest.objects.length + manifest.scenes.length + manifest.avatars.length} assets → src/generated/`,
+  `brand: ${logos.length} logo components per platform, manifest of ${manifest.illustrations.length + manifest.textures.length + manifest.objects.length + manifest.scenes.length + manifest.avatars.length + manifest.stateObjects.length * 2} assets → src/generated/`,
 );

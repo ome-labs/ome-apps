@@ -6,5 +6,7 @@ export const textureFile = (id: string, scale: "1x" | "2x") => `textures/${id}@$
 export const objectFile = (group: string, id: string) => `objects/${group}/${id}.svg`;
 export const sceneFile = (id: string, scale: "1x" | "2x") => `scenes/${id}@${scale}.webp`;
 export const avatarFile = (kind: "vault" | "profile", id: string) => `avatars/${kind}s/${id}.svg`;
+export const stateObjectFile = (theme: "light" | "dark", id: string, scale: "1x" | "2x") =>
+  `state-objects/${theme}/${id}@${scale}.webp`;
 export const appIconVariants = ["lake", "night", "paper", "testnet"] as const;
 export type AppIconVariant = (typeof appIconVariants)[number];

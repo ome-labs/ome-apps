@@ -1659,5 +1659,722 @@
       "kind": "profile",
       "alt": "An iguana basking on a rock, its spiny crest and banded tail in the sun."
     }
+  ],
+  "stateObjects": [
+    {
+      "id": "no-proposals",
+      "title": "Empty ballot box",
+      "group": "empty",
+      "use": "Proposals, nothing open or nothing matching a filter",
+      "alt": "An empty wooden ballot box with a slot in its lid.",
+      "size": {
+        "light": [114, 118],
+        "dark": [114, 118]
+      }
+    },
+    {
+      "id": "no-vaults",
+      "title": "Open, empty strongbox",
+      "group": "empty",
+      "use": "Home before any vault exists",
+      "alt": "An open stone strongbox, empty, its lid leaning back.",
+      "size": {
+        "light": [123, 159],
+        "dark": [123, 159]
+      }
+    },
+    {
+      "id": "no-tokens",
+      "title": "Empty offering bowl",
+      "group": "empty",
+      "use": "Balances, no tokens tracked yet",
+      "alt": "An empty clay offering bowl on three short legs.",
+      "size": {
+        "light": [137, 106],
+        "dark": [137, 106]
+      }
+    },
+    {
+      "id": "no-members-online",
+      "title": "Three empty stools",
+      "group": "empty",
+      "use": "Members, nobody's keeper answering right now",
+      "alt": "Three empty stools around a low table with an unlit lantern.",
+      "size": {
+        "light": [145, 111],
+        "dark": [145, 111]
+      }
+    },
+    {
+      "id": "no-activity",
+      "title": "Closed ledger",
+      "group": "empty",
+      "use": "Activity, nothing has happened yet",
+      "alt": "A closed blue ledger with a ribbon across the cover.",
+      "size": {
+        "light": [115, 80],
+        "dark": [115, 80]
+      }
+    },
+    {
+      "id": "no-counterparties",
+      "title": "Empty mooring post",
+      "group": "empty",
+      "use": "Counterparties, nobody has paid this vault",
+      "alt": "A mooring post with a coiled rope on an empty dock.",
+      "size": {
+        "light": [126, 96],
+        "dark": [126, 96]
+      }
+    },
+    {
+      "id": "no-devices",
+      "title": "Phone on a stand, screen dark",
+      "group": "empty",
+      "use": "Devices, no paired phone",
+      "alt": "A phone standing on a stone stand, its screen dark.",
+      "size": {
+        "light": [96, 111],
+        "dark": [96, 111]
+      }
+    },
+    {
+      "id": "no-audit-entries",
+      "title": "Folded codex, tied",
+      "group": "empty",
+      "use": "Keeper audit log, no reads yet",
+      "alt": "A folded paper codex tied with a cord.",
+      "size": {
+        "light": [120, 99],
+        "dark": [120, 99]
+      }
+    },
+    {
+      "id": "no-results",
+      "title": "Lens over an empty tile",
+      "group": "empty",
+      "use": "Search and filters with no match",
+      "alt": "A magnifying lens lying on an empty stone tile.",
+      "size": {
+        "light": [138, 75],
+        "dark": [138, 75]
+      }
+    },
+    {
+      "id": "no-notifications",
+      "title": "Still bell",
+      "group": "empty",
+      "use": "Notifications, all quiet",
+      "alt": "A still bell hanging in a wooden frame.",
+      "size": {
+        "light": [100, 142],
+        "dark": [100, 142]
+      }
+    },
+    {
+      "id": "no-invites",
+      "title": "Sealed envelope",
+      "group": "empty",
+      "use": "No invites waiting",
+      "alt": "A sealed envelope with a red wax seal.",
+      "size": {
+        "light": [126, 73],
+        "dark": [126, 73]
+      }
+    },
+    {
+      "id": "no-requests",
+      "title": "Closed door",
+      "group": "empty",
+      "use": "No join requests",
+      "alt": "A closed wooden door in a stone frame.",
+      "size": {
+        "light": [97, 154],
+        "dark": [97, 154]
+      }
+    },
+    {
+      "id": "no-contacts",
+      "title": "Empty card box",
+      "group": "empty",
+      "use": "Address book and aliases, none saved",
+      "alt": "An empty wooden card box with one divider.",
+      "size": {
+        "light": [114, 96],
+        "dark": [114, 96]
+      }
+    },
+    {
+      "id": "all-done",
+      "title": "Empty tray, swept",
+      "group": "empty",
+      "use": "Needs you, nothing waiting on you",
+      "alt": "An empty woven tray with a single leaf in it.",
+      "size": {
+        "light": [126, 80],
+        "dark": [126, 80]
+      }
+    },
+    {
+      "id": "no-keepers",
+      "title": "Unlit beacon",
+      "group": "empty",
+      "use": "Keepers and relays, none connected",
+      "alt": "A stone beacon tower with its fire unlit.",
+      "size": {
+        "light": [88, 138],
+        "dark": [88, 138]
+      }
+    },
+    {
+      "id": "syncing",
+      "title": "Hourglass",
+      "group": "states",
+      "use": "Syncing with the node; anything that waits on blocks",
+      "alt": "A wooden hourglass with sand running through.",
+      "size": {
+        "light": [90, 144],
+        "dark": [90, 144]
+      }
+    },
+    {
+      "id": "daemon-down",
+      "title": "Unplugged cord",
+      "group": "states",
+      "use": "Ome isn't running on this computer",
+      "alt": "A dark plug pulled out of its socket, the cord trailing.",
+      "size": {
+        "light": [127, 114],
+        "dark": [127, 114]
+      }
+    },
+    {
+      "id": "node-unreachable",
+      "title": "Broken bridge",
+      "group": "states",
+      "use": "The Aztec node can't be reached",
+      "alt": "A wooden bridge broken in the middle between two stone piers over water.",
+      "size": {
+        "light": [118, 111],
+        "dark": [118, 111]
+      }
+    },
+    {
+      "id": "offline",
+      "title": "Bent antenna",
+      "group": "states",
+      "use": "No network on this computer",
+      "alt": "A small radio box with its antenna bent.",
+      "size": {
+        "light": [85, 105],
+        "dark": [85, 105]
+      }
+    },
+    {
+      "id": "keeper-failed",
+      "title": "Cracked lantern",
+      "group": "states",
+      "use": "Your keeper failed to start",
+      "alt": "A dark lantern with cracked glass and shards beside it.",
+      "size": {
+        "light": [117, 125],
+        "dark": [117, 125]
+      }
+    },
+    {
+      "id": "signer-locked",
+      "title": "Closed padlock",
+      "group": "states",
+      "use": "Signer locked; unlock to approve",
+      "alt": "A closed amber padlock.",
+      "size": {
+        "light": [78, 112],
+        "dark": [78, 112]
+      }
+    },
+    {
+      "id": "signer-unlocked",
+      "title": "Open padlock",
+      "group": "states",
+      "use": "Signer unlocked for a while",
+      "alt": "An amber padlock with its shackle open.",
+      "size": {
+        "light": [78, 120],
+        "dark": [78, 120]
+      }
+    },
+    {
+      "id": "alarm",
+      "title": "Signal fire",
+      "group": "states",
+      "use": "Alarms: config mismatch, unexpected transaction",
+      "alt": "A signal fire burning in a brazier on three legs.",
+      "size": {
+        "light": [100, 111],
+        "dark": [100, 111]
+      }
+    },
+    {
+      "id": "removed",
+      "title": "Broken key",
+      "group": "states",
+      "use": "You were removed from this vault",
+      "alt": "A steel key broken in two on a stone slab.",
+      "size": {
+        "light": [114, 67],
+        "dark": [114, 67]
+      }
+    },
+    {
+      "id": "error",
+      "title": "Cracked stela",
+      "group": "states",
+      "use": "Something failed; the message says what",
+      "alt": "A stone stela with cracks running down it.",
+      "size": {
+        "light": [91, 136],
+        "dark": [91, 136]
+      }
+    },
+    {
+      "id": "warning",
+      "title": "Leaning cairn",
+      "group": "states",
+      "use": "Warnings: a keeper misbehaving, low read health",
+      "alt": "A cairn of stones leaning to one side.",
+      "size": {
+        "light": [129, 93],
+        "dark": [129, 93]
+      }
+    },
+    {
+      "id": "success",
+      "title": "Lantern lit on its post",
+      "group": "states",
+      "use": "Done: founded, executed, joined",
+      "alt": "A lit lantern hanging from a wooden post.",
+      "size": {
+        "light": [106, 131],
+        "dark": [106, 131]
+      }
+    },
+    {
+      "id": "waiting",
+      "title": "Candle on a dish",
+      "group": "states",
+      "use": "Waiting on other members, keepers or the network",
+      "alt": "A lit candle on a clay dish.",
+      "size": {
+        "light": [98, 102],
+        "dark": [98, 102]
+      }
+    },
+    {
+      "id": "update",
+      "title": "Crate, lid ajar",
+      "group": "states",
+      "use": "A new version of Ome is ready",
+      "alt": "A wooden crate with its lid lifted a little.",
+      "size": {
+        "light": [120, 117],
+        "dark": [120, 117]
+      }
+    },
+    {
+      "id": "proving",
+      "title": "Mortar and pestle",
+      "group": "states",
+      "use": "Proving: making the proof on this computer",
+      "alt": "An obsidian mortar with its pestle.",
+      "size": {
+        "light": [117, 98],
+        "dark": [117, 98]
+      }
+    },
+    {
+      "id": "sending",
+      "title": "Canoe with a crate",
+      "group": "states",
+      "use": "Sending a transaction; a transfer on its way",
+      "alt": "A canoe carrying a crate across the water.",
+      "size": {
+        "light": [150, 90],
+        "dark": [150, 90]
+      }
+    },
+    {
+      "id": "confirmed",
+      "title": "Sealed scroll",
+      "group": "states",
+      "use": "Mined, confirmed, recorded",
+      "alt": "A rolled scroll sealed with red wax.",
+      "size": {
+        "light": [115, 79],
+        "dark": [115, 79]
+      }
+    },
+    {
+      "id": "blocked",
+      "title": "Barred gate",
+      "group": "states",
+      "use": "Blocked: enough members rejected",
+      "alt": "A wooden gate barred shut between two stone posts.",
+      "size": {
+        "light": [103, 140],
+        "dark": [103, 140]
+      }
+    },
+    {
+      "id": "expired",
+      "title": "Wilted plant",
+      "group": "states",
+      "use": "Expired or stale proposals",
+      "alt": "A wilted plant in a clay pot.",
+      "size": {
+        "light": [97, 94],
+        "dark": [97, 94]
+      }
+    },
+    {
+      "id": "cancelled",
+      "title": "Torn page",
+      "group": "states",
+      "use": "Cancelled",
+      "alt": "A written page torn in two.",
+      "size": {
+        "light": [128, 75],
+        "dark": [128, 75]
+      }
+    },
+    {
+      "id": "executed",
+      "title": "Open chest, scrolls inside",
+      "group": "states",
+      "use": "Executed: the payment went out",
+      "alt": "An open wooden chest with rolled scrolls inside.",
+      "size": {
+        "light": [117, 142],
+        "dark": [117, 142]
+      }
+    },
+    {
+      "id": "pending-approvals",
+      "title": "Ballot box, one slip in",
+      "group": "states",
+      "use": "Collecting approvals",
+      "alt": "A wooden ballot box with one paper slip going into its slot.",
+      "size": {
+        "light": [122, 132],
+        "dark": [122, 132]
+      }
+    },
+    {
+      "id": "create-profile",
+      "title": "Blank name plaque",
+      "group": "setup",
+      "use": "First run: create your profile",
+      "alt": "A blank name plaque on a wooden stand.",
+      "size": {
+        "light": [106, 135],
+        "dark": [106, 135]
+      }
+    },
+    {
+      "id": "passphrase",
+      "title": "Ring of keys",
+      "group": "setup",
+      "use": "Passphrase and signing key",
+      "alt": "Two keys on a steel ring.",
+      "size": {
+        "light": [113, 59],
+        "dark": [113, 59]
+      }
+    },
+    {
+      "id": "touch-id",
+      "title": "Hand-print stone",
+      "group": "setup",
+      "use": "Unlock with Touch ID",
+      "alt": "A stone slab carved with concentric rings like a fingerprint.",
+      "size": {
+        "light": [114, 74],
+        "dark": [114, 74]
+      }
+    },
+    {
+      "id": "pair-phone",
+      "title": "Phone and laptop, linked",
+      "group": "setup",
+      "use": "Pair a phone",
+      "alt": "A laptop and a phone joined by a cable.",
+      "size": {
+        "light": [123, 116],
+        "dark": [123, 116]
+      }
+    },
+    {
+      "id": "scan-code",
+      "title": "Camera on a tripod",
+      "group": "setup",
+      "use": "Scan a code with the phone",
+      "alt": "A small camera on a tripod.",
+      "size": {
+        "light": [80, 114],
+        "dark": [80, 114]
+      }
+    },
+    {
+      "id": "backup",
+      "title": "Chest half buried",
+      "group": "setup",
+      "use": "Back up the profile",
+      "alt": "A wooden chest half buried in the ground.",
+      "size": {
+        "light": [150, 136],
+        "dark": [150, 136]
+      }
+    },
+    {
+      "id": "invite",
+      "title": "Open envelope with a card",
+      "group": "setup",
+      "use": "Invite co-founders",
+      "alt": "An open envelope with a card rising out of it.",
+      "size": {
+        "light": [126, 107],
+        "dark": [126, 107]
+      }
+    },
+    {
+      "id": "founding",
+      "title": "Cornerstone and trowel",
+      "group": "setup",
+      "use": "Founding a vault",
+      "alt": "A cornerstone with a trowel resting on it.",
+      "size": {
+        "light": [132, 102],
+        "dark": [132, 102]
+      }
+    },
+    {
+      "id": "key-shares",
+      "title": "Three shards of one key",
+      "group": "setup",
+      "use": "Shares: no single member holds the key",
+      "alt": "A key in three separate pieces on a stone slab.",
+      "size": {
+        "light": [126, 69],
+        "dark": [126, 69]
+      }
+    },
+    {
+      "id": "threshold",
+      "title": "Balance scales",
+      "group": "setup",
+      "use": "Thresholds: approvals to spend, members to read",
+      "alt": "A balance scale with stones on both pans.",
+      "size": {
+        "light": [119, 130],
+        "dark": [119, 130]
+      }
+    },
+    {
+      "id": "members",
+      "title": "Paddles in a rack",
+      "group": "setup",
+      "use": "Members and the committee",
+      "alt": "Three canoe paddles standing in a wooden rack.",
+      "size": {
+        "light": [88, 129],
+        "dark": [88, 129]
+      }
+    },
+    {
+      "id": "health",
+      "title": "Healthy plant",
+      "group": "setup",
+      "use": "Read health: keepers answering",
+      "alt": "A healthy leafy plant in a clay pot.",
+      "size": {
+        "light": [93, 124],
+        "dark": [93, 124]
+      }
+    },
+    {
+      "id": "relay",
+      "title": "Lighthouse, lit",
+      "group": "setup",
+      "use": "Relays and keepers online",
+      "alt": "A striped lighthouse with its lamp lit.",
+      "size": {
+        "light": [88, 138],
+        "dark": [88, 138]
+      }
+    },
+    {
+      "id": "network",
+      "title": "Globe on a stand",
+      "group": "setup",
+      "use": "Network: Testnet or local",
+      "alt": "A globe on a wooden stand.",
+      "size": {
+        "light": [98, 127],
+        "dark": [98, 127]
+      }
+    },
+    {
+      "id": "settings",
+      "title": "Panel of dials",
+      "group": "setup",
+      "use": "Settings",
+      "alt": "A stone panel with three dials and a small screen.",
+      "size": {
+        "light": [102, 102],
+        "dark": [102, 102]
+      }
+    },
+    {
+      "id": "receive",
+      "title": "Open basket",
+      "group": "things",
+      "use": "Receive: pay this vault privately",
+      "alt": "An open woven basket.",
+      "size": {
+        "light": [127, 104],
+        "dark": [127, 104]
+      }
+    },
+    {
+      "id": "contract-call",
+      "title": "Scroll with cords",
+      "group": "things",
+      "use": "Contract calls and authwits",
+      "alt": "A scroll tied with two cords.",
+      "size": {
+        "light": [125, 97],
+        "dark": [125, 97]
+      }
+    },
+    {
+      "id": "audit-log",
+      "title": "Open book and quill",
+      "group": "things",
+      "use": "Keeper audit log and history",
+      "alt": "An open book with written lines and a quill.",
+      "size": {
+        "light": [145, 90],
+        "dark": [145, 90]
+      }
+    },
+    {
+      "id": "extension",
+      "title": "Puzzle piece",
+      "group": "things",
+      "use": "Browser extension: connect and sign",
+      "alt": "A blue puzzle piece.",
+      "size": {
+        "light": [137, 85],
+        "dark": [137, 85]
+      }
+    },
+    {
+      "id": "connect-site",
+      "title": "Plug meeting socket",
+      "group": "things",
+      "use": "Connect a site or app",
+      "alt": "A plug meeting its socket.",
+      "size": {
+        "light": [117, 95],
+        "dark": [117, 95]
+      }
+    },
+    {
+      "id": "signature",
+      "title": "Quill in an inkpot",
+      "group": "things",
+      "use": "Signature requested",
+      "alt": "A quill standing in an inkpot.",
+      "size": {
+        "light": [90, 127],
+        "dark": [90, 127]
+      }
+    },
+    {
+      "id": "phone-alert",
+      "title": "Phone, screen lit",
+      "group": "things",
+      "use": "Approve on your phone; push to a paired device",
+      "alt": "A phone lying face up with its screen lit.",
+      "size": {
+        "light": [119, 69],
+        "dark": [119, 69]
+      }
+    },
+    {
+      "id": "package",
+      "title": "Strapped crate",
+      "group": "things",
+      "use": "Download and install",
+      "alt": "A crate bound with two straps.",
+      "size": {
+        "light": [126, 135],
+        "dark": [126, 135]
+      }
+    },
+    {
+      "id": "deployed",
+      "title": "Small temple",
+      "group": "things",
+      "use": "The vault contract, deployed",
+      "alt": "A small stepped stone temple with a blue shrine on top.",
+      "size": {
+        "light": [138, 134],
+        "dark": [138, 134]
+      }
+    },
+    {
+      "id": "expires-soon",
+      "title": "Sundial",
+      "group": "things",
+      "use": "Expires soon; time-limited things",
+      "alt": "A stone sundial.",
+      "size": {
+        "light": [117, 100],
+        "dark": [117, 100]
+      }
+    },
+    {
+      "id": "privacy",
+      "title": "Obsidian mirror",
+      "group": "things",
+      "use": "Privacy: who can see what",
+      "alt": "An obsidian mirror in a golden frame on a stand.",
+      "size": {
+        "light": [80, 121],
+        "dark": [80, 121]
+      }
+    },
+    {
+      "id": "backup-phrase",
+      "title": "Folded paper, tied",
+      "group": "setup",
+      "use": "Write down; keep safe",
+      "alt": "A folded paper tied with a red ribbon.",
+      "size": {
+        "light": [126, 81],
+        "dark": [126, 81]
+      }
+    },
+    {
+      "id": "tokens",
+      "title": "Stacked ingots",
+      "group": "things",
+      "use": "Balances and tokens (no symbols)",
+      "alt": "Stacked steel and gold ingots, unmarked.",
+      "size": {
+        "light": [139, 102],
+        "dark": [139, 102]
+      }
+    }
   ]
 }

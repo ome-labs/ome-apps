@@ -5,6 +5,7 @@ import {
   Illustration,
   Logo,
   PixelObject,
+  StateObject,
   manifest,
   type LogoTone,
   type LogoVariant,
@@ -47,6 +48,31 @@ describe("art", () => {
       const { unmount } = render(<PixelObject id={id} size={32} />);
 
       expect(screen.getByRole("img", { name: alt }).getAttribute("src")).toMatch(/svg/);
+      unmount();
+    }
+  });
+
+  test("every state object renders in both themes with its alt text, at its own size or a given one", () => {
+    for (const { id, alt, light, dark } of manifest.stateObjects) {
+      const { unmount } = render(
+        <>
+          <StateObject id={id} />
+          <StateObject id={id} theme="dark" size={64} alt="" />
+        </>,
+      );
+      const image = screen.getByRole("img", { name: alt });
+
+      expect(image.getAttribute("src")).toContain("state-objects/light/");
+      expect(image.getAttribute("width")).toBe(String(light.width));
+      const decorative = screen.getByRole("presentation");
+      expect(decorative.getAttribute("src")).toContain("state-objects/dark/");
+      expect(
+        Math.max(
+          Number(decorative.getAttribute("width")),
+          Number(decorative.getAttribute("height")),
+        ),
+      ).toBe(64);
+      expect(dark.width).toBeGreaterThan(0);
       unmount();
     }
   });

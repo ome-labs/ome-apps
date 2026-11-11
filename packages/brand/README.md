@@ -1,7 +1,7 @@
 # @ome-labs/brand
 
 Every brand asset of the Ome kit, typed and in the right format for web and React Native: the logo
-and mark, app icons, fonts, textures, pixel objects, illustrations, scenes and avatars (Figma pages 02–05, 08, 12–17).
+and mark, app icons, fonts, textures, pixel objects, state objects, illustrations, scenes and avatars (Figma pages 02–05, 08, 12–17b).
 
 ## Use
 
@@ -9,7 +9,7 @@ Web:
 
 ```tsx
 import "@ome-labs/brand/fonts.css";
-import { AvatarArt, Illustration, Logo, PixelObject, Scene } from "@ome-labs/brand/web";
+import { AvatarArt, Illustration, Logo, PixelObject, Scene, StateObject } from "@ome-labs/brand/web";
 
 <Logo variant="lockup-horizontal" tone="light" height={28} />
 <Logo variant="mark" tone="mono" title="" className="text-fg" height={20} /> {/* decorative, takes currentColor */}
@@ -17,6 +17,7 @@ import { AvatarArt, Illustration, Logo, PixelObject, Scene } from "@ome-labs/bra
 <PixelObject id="vault" size={64} />
 <Scene id="key-generation" alt="" />
 <AvatarArt id="heron" size={40} alt="" />
+<StateObject id="no-proposals" theme="dark" size={120} alt="" /> {/* or ui-web's StateArt, which follows the theme */}
 ```
 
 React Native (needs `react-native-svg`; load fonts with expo-font):
@@ -29,14 +30,14 @@ const [loaded] = useFonts(fontFiles);
 <Logo variant="mark" tone="dark" width={32} height={32} />;
 ```
 
-| Export                      | What                                                                                  |
-| --------------------------- | ------------------------------------------------------------------------------------- |
-| `@ome-labs/brand/web`       | `Logo`, `Illustration`, `PixelObject`, `Scene`, `AvatarArt`, asset URLs, the manifest |
-| `@ome-labs/brand/native`    | the same components for React Native, `require()` sources, `fontFiles` for expo-font  |
-| `@ome-labs/brand/fonts.css` | `@font-face` rules for Instrument Serif, Inter and JetBrains Mono (WOFF2)             |
-| `@ome-labs/brand/manifest`  | every asset's id, group, size, files and alt text                                     |
-| `@ome-labs/brand/assets/*`  | the raw files                                                                         |
-| `@ome-labs/brand/fonts/*`   | the font files and their licences                                                     |
+| Export                      | What                                                                                                 |
+| --------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `@ome-labs/brand/web`       | `Logo`, `Illustration`, `PixelObject`, `StateObject`, `Scene`, `AvatarArt`, asset URLs, the manifest |
+| `@ome-labs/brand/native`    | the same components for React Native, `require()` sources, `fontFiles` for expo-font                 |
+| `@ome-labs/brand/fonts.css` | `@font-face` rules for Instrument Serif, Inter and JetBrains Mono (WOFF2)                            |
+| `@ome-labs/brand/manifest`  | every asset's id, group, size, files and alt text                                                    |
+| `@ome-labs/brand/assets/*`  | the raw files                                                                                        |
+| `@ome-labs/brand/fonts/*`   | the font files and their licences                                                                    |
 
 Logo tones follow page 02: `light` (Night sun, Lake reflection) on light surfaces, `dark` (white and
 Haze) on dark ones, `mono` (one colour, `currentColor`) on illustrations and photos. Pixel art is
@@ -54,6 +55,7 @@ assets/
   avatars/        60 avatars in vaults/ and profiles/, 64 × 64 SVG in the kit's palette
   textures/       12 dither textures, WebP @1x @2x
   objects/        73 pixel objects in vault-and-keys/, proposals/, keepers/, lake/, craft/, SVG
+  state-objects/  65 voxel state objects (empty, states, setup, things) in light/ and dark/, WebP @1x @2x
   fonts/          Instrument Serif, Inter, JetBrains Mono: WOFF2 for web, TTF per weight for native, OFL.txt
   catalog.json    every raster and pixel asset's id, group, title and alt text
 ```
