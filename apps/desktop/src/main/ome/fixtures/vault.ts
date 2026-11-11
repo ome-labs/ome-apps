@@ -85,7 +85,8 @@ export function vaultDetails(scenario: Scenario, now: number): VaultDetails {
         transport: sampleHex(`${m.key}.transport`),
         peerId: samplePeerId(m.key),
         addresses: [`/ip4/127.0.0.1/udp/${54_010 + m.index * 2}/quic-v1`],
-        release: "0.3.0",
+        // Carol hasn't updated yet, so the Members page has a release to flag.
+        release: m.key === "carol" ? "0.2.0" : "0.3.0",
         you: m.you,
       })),
       // The removed scenario: a rotation left this member out, and its keeper destroyed its share.
