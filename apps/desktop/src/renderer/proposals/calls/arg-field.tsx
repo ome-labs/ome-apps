@@ -312,8 +312,10 @@ export function AddressInput({
 const BASE = "base";
 
 /**
- * A large unsigned number, usually an amount. It can be typed in a token's whole units ("250 OMET"), which become base
- * units exactly; the base units always show under it, since that is what members sign.
+ * A large unsigned number, usually an amount. It starts in base units, what members sign and what the CLI takes, so
+ * two fields with the same number always mean the same amount (a swap's `amount_in` and the authwit that pays it).
+ * It can be switched to a token's whole units ("250 OMET"), which become base units exactly. Under it is the other
+ * reading: the token amount for base units, the base units for a token amount.
  */
 function AmountInput({
   value,
@@ -328,7 +330,7 @@ function AmountInput({
   invalid: boolean;
   amountOf: TokenInfo | undefined;
 }) {
-  const [unit, setUnit] = useState<string>(amountOf?.address ?? BASE);
+  const [unit, setUnit] = useState<string>(BASE);
   const token = context.tokens.find((t) => t.address === unit);
   // Shown text in the chosen unit; the draft holds base units.
   const [text, setText] = useState(() =>
@@ -406,6 +408,10 @@ function AmountInput({
         <span className="type-caption text-danger">{unitError}</span>
       ) : token && /^\d+$/u.test(value) ? (
         <span className={cn("type-mono-s text-fg-subtle")}>{value} base units</span>
+      ) : amountOf && /^\d+$/u.test(value) ? (
+        <span className="type-mono-s text-fg-subtle">
+          = {formatAmount(value, amountOf.decimals)} {amountOf.symbol}
+        </span>
       ) : null}
     </div>
   );

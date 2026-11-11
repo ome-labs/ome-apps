@@ -9,6 +9,24 @@ import { emptyArg } from "./abi.ts";
 import { type ArgContext, ArgField } from "./arg-field.tsx";
 import { type CallDraft, withFunction } from "./composer.ts";
 
+/**
+ * The token an amount is in, read from the call itself: `amount_in` is in the token `token_in` names, as AMMs and
+ * routers name them.
+ */
+function amountTokenOf(
+  name: string,
+  params: ContractFunction["params"],
+  args: CallDraft["args"],
+  tokens: TokenInfo[],
+): TokenInfo | undefined {
+  if (!/amount/u.test(name)) return undefined;
+  const at = params.findIndex((param) => param.name === name.replace("amount", "token"));
+  const named = at === -1 ? undefined : args[at];
+  return typeof named === "string"
+    ? tokens.find((token) => token.address === named.trim().toLowerCase())
+    : undefined;
+}
+
 const KIND_TONE = { private: "accent", public: "info", utility: "neutral" } as const;
 
 export type CallEditorProps = {
@@ -152,7 +170,10 @@ export function CallEditor({
                 call={call}
                 onChange={onChange}
                 context={argContext}
-                amountOf={/amount/u.test(param.name) ? amountOf : undefined}
+                amountOf={
+                  amountTokenOf(param.name, fn.params, call.args, tokens) ??
+                  (/amount/u.test(param.name) ? amountOf : undefined)
+                }
               />
             ))
           )}

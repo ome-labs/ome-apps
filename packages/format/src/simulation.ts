@@ -29,7 +29,7 @@ export function failureText(failure: SimulationFailure, nameOf: NameOf = () => u
         ? `A call needs an authwit to spend the vault's ${name(failure.contract)}. Add one that lets the calling contract make that call.`
         : "A call needs an authwit the proposal doesn't grant.";
     case "unusedAuthwit":
-      return `Authwit ${failure.index + 1} isn't used by any call; check its caller and call, or remove it.`;
+      return `No call uses authwit ${failure.index + 1}. Its caller, amount and nonce must match what the call asks for exactly (amounts in base units), or remove it.`;
     case "nonceUsed":
       return "Another proposal already used this nonce.";
     case "reverted":
