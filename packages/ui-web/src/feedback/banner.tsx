@@ -55,7 +55,8 @@ export function Banner({ kind, children, action, className }: BannerProps) {
       )}
     >
       <Icon name={style.icon} size={20} tone={style.colour} />
-      <div className="min-w-0 flex-1 type-body-s text-fg">{children}</div>
+      {/* Daemon messages carry whole addresses and hashes, which must wrap rather than run out of the banner. */}
+      <div className="min-w-0 flex-1 type-body-s text-fg [overflow-wrap:anywhere]">{children}</div>
       {action ? (
         <Button size="sm" onClick={action.onClick}>
           {action.label}
