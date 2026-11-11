@@ -1,5 +1,6 @@
 export * from "./activity.ts";
 export * from "./address.ts";
+export * from "./audit.ts";
 export * from "./amount.ts";
 export * from "./balance.ts";
 export * from "./count.ts";
