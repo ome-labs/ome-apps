@@ -78,6 +78,12 @@ export const nav = [
         icon: "user",
       },
       {
+        to: "/brand/state-objects",
+        title: "State objects",
+        description: "Voxel objects for empty pages, waits and alarms, light and dark",
+        icon: "hourglass",
+      },
+      {
         to: "/brand/textures-objects",
         title: "Textures & objects",
         description: "Dither textures and 32-grid pixel objects",

@@ -19,6 +19,7 @@ import { MotionPage } from "./pages/motion.tsx";
 import { NotFound } from "./pages/not-found.tsx";
 import { OverviewPage } from "./pages/overview.tsx";
 import { ScenesPage } from "./pages/scenes.tsx";
+import { StateObjectsPage } from "./pages/state-objects.tsx";
 import { TexturesObjectsPage } from "./pages/textures-objects.tsx";
 import { TypographyPage } from "./pages/typography.tsx";
 import { Shell } from "./shell/shell.tsx";
@@ -48,6 +49,7 @@ const pages: [string, ComponentType][] = [
   ["/brand/illustrations", IllustrationsPage],
   ["/brand/scenes", ScenesPage],
   ["/brand/avatars", AvatarsPage],
+  ["/brand/state-objects", StateObjectsPage],
   ["/brand/textures-objects", TexturesObjectsPage],
 ];
 

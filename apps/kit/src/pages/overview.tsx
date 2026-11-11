@@ -14,6 +14,7 @@ const contents = [
   [iconNames.length, "icons"],
   [manifest.illustrations.length, "illustrations"],
   [manifest.objects.length, "pixel objects"],
+  [manifest.stateObjects.length, "state objects"],
   [manifest.textures.length, "textures"],
   [componentPages, "component pages"],
 ] as const;

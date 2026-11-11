@@ -8,6 +8,7 @@ import {
   DetailRow,
   EmptyState,
   Scene,
+  StateArt,
   ThresholdChip,
   toast,
 } from "@ome-labs/ui-web";
@@ -39,6 +40,48 @@ export function Empty() {
     <Card className="w-full max-w-[480px]">
       <EmptyState illustration="no-proposals" title="Nothing waiting for you." />
     </Card>
+  );
+}
+
+export function EmptyWithObject() {
+  return (
+    <Card className="w-full max-w-[480px]">
+      <EmptyState state="no-proposals" title="Nothing waiting for you.">
+        Proposals that need your approval appear here.
+      </EmptyState>
+    </Card>
+  );
+}
+
+export function NoVaults() {
+  return (
+    <Card className="w-full max-w-[560px]">
+      <EmptyState
+        state="no-vaults"
+        size="lg"
+        title="No vaults yet"
+        action={
+          <div className="flex gap-2">
+            <Button onClick={() => toast.info("Join vault pressed")}>Join vault</Button>
+            <Button variant="primary" onClick={() => toast.info("Create vault pressed")}>
+              Create vault
+            </Button>
+          </div>
+        }
+      >
+        Create a vault and invite co-founders, or join one from an invite.
+      </EmptyState>
+    </Card>
+  );
+}
+
+export function StateArtStrip() {
+  return (
+    <div className="flex flex-wrap items-end gap-6">
+      {(["syncing", "signer-locked", "alarm", "success", "relay"] as const).map((id) => (
+        <StateArt key={id} id={id} size={80} />
+      ))}
+    </div>
   );
 }
 
@@ -81,6 +124,20 @@ export const surfaces: ExampleSet = {
     { name: "VaultCard", title: "Card with details", Component: VaultCard },
     { name: "Empty", title: "Empty state", Component: Empty },
     { name: "NoTokens", title: "Empty state with an action", Component: NoTokens },
+    {
+      name: "EmptyWithObject",
+      title: "Empty state with a state object",
+      description:
+        "The usual choice inside a card: a state object (page 13b), drawn for the theme in effect.",
+      Component: EmptyWithObject,
+    },
+    { name: "NoVaults", title: "Large, with two actions", Component: NoVaults },
+    {
+      name: "StateArtStrip",
+      title: "StateArt",
+      description: "State objects on their own, for banners, toasts and whole-window states.",
+      Component: StateArtStrip,
+    },
     {
       name: "DitherDissolve",
       title: "Dither dissolve",
