@@ -7,25 +7,16 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 
-import { ActivityPage } from "./activity/activity-page.tsx";
-import { CounterpartiesPage } from "./activity/counterparties-page.tsx";
 import { CreatePage, JoinPage, validateLobbySearch } from "./founding/pages.tsx";
-import { HomePage } from "./home/home-page.tsx";
-import { HealthPage } from "./members/health-page.tsx";
-import { MembersPage } from "./members/members-page.tsx";
 import { Profiles } from "./onboarding/profiles.tsx";
 import { Welcome } from "./onboarding/welcome.tsx";
-import { NewProposalPage } from "./proposals/new-proposal-page.tsx";
-import { ProposalPage } from "./proposals/proposal-page.tsx";
-import { ProposalsPage } from "./proposals/proposals-page.tsx";
-import { ReceivePage } from "./receive/receive-page.tsx";
 import { APP_PAGES, VAULT_PAGES } from "./routes/pages.ts";
+import { APP_SCREENS, VAULT_SCREENS, notYet } from "./routes/screens.tsx";
 import { Start } from "./routes/start.tsx";
 import { SettingsLayout } from "./settings/layout.tsx";
 import { SETTINGS_PAGES } from "./settings/pages.tsx";
 import { AppFrame } from "./shell/app-frame.tsx";
 import { SessionGate } from "./shell/session-gate.tsx";
-import { BalancesPage } from "./tokens/balances-page.tsx";
 
 // The root decides between the first run, the profile list and the app. Pages are empty until their screens are
 // built; Settings has its own pages, one per section.
@@ -40,18 +31,14 @@ const profiles = createRoute({
 });
 
 const shell = createRoute({ getParentRoute: () => root, id: "shell", component: AppFrame });
-/** App pages whose screens are built; the others stay empty frames for now. */
-const SCREENS: Partial<Record<string, () => React.ReactNode>> = { "/home": HomePage };
-
 /** Pages with routes of their own below (search params, child pages). */
 const OWN_ROUTES = new Set(["/settings", "/create", "/join"]);
 
 const appPages = APP_PAGES.filter((page) => !OWN_ROUTES.has(page.path)).map((page) => {
-  const component = SCREENS[page.path];
   return createRoute({
     getParentRoute: () => shell,
     path: page.path,
-    ...(component ? { component } : {}),
+    component: APP_SCREENS[page.path] ?? notYet(page),
   });
 });
 
@@ -83,24 +70,11 @@ const settingsPages = SETTINGS_PAGES.map((page) =>
 );
 
 const vault = createRoute({ getParentRoute: () => shell, path: "/vaults/$vault" });
-/** Vault pages built so far; the rest render the empty frame until they are. */
-const VAULT_SCREENS: Partial<Record<string, () => React.ReactNode>> = {
-  "/proposals": ProposalsPage,
-  "/proposals/$id": ProposalPage,
-  "/new": NewProposalPage,
-  "/tokens": BalancesPage,
-  "/receive": ReceivePage,
-  "/members": MembersPage,
-  "/health": HealthPage,
-  "/activity": ActivityPage,
-  "/counterparties": CounterpartiesPage,
-};
 const vaultPages = VAULT_PAGES.map((page) => {
-  const component = VAULT_SCREENS[page.path];
   return createRoute({
     getParentRoute: () => vault,
     path: page.path,
-    ...(component ? { component } : {}),
+    component: VAULT_SCREENS[page.path] ?? notYet(page),
   });
 });
 

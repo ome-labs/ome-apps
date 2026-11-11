@@ -8,17 +8,13 @@ import { Scene } from "@ome-labs/brand/web";
 import {
   connectionOf,
   connectionStatus,
-  readingHealth,
   riskRemedy,
-  thresholdRisks,
-  vaultHealth,
   type VaultHealthState,
 } from "@ome-labs/format";
 import { Banner, CheckRow, HealthMeter, MemberAvatar, cn } from "@ome-labs/ui-web";
 
-import { useOme } from "../data/ome.ts";
 import { Page } from "../shell/page.tsx";
-import { useMembers } from "./live.ts";
+import { useVaultHealth } from "./live.ts";
 
 const SCENES: Record<VaultHealthState, SceneId> = {
   healthy: "health-good",
@@ -44,34 +40,8 @@ const TITLE_TONES = {
 export function HealthPage() {
   const { vault } = useParams({ strict: false }) as { vault: Hex32 };
   const navigate = useNavigate();
-  const { details, peers, rows } = useMembers(vault);
-  const status = useOme("status", {});
+  const { details, peers, rows, health, running, answers } = useVaultHealth(vault);
   const data = details.data;
-  // This member's keeper answers only while it runs and still holds its share.
-  const running = status.data ? status.data.keeper.status === "running" : true;
-  const answers = Boolean(data?.committee.serving) && running;
-
-  const health = useMemo(() => {
-    if (!data || !peers.data) return undefined;
-    const reading = readingHealth({
-      peers: peers.data,
-      serving: answers,
-      viewingThreshold: data.committee.viewingThreshold,
-    });
-    return {
-      reading,
-      overall: vaultHealth({
-        reading,
-        serving: data.committee.serving,
-        matchesCommittee: data.config?.matchesCommittee ?? null,
-      }),
-      risks: thresholdRisks({
-        threshold: data.summary.threshold,
-        viewingThreshold: data.committee.viewingThreshold,
-        members: data.summary.members,
-      }),
-    };
-  }, [answers, data, peers.data]);
 
   const members = useCallback(
     () => void navigate({ to: "/vaults/$vault/members", params: { vault } }),

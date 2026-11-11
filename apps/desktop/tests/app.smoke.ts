@@ -38,7 +38,8 @@ test("opens on the default vault's overview", async () => {
     "page",
   );
 
-  await page.getByRole("button", { name: /Alice/ }).click();
+  // The profile menu, by its exact name: activity rows mention Alice too.
+  await page.getByRole("button", { name: "Alice", exact: true }).click();
   await page.getByRole("menuitem", { name: "Unlock…" }).click();
   await page.getByLabel("Passphrase").fill("wrong");
   await page.keyboard.press("Enter");
@@ -92,11 +93,13 @@ test("sets up a profile from the first run, with Touch ID", async () => {
   await page.getByRole("button", { name: "Use Touch ID" }).click();
   await expect(page.getByRole("button", { name: /Alice/ })).toBeVisible();
 
-  await page.getByRole("button", { name: /Alice/ }).click();
+  // The profile menu, by its exact name: activity rows mention Alice too.
+  await page.getByRole("button", { name: "Alice", exact: true }).click();
   await page.getByRole("menuitem", { name: "Unlock…" }).click();
   await page.getByRole("button", { name: /Touch ID/ }).click();
   await expect(page.getByRole("dialog")).toBeHidden();
-  await page.getByRole("button", { name: /Alice/ }).click();
+  // The profile menu, by its exact name: activity rows mention Alice too.
+  await page.getByRole("button", { name: "Alice", exact: true }).click();
   await expect(page.getByRole("menuitem", { name: "Lock now" })).toBeVisible();
   await app.close();
 });
@@ -143,7 +146,8 @@ test("goes back to the profiles from setting up another member", async () => {
     },
   });
   const page = await app.firstWindow();
-  await expect(page.getByRole("button", { name: /Alice/ })).toBeVisible();
+  // The profile menu: the overview's activity rows mention Alice too.
+  await expect(page.getByRole("button", { name: "Alice", exact: true })).toBeVisible();
   await page.keyboard.press(`${process.platform === "darwin" ? "Meta" : "Control"}+,`);
   await page.getByRole("button", { name: "Switch" }).click();
   await page.getByRole("button", { name: "Set up another member" }).click();

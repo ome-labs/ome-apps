@@ -8,6 +8,7 @@ import { type OmeClient, OmeError } from "../client.ts";
 import { FixtureContracts, aztecAliases } from "./contracts.ts";
 import { FixtureFounding } from "./founding.ts";
 import { FixtureHistory } from "./history.ts";
+import { FixtureOps, OPS, vaultOf } from "./ops.ts";
 import { FixtureProposals } from "./proposal-state.ts";
 import { VAULT } from "./sample.ts";
 import type { Scenario } from "./scenarios.ts";
@@ -29,6 +30,7 @@ export class FixtureClient implements OmeClient {
   readonly #contracts = new FixtureContracts();
   readonly #tokens = new FixtureTokens((event) => this.#emit(event));
   readonly #history = new FixtureHistory(now(), (event) => this.#emit(event));
+  readonly #ops = new FixtureOps(this.#contracts);
   readonly #proposals = new FixtureProposals(
     this.#contracts,
     (event) => this.#emit(event),
@@ -78,6 +80,13 @@ export class FixtureClient implements OmeClient {
       throw new OmeError("unreachable", "Ome's daemon isn't running for this profile.");
     }
 
+    if (
+      vaultOf(params) === OPS &&
+      this.#scenario !== "no-vaults" &&
+      this.#scenario !== "no-profile"
+    ) {
+      return this.#ops.call(method, params, this.#scenario, now());
+    }
     const handler = this.#handlers[method] as
       | ((params: DaemonParams<M>) => DaemonResult<M>)
       | undefined;

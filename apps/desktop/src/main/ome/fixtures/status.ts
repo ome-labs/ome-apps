@@ -8,6 +8,7 @@ import type {
   Status,
 } from "@ome-labs/api";
 
+import { opsSummary } from "./ops.ts";
 import {
   ACCOUNTS,
   FEE_PAYER,
@@ -116,7 +117,7 @@ export function status(scenario: Scenario, now: number, unlockedUntil: number | 
     keeper: keeper(scenario),
     node: node(scenario, now),
     signer: signer(scenario, now, unlockedUntil),
-    vaults: hasVaults ? [vaultSummary(now)] : [],
+    vaults: hasVaults ? [vaultSummary(now), opsSummary(now)] : [],
     defaultVault: hasVaults ? VAULT : null,
     fees: hasProfile
       ? {

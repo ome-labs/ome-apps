@@ -7,10 +7,17 @@ import { CommandMenu, type CommandGroup, Dialog, KbdCombo } from "@ome-labs/ui-w
 
 import { callOme } from "../data/ome.ts";
 import { APP_PAGES, VAULT_PAGES } from "../routes/pages.ts";
+import { isBuiltAppPage, isBuiltVaultPage } from "../routes/screens.tsx";
 import { keycaps, type Shortcut, useShortcuts } from "./keys.ts";
 
-/** Pages the menu lists: proposal pages need an id, so they're reached from the proposals list. */
-const MENU_VAULT_PAGES = VAULT_PAGES.filter((page) => !page.path.includes("$"));
+/**
+ * Pages the menu lists: those with screens. A proposal's page needs an id, so it's reached from the list, and New
+ * proposal is an action below.
+ */
+const MENU_VAULT_PAGES = VAULT_PAGES.filter(
+  (page) => !page.path.includes("$") && page.path !== "/new" && isBuiltVaultPage(page.path),
+);
+const MENU_APP_PAGES = APP_PAGES.filter((page) => isBuiltAppPage(page.path));
 
 /**
  * ⌘K and the app's other shortcuts, and the sheet that lists them (`?`). A proposal's own keys (approve, reject,
@@ -48,7 +55,7 @@ export function Commands({
             {
               key: "n",
               mod: true,
-              label: "New payment",
+              label: "New proposal",
               run: (): void => void navigate({ to: vaultPath(current, "/new") }),
             },
           ]
@@ -100,12 +107,12 @@ export function Commands({
           ...(vault
             ? [
                 {
-                  id: "new-payment",
-                  label: "New payment",
+                  id: "new-proposal",
+                  label: "New proposal",
                   hint: vault.name,
                   icon: "send" as const,
-                  keywords: ["send", "transfer", "proposal"],
-                  shortcut: shortcutOf("New payment"),
+                  keywords: ["send", "transfer", "payment", "call"],
+                  shortcut: shortcutOf("New proposal"),
                   onSelect: go(vaultPath(vault.address, "/new")),
                 },
               ]
@@ -145,7 +152,7 @@ export function Commands({
         : []),
       {
         title: "App",
-        items: APP_PAGES.map((page) => ({
+        items: MENU_APP_PAGES.map((page) => ({
           id: `app${page.path}`,
           label: page.title,
           icon: page.icon,
