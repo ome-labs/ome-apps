@@ -81,3 +81,80 @@ export function thresholdRisks({ threshold, viewingThreshold, members }: Shape):
 
   return risks;
 }
+
+/** What a member can do about each risk, in the guide's recovery terms. */
+export function riskRemedy(id: ThresholdRisk["id"]): string {
+  switch (id) {
+    case "unreadable-on-any-loss":
+      return "Add a member, or lower the members needed to read, so one lost keeper leaves enough to read.";
+    case "frozen-on-any-loss":
+      return "Lower the approvals to spend below the member count, so one lost key doesn't freeze the vault.";
+    case "single-spender":
+      return "Raise the approvals to spend to at least 2, so no one member can move funds alone.";
+    case "pair-can-read":
+      return "Raise the members needed to read to 3 or more, so two members can't read on their own.";
+  }
+}
+
+export type VaultHealthState = "removed" | "mismatch" | "unreadable" | "no-spare" | "healthy";
+
+export type VaultHealth = {
+  state: VaultHealthState;
+  tone: Tone;
+  /** One line for the page and the overview: "Healthy", "Can't read new payments now". */
+  title: string;
+  /** What it means and what to do. */
+  detail: string;
+};
+
+type VaultHealthInput = {
+  reading: ReadingHealth;
+  /** Whether this member's keeper still serves the vault (`committee.serving`). */
+  serving: boolean;
+  /** Whether the on-chain config names this committee; null before it was read. */
+  matchesCommittee: boolean | null;
+};
+
+/** The vault's health in one state, most serious first. */
+export function vaultHealth({ reading, serving, matchesCommittee }: VaultHealthInput): VaultHealth {
+  if (!serving) {
+    return {
+      state: "removed",
+      tone: "danger",
+      title: "Your keeper no longer serves this vault",
+      detail:
+        "A membership change left this member out, and the keeper destroyed its share. The other members' vault keeps working without you.",
+    };
+  }
+  if (matchesCommittee === false) {
+    return {
+      state: "mismatch",
+      tone: "danger",
+      title: "The vault on chain names a committee your keeper can't verify",
+      detail:
+        "Your keeper won't serve it until this is understood. Check with the other members before approving anything.",
+    };
+  }
+  if (!reading.canRead) {
+    return {
+      state: "unreadable",
+      tone: "danger",
+      title: "Can't read new payments now",
+      detail: `${reading.answering} of the ${reading.needed} keepers needed are answering. Payments still arrive, and show once enough keepers are back online.`,
+    };
+  }
+  if (reading.spare === 0) {
+    return {
+      state: "no-spare",
+      tone: "warning",
+      title: "Reading works, with no keeper to spare",
+      detail: "If one more keeper goes offline, the vault can't read new payments until it's back.",
+    };
+  }
+  return {
+    state: "healthy",
+    tone: "success",
+    title: "Healthy",
+    detail: `Every check passes, and ${reading.spare === 1 ? "one keeper" : `${reading.spare} keepers`} can go offline without losing reading.`,
+  };
+}
