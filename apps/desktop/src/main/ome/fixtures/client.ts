@@ -7,12 +7,13 @@ import type { RendererMethod } from "../../../bridge/contract.ts";
 import { type OmeClient, OmeError } from "../client.ts";
 import { FixtureContracts, aztecAliases } from "./contracts.ts";
 import { FixtureFounding } from "./founding.ts";
+import { FixtureHistory } from "./history.ts";
 import { FixtureProposals } from "./proposal-state.ts";
 import { VAULT } from "./sample.ts";
 import type { Scenario } from "./scenarios.ts";
 import { keeper, node, settings, signer, status } from "./status.ts";
 import { FixtureTokens } from "./tokens.ts";
-import { activity, audit, counterparties, peers, vaultDetails } from "./vault.ts";
+import { audit, peers, vaultDetails } from "./vault.ts";
 
 type Handlers = { [M in RendererMethod]?: (params: DaemonParams<M>) => DaemonResult<M> };
 
@@ -27,6 +28,7 @@ export class FixtureClient implements OmeClient {
   /** A founded vault makes this a profile with Treasury, as the sample story has it. */
   readonly #contracts = new FixtureContracts();
   readonly #tokens = new FixtureTokens((event) => this.#emit(event));
+  readonly #history = new FixtureHistory(now(), (event) => this.#emit(event));
   readonly #proposals = new FixtureProposals(
     this.#contracts,
     (event) => this.#emit(event),
@@ -83,6 +85,11 @@ export class FixtureClient implements OmeClient {
       throw new OmeError("failed", `The fixtures don't simulate ${method} yet.`);
     }
     return handler(params);
+  }
+
+  /** A payment arriving now, for designing live updates (`window.ome.dev.set({ receive: true })`) and tests. */
+  receive(): void {
+    this.#history.receive(now());
   }
 
   subscribe(listener: (event: DaemonEvent) => void): () => void {
@@ -182,8 +189,14 @@ export class FixtureClient implements OmeClient {
     "vault.list": () => status(this.#scenario, now(), this.#unlockedUntil).vaults,
     "vault.details": ({ vault }) => (this.#vault(vault), vaultDetails(this.#scenario, now())),
     "vault.peers": ({ vault }) => (this.#vault(vault), peers(this.#scenario, now())),
-    "vault.activity": ({ vault }) => (this.#vault(vault), activity(now(), this.#proposals.all())),
-    "vault.counterparties": ({ vault }) => (this.#vault(vault), counterparties(now())),
+    "vault.activity": (params) => (
+      this.#vault(params.vault),
+      this.#history.activity(this.#proposals.all(), params)
+    ),
+    "vault.counterparties": (params) => (
+      this.#vault(params.vault),
+      this.#history.counterparties(now(), params)
+    ),
     "vault.audit": ({ vault, limit }) => (this.#vault(vault), audit(now(), limit)),
     "tokens.list": ({ vault }) => (this.#vault(vault), this.#tokens.list(this.#scenario)),
     "tokens.add": ({ vault, token, deployment }) => (
@@ -198,7 +211,7 @@ export class FixtureClient implements OmeClient {
     },
     "vault.receiving": ({ vault }) => (
       this.#vault(vault),
-      this.#tokens.receiving(now() - 110 * 60)
+      this.#tokens.receiving(this.#history.lastReceivedAt())
     ),
     "vault.request": (params) => (this.#vault(params.vault), this.#tokens.request(params)),
     "proposals.list": ({ vault, filter, limit }) => (

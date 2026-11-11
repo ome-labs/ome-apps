@@ -31,5 +31,17 @@ function switcher(): HTMLElement {
   return select;
 }
 
-document.body.append(switcher());
+/** Makes a payment arrive now, to watch pages update without a reload. */
+function payButton(): HTMLElement {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = "simulate payment";
+  button.style.cssText =
+    "position:fixed;right:12px;bottom:52px;z-index:9999;font:12px ui-monospace,monospace;padding:6px 8px;" +
+    "border-radius:8px;border:1px solid #c9ccd6;background:#fff;color:#1b1e28;box-shadow:0 2px 8px #0002";
+  button.addEventListener("click", () => session.client.receive());
+  return button;
+}
+
+document.body.append(switcher(), payButton());
 await import("../renderer/main.tsx");

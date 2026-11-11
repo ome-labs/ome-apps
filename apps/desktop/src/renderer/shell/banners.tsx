@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+import { useNavigate } from "@tanstack/react-router";
 
 import type { DaemonEvent, Status } from "@ome-labs/api";
 import { Banner } from "@ome-labs/ui-web";
@@ -50,6 +52,7 @@ export function Banners({ status, vault }: { status: Status; vault: string | und
 function VaultBanners({ vault }: { vault: string }) {
   const details = useOme("vault.details", { vault });
   const reported = useKeeperReports(vault);
+  const advised = useHandshakeAdvice(vault);
   const committee = details.data?.committee;
   const config = details.data?.config;
 
@@ -75,8 +78,42 @@ function VaultBanners({ vault }: { vault: string }) {
           {report.text}
         </Banner>
       ))}
+      {advised ? (
+        <Banner kind="warning" action={advised.action}>
+          {advised.counterparties === 1 ? "Someone who" : `${advised.counterparties} people who`}{" "}
+          paid this vault before a member was removed can still be recognised by that member when
+          they pay. Ask them to handshake with the vault again.
+        </Banner>
+      ) : null}
     </>
   );
+}
+
+/**
+ * After a membership change that removed someone, the daemon says how many counterparties should handshake again
+ * (`handshakeAdvised`); shown until the app restarts, with the way to Counterparties.
+ */
+function useHandshakeAdvice(
+  vault: string,
+): { counterparties: number; action: { label: string; onClick: () => void } } | undefined {
+  const navigate = useNavigate();
+  const [counterparties, setCounterparties] = useState(0);
+  useEffect(
+    () =>
+      window.ome.onEvent((event: DaemonEvent) => {
+        if (event.type === "handshakeAdvised" && event.vault === vault)
+          setCounterparties(event.counterparties);
+      }),
+    [vault],
+  );
+  const action = useMemo(
+    () => ({
+      label: "Counterparties",
+      onClick: () => void navigate({ to: "/vaults/$vault/counterparties", params: { vault } }),
+    }),
+    [navigate, vault],
+  );
+  return counterparties > 0 ? { counterparties, action } : undefined;
 }
 
 type Report = { key: string; kind: "alarm" | "warning" | "info"; text: string };

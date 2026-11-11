@@ -1,13 +1,9 @@
 // The Treasury vault: 3 members, 2 approvals to spend, 2 to read, funded with 1,000 OMET. The 250 OMET to dave is
 // approved but not executed yet, so all 1,000 are still there.
 import type {
-  ActivityEntry,
-  ActivityPage,
   AuditPage,
   AuditView,
-  CounterpartyPage,
   MemberReachability,
-  ProposalView,
   TokenBalance,
   VaultDetails,
   VaultSummary,
@@ -15,7 +11,6 @@ import type {
 
 import {
   ACCOUNTS,
-  FUNDING_TX,
   MEMBERS,
   OMET,
   USDC,
@@ -163,40 +158,6 @@ export function tokens(): TokenBalance[] {
 export function privateBalance(token: string): bigint | null {
   const entry = tokens().find((t) => t.token.address === token);
   return entry?.private.state === "known" ? BigInt(entry.private.amount) : null;
-}
-
-export function activity(now: number, proposals: ProposalView[]): ActivityPage {
-  const proposalEntries: ActivityEntry[] = proposals.map((proposal) => ({
-    kind: "proposal",
-    at: proposal.createdAt,
-    proposal,
-  }));
-  const funded: ActivityEntry = {
-    kind: "received",
-    at: now - 110 * 60,
-    token: OMET,
-    from: ACCOUNTS.alice,
-    amount: "1000000000000000000000",
-    txHash: FUNDING_TX,
-    block: 1_182,
-  };
-  return { items: [...proposalEntries, funded].toSorted((a, b) => b.at - a.at), next: null };
-}
-
-export function counterparties(now: number): CounterpartyPage {
-  return {
-    next: null,
-    items: [
-      {
-        address: ACCOUNTS.alice,
-        label: "alice",
-        received: 1,
-        firstAt: now - 110 * 60,
-        lastAt: now - 110 * 60,
-        exposed: false,
-      },
-    ],
-  };
 }
 
 export function audit(now: number, limit = 50): AuditPage {

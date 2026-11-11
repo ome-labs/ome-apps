@@ -124,7 +124,7 @@ export class FixtureTokens {
     return token;
   }
 
-  receiving(lastReceivedAt: number): ReceivingStatus {
+  receiving(lastReceivedAt: number | null): ReceivingStatus {
     return { handshakes: true, senders: 3, lastReceivedAt };
   }
 

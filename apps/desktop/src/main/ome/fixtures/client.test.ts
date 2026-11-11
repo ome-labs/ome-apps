@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { OmeError } from "../client.ts";
 import { FixtureClient } from "./client.ts";
-import { OMET, PROPOSALS, VAULT, sampleHex } from "./sample.ts";
+import { OMET, PROPOSALS, USDC, VAULT, sampleHex } from "./sample.ts";
 import { SCENARIOS } from "./scenarios.ts";
 
 describe("FixtureClient", () => {
@@ -139,5 +139,48 @@ describe("FixtureClient", () => {
     await expect(
       client.call("vault.request", { vault: VAULT, token: sampleHex("not-tracked") }),
     ).rejects.toMatchObject({ kind: "invalid" });
+  });
+
+  it("pages activity newest first without repeating an entry, and filters it", async () => {
+    const client = new FixtureClient("normal");
+    const seen: string[] = [];
+    let before: string | undefined;
+    for (let page = 0; page < 20; page++) {
+      // oxlint-disable-next-line no-await-in-loop
+      const result = await client.call("vault.activity", {
+        vault: VAULT,
+        limit: 25,
+        ...(before ? { before } : {}),
+      });
+      seen.push(...result.items.map((e) => (e.kind === "received" ? e.txHash : e.proposal.id)));
+      if (!result.next) break;
+      before = result.next;
+    }
+    expect(seen.length).toBeGreaterThan(50);
+    expect(new Set(seen).size).toBe(seen.length);
+
+    const received = await client.call("vault.activity", { vault: VAULT, kinds: ["received"] });
+    expect(received.items.every((e) => e.kind === "received")).toBe(true);
+    const usdc = await client.call("vault.activity", { vault: VAULT, token: USDC.address });
+    expect(usdc.items.every((e) => e.kind === "received" && e.token.symbol === "USDC")).toBe(true);
+  });
+
+  it("lists who paid, with the senders a removed member can still recognise", async () => {
+    const parties = await new FixtureClient("normal").call("vault.counterparties", {
+      vault: VAULT,
+    });
+    expect(parties.items.some((p) => p.exposed)).toBe(true);
+    expect(parties.items.some((p) => !p.exposed)).toBe(true);
+    expect(parties.items.find((p) => p.label === "dave")?.received).toBeGreaterThan(5);
+  });
+
+  it("shows a payment arriving now at the top, with its events", async () => {
+    const client = new FixtureClient("normal");
+    const events: string[] = [];
+    client.subscribe((event) => events.push(event.type));
+    client.receive();
+    const [latest] = (await client.call("vault.activity", { vault: VAULT, limit: 1 })).items;
+    expect(latest?.kind).toBe("received");
+    expect(events).toEqual(["received", "balanceChanged"]);
   });
 });

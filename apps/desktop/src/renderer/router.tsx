@@ -7,6 +7,8 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 
+import { ActivityPage } from "./activity/activity-page.tsx";
+import { CounterpartiesPage } from "./activity/counterparties-page.tsx";
 import { CreatePage, JoinPage, validateLobbySearch } from "./founding/pages.tsx";
 import { HomePage } from "./home/home-page.tsx";
 import { HealthPage } from "./members/health-page.tsx";
@@ -90,6 +92,8 @@ const VAULT_SCREENS: Partial<Record<string, () => React.ReactNode>> = {
   "/receive": ReceivePage,
   "/members": MembersPage,
   "/health": HealthPage,
+  "/activity": ActivityPage,
+  "/counterparties": CounterpartiesPage,
 };
 const vaultPages = VAULT_PAGES.map((page) => {
   const component = VAULT_SCREENS[page.path];

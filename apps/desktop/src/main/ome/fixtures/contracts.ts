@@ -102,6 +102,7 @@ export function aztecAliases(): AztecAlias[] {
     { key: "accounts:alice", value: ACCOUNTS.alice },
     { key: "accounts:bob", value: ACCOUNTS.bob },
     { key: "accounts:dave", value: ACCOUNTS.dave },
+    { key: "accounts:payroll", value: sampleHex("sender.payroll") },
     { key: "contracts:amm", value: AMM },
     { key: "artifacts:amm", value: AMM_ARTIFACT },
     { key: `artifacts:${AMM}`, value: AMM_ARTIFACT },
