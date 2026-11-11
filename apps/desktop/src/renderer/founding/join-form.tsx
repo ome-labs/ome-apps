@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 
 import type { InvitePreview } from "@ome-labs/api";
 import { Scene } from "@ome-labs/brand/web";
-import { Banner, Button, MemberAvatar, Tag, TextField, ThresholdChip } from "@ome-labs/ui-web";
+import { Banner, Button, MemberAvatar, Tag, TextField, ThresholdChip, cn } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
 import { Page } from "../shell/page.tsx";
@@ -71,11 +71,7 @@ export function JoinForm() {
     >
       <div className="grid grid-cols-1 items-start gap-6 @3xl:grid-cols-[minmax(0,1fr)_380px]">
         <section className="flex flex-col rounded-lg bg-surface px-6 shadow-1">
-          <form
-            className="flex items-start gap-2 border-b border-line-subtle py-6"
-            onSubmit={inspect}
-            noValidate
-          >
+          <form className="flex items-start gap-2 pt-6 pb-2" onSubmit={inspect} noValidate>
             <TextField
               label="Invite"
               className="flex-1"
@@ -91,20 +87,24 @@ export function JoinForm() {
           </form>
 
           {error ? (
-            <div className="pt-5">
+            <div className="pt-3">
               <Banner kind="alarm">{error}</Banner>
             </div>
           ) : null}
 
+          {/* The vault shows once the invite is opened; until then the form is just the field and its buttons. */}
           {preview ? (
-            <Preview preview={preview} />
-          ) : (
-            <p className="py-5 type-body-s text-fg-muted">
-              The vault's name, host and thresholds show here.
-            </p>
-          )}
+            <div className="mt-4 border-t border-line-subtle">
+              <Preview preview={preview} />
+            </div>
+          ) : null}
 
-          <div className="flex items-center justify-end gap-2 border-t border-line-subtle py-4">
+          <div
+            className={cn(
+              "flex items-center justify-end gap-2 py-4",
+              preview && "border-t border-line-subtle",
+            )}
+          >
             <Button variant="ghost" onClick={cancel} disabled={pending === "join"}>
               Cancel
             </Button>

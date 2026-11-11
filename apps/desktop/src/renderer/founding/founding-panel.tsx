@@ -30,6 +30,15 @@ const LABELS: Record<FoundingStepId, string> = {
   verify: "Verify on chain",
 };
 
+/** The steps before the daemon reports any: all waiting, so the page never shows an empty list. */
+const NOT_STARTED: FoundingStep[] = (Object.keys(LABELS) as FoundingStepId[]).map((id) => ({
+  id,
+  status: "pending",
+  startedAt: null,
+  finishedAt: null,
+  detail: null,
+}));
+
 /** What a step is doing, in this member's terms; the daemon's own detail once the step finishes. */
 function detail(step: FoundingStep, lobby: LobbyView, hostName: string): string | undefined {
   const host = lobby.role === "host";
@@ -126,7 +135,7 @@ export function FoundingPanel({
             <StatusBadge kind="step" status={failed ? "failed" : done ? "done" : "active"} />
           </header>
           <StepList label={`Founding ${lobby.name}`} className="py-2">
-            {(founding?.steps ?? []).map((step) => (
+            {(founding?.steps ?? NOT_STARTED).map((step) => (
               <StepRow
                 key={step.id}
                 status={step.status}
