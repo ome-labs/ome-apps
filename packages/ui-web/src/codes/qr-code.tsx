@@ -33,6 +33,19 @@ function inFinder(x: number, y: number, size: number): boolean {
 }
 
 /**
+ * Whether `value` fits in a code at error correction H (about 1.2 KB). A longer value makes `QrCode` throw, so callers
+ * with payloads that can grow (a membership change plan) check first and show only the text when it doesn't fit.
+ */
+export function fitsQrCode(value: string): boolean {
+  try {
+    encode(value, { ecc: "H", border: 0 });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Page 35's QR code in Ome's style: square modules, rounded finder squares with a lake-blue eye, and the Ome mark on a
  * white plate in the middle (error correction H keeps it readable under the mark). It is always dark on a white tile,
  * in both themes: phone cameras read light-on-dark codes poorly.

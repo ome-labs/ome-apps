@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 
 import { useNavigate, useParams } from "@tanstack/react-router";
 
 import type { Hex32, MembershipPlan, RotationState } from "@ome-labs/api";
-import { Banner, Button, CodeBox, QrCode, TextField, toast } from "@ome-labs/ui-web";
+import { Banner, Button, CodeBox, fitsQrCode, QrCode, TextField, toast } from "@ome-labs/ui-web";
 
 import { callOme, useOme } from "../data/ome.ts";
 import { Page } from "../shell/page.tsx";
@@ -66,7 +66,13 @@ export function ChangeMembersPage() {
         {details.error ? <Banner kind="alarm">{details.error.message}</Banner> : null}
 
         {running.map((rotation) => (
-          <RotationProgress key={rotation.plan.id} vault={vault} rotation={rotation} />
+          <Fragment key={rotation.plan.id}>
+            {/* Until the reshare is done, someone may still need the plan: show it again after a reload. */}
+            {rotation.steps[0]?.status === "done" ? null : (
+              <SharePlan plan={rotation.plan} me={me} />
+            )}
+            <RotationProgress vault={vault} rotation={rotation} />
+          </Fragment>
         ))}
 
         {started ? (
@@ -111,10 +117,15 @@ function SharePlan({ plan, me }: { plan: MembershipPlan; me: string | undefined 
           existing vault). It holds no secrets. The change goes on once they have.
         </p>
       </div>
-      <div className="flex flex-col items-start gap-5 @2xl:flex-row">
-        <QrCode value={plan.share} label="Membership change plan, to scan" size={160} />
-        <CodeBox label="Plan" value={plan.share} className="min-w-0 flex-1" />
-      </div>
+      {/* A plan names every member, their keys and the committee: past a few members it outgrows a QR code. */}
+      {fitsQrCode(plan.share) ? (
+        <div className="flex flex-col items-start gap-5 @2xl:flex-row">
+          <QrCode value={plan.share} label="Membership change plan, to scan" size={160} />
+          <CodeBox label="Plan" value={plan.share} className="min-w-0 flex-1" />
+        </div>
+      ) : (
+        <CodeBox label="Plan" value={plan.share} />
+      )}
     </section>
   );
 }

@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 
 import type { RotationState } from "@ome-labs/api";
 import { Scene } from "@ome-labs/brand/web";
-import { Banner, Button, CodeBox, QrCode, TextField } from "@ome-labs/ui-web";
+import { Banner, Button, CodeBox, fitsQrCode, QrCode, TextField } from "@ome-labs/ui-web";
 
 import { callOme } from "../data/ome.ts";
 import { Page } from "../shell/page.tsx";
@@ -79,11 +79,13 @@ export function JoinRequestPage() {
                 title="Send your join request"
                 text="It names you, your Aztec account and your keeper, signed by the keeper. It holds no secrets."
               >
-                {request ? (
+                {request && fitsQrCode(request) ? (
                   <div className="flex flex-col items-start gap-5 @2xl:flex-row">
                     <QrCode value={request} label="Join request, to scan" size={152} />
                     <CodeBox label="Join request" value={request} className="min-w-0 flex-1" />
                   </div>
+                ) : request ? (
+                  <CodeBox label="Join request" value={request} />
                 ) : (
                   <div>
                     <Button
