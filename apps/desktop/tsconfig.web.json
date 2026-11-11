@@ -4,5 +4,5 @@
     // @ome-labs/format formats durations with Intl.DurationFormat, which TypeScript only types in ESNext.
     "lib": ["ESNext", "DOM", "DOM.Iterable"]
   },
-  "include": ["src/renderer", "src/bridge"]
+  "include": ["src/renderer", "src/bridge", "src/browser"]
 }

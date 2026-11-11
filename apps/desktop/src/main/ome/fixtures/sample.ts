@@ -1,7 +1,5 @@
 // The UI guide's sample story comes from `@ome-labs/format/sample`, the one copy the kits' stories also use. This file
 // adds what a running daemon would have on top: well-formed ids for the values the story leaves out.
-import { createHash } from "node:crypto";
-
 import type { Hex32, Point, TokenInfo } from "@ome-labs/api";
 import { accounts, aliases, omet, proposals, treasury } from "@ome-labs/format/sample";
 
@@ -34,9 +32,26 @@ export const MEMBERS = [
 
 export const NODE_URL = "http://localhost:8080";
 
+/**
+ * 32 stable bytes for a label: FNV-1a with a different seed per 4-byte word. Sample ids need only be well shaped and
+ * stable, and plain arithmetic keeps the fixtures running in a browser as well as in Node.
+ */
+function sampleBytes(label: string): number[] {
+  const bytes: number[] = [];
+  for (let word = 0; word < 8; word++) {
+    let hash = (0x811c9dc5 ^ Math.imul(word + 1, 0x9e3779b1)) >>> 0;
+    for (const char of `${word}:${label}`)
+      hash = Math.imul(hash ^ char.charCodeAt(0), 0x01000193) >>> 0;
+    bytes.push(hash >>> 24, (hash >>> 16) & 0xff, (hash >>> 8) & 0xff, hash & 0xff);
+  }
+  return bytes;
+}
+
 /** A stable, correctly shaped 32-byte hex value for a label, for ids the story doesn't fix. */
 export function sampleHex(label: string): Hex32 {
-  return `0x${createHash("sha256").update(label).digest("hex")}`;
+  return `0x${sampleBytes(label)
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("")}`;
 }
 
 export function samplePoint(label: string): Point {
@@ -47,7 +62,7 @@ const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
 /** A stable, correctly shaped libp2p peer id (`12D3KooW` + 44 base58 characters) for a label. */
 export function samplePeerId(label: string): string {
-  const bytes = createHash("sha256").update(`peer:${label}`).digest();
+  const bytes = sampleBytes(`peer:${label}`);
   const tail = Array.from(
     { length: 44 },
     (_, i) => BASE58[(bytes[i % bytes.length] ?? 0) % BASE58.length],

@@ -213,7 +213,7 @@ export class FixtureProposals {
   /** A new proposal, with the proposer's approval already on it. */
   create({ intent, expiresInHours }: ProposeParams): ProposalView {
     this.#signer();
-    const summary = Buffer.byteLength(JSON.stringify(intent));
+    const summary = new TextEncoder().encode(JSON.stringify(intent)).length;
     if (summary > MAX_SUMMARY_BYTES)
       throw new OmeError(
         "invalid",

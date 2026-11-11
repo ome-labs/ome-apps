@@ -10,6 +10,7 @@
   "scripts": {
     "build": "electron-vite build",
     "dev": "electron-vite dev",
+    "browser": "vite --config vite.browser.config.ts",
     "package": "electron-vite build && electron-builder --dir",
     "preview": "electron-vite preview",
     "test": "vitest run",

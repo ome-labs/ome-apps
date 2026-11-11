@@ -16,6 +16,7 @@ the top bar. Every profile proves on its own device, on every network.
 ```sh
 pnpm --filter @ome-labs/desktop dev          # the app with hot reload, on your daemon
 OME_DESKTOP_SOURCE=fixtures pnpm --filter @ome-labs/desktop dev   # on the sample data instead
+pnpm --filter @ome-labs/desktop browser      # the screens in a plain browser on the sample data (?scenario=…)
 pnpm --filter @ome-labs/desktop test         # unit tests (fast; what CI runs)
 pnpm --filter @ome-labs/desktop test:smoke   # builds and launches the app with Playwright (local only)
 pnpm --filter @ome-labs/desktop package      # an unsigned app in release/ for this platform
