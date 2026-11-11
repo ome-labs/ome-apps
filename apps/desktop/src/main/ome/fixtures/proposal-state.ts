@@ -104,6 +104,80 @@ export class FixtureProposals {
     return this.#list;
   }
 
+  readonly #executed = new Set<(id: Hex32) => void>();
+
+  /** Calls `listener` with each proposal's id as it is executed. */
+  onExecuted(listener: (id: Hex32) => void): void {
+    this.#executed.add(listener);
+  }
+
+  /**
+   * The `rotate_membership` proposal a planner's daemon makes once the reshare is done: a call on the vault, approved
+   * and executed like any proposal. Bob's daemon took part in the reshare too, so he approves it a moment later.
+   */
+  addRotation(memo: string): ProposalView {
+    const made = now();
+    const id = sampleHex(`rotation:${made}:${memo}`);
+    const template = this.#list[0] as ProposalView;
+    const rotate: DecodedCall = {
+      to: VAULT,
+      toLabel: "Treasury",
+      fn: "rotate_membership",
+      selector: "0x5b1e0c44",
+      kind: "private",
+      args: [],
+      isStatic: false,
+      decoded: true,
+    };
+    const proposal: ProposalView = {
+      ...template,
+      id,
+      intent: { kind: "calls", calls: [{ to: VAULT, fn: "rotate_membership", args: [] }], memo },
+      proposer: { index: ME.index, name: ME.name },
+      status: "collecting",
+      votes: [],
+      approvedByMe: false,
+      rejectedByMe: false,
+      createdAt: made,
+      expiresAt: made + 72 * 3600,
+      txNonce: sampleHex(`${id}.nonce`),
+      outerHash: sampleHex(`${id}.outer-hash`),
+      approvalMessage: sampleHex(`${id}.approval-message`),
+      calls: [this.#contracts.feeCall(), rotate],
+      authwits: [],
+      token: null,
+      execution: null,
+      executing: null,
+      cancelledBy: null,
+    };
+    this.#list = [proposal, ...this.#list];
+    this.#emit({
+      type: "proposalCreated",
+      vault: VAULT,
+      proposal: id,
+      summary: JSON.stringify(proposal.intent),
+      by: { index: ME.index, name: ME.name },
+    });
+    this.#changed();
+    setTimeout(() => {
+      const current = this.#list.find((p) => p.id === id);
+      if (!current || !OPEN.has(current.status)) return;
+      const bob: Vote = {
+        slot: 1,
+        index: 2,
+        name: "Bob",
+        approve: true,
+        valid: true,
+        reason: null,
+        at: now(),
+      };
+      this.#set(
+        settle({ ...current, votes: [...current.votes, bob].toSorted((a, b) => a.slot - b.slot) }),
+      );
+    }, 2500);
+    return proposal;
+  }
+
   list(filter: ProposalFilter = "all", limit = 50): ProposalPage {
     return { items: this.#list.filter((p) => matches(p, filter)).slice(0, limit), next: null };
   }
@@ -506,6 +580,7 @@ export class FixtureProposals {
       txHash,
       by: me,
     });
+    for (const listener of this.#executed) listener(id);
   }
 
   #voted(next: ProposalView, approve: boolean, reason: string | null): ProposalView {

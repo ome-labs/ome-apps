@@ -8,6 +8,7 @@ import { type OmeClient, OmeError } from "../client.ts";
 import { FixtureContracts, aztecAliases } from "./contracts.ts";
 import { FixtureFounding } from "./founding.ts";
 import { FixtureHistory } from "./history.ts";
+import { FixtureMembership, detailsWithRoster, peersWithRoster, withRoster } from "./membership.ts";
 import { FixtureOps, OPS, vaultOf } from "./ops.ts";
 import { FixtureProposals } from "./proposal-state.ts";
 import { VAULT } from "./sample.ts";
@@ -41,6 +42,7 @@ export class FixtureClient implements OmeClient {
     (event) => this.#emit(event),
     () => this.#unlocked(),
   );
+  readonly #membership = new FixtureMembership(this.#proposals, (event) => this.#emit(event));
   readonly #founding = new FixtureFounding(
     (event) => this.#emit(event),
     () => this.setScenario("normal"),
@@ -136,7 +138,8 @@ export class FixtureClient implements OmeClient {
 
   /** The vaults as the member sees them now: renamed, aliased, the default, without a retired one. */
   #vaults() {
-    return this.#vaultSettings.apply(this.#baseVaults());
+    const roster = this.#membership.roster();
+    return this.#vaultSettings.apply(this.#baseVaults()).map((v) => withRoster(v, roster));
   }
 
   /** The vault a request names must be Treasury, and the profile must have it. */
@@ -227,7 +230,10 @@ export class FixtureClient implements OmeClient {
     "vault.list": () => this.#vaults(),
     "vault.details": ({ vault }) => {
       this.#vault(vault);
-      const details = vaultDetails(this.#scenario, now());
+      const details = detailsWithRoster(
+        vaultDetails(this.#scenario, now()),
+        this.#membership.roster(),
+      );
       const summary = this.#vaults().find((v) => v.address === vault) ?? details.summary;
       return { ...details, summary };
     },
@@ -242,7 +248,10 @@ export class FixtureClient implements OmeClient {
       this.#vault(vault),
       this.#vaultSettings.retire(vault, this.#scenario, this.#baseVaults())
     ),
-    "vault.peers": ({ vault }) => (this.#vault(vault), peers(this.#scenario, now())),
+    "vault.peers": ({ vault }) => (
+      this.#vault(vault),
+      peersWithRoster(peers(this.#scenario, now()), this.#membership.roster(), now())
+    ),
     "vault.activity": (params) => (
       this.#vault(params.vault),
       this.#history.activity(this.#proposals.all(), params)
@@ -311,6 +320,10 @@ export class FixtureClient implements OmeClient {
     "lobby.update": (params) => this.#founding.update(params),
     "founding.begin": ({ lobby }) => this.#founding.begin(lobby),
     "founding.get": ({ lobby }) => this.#founding.founding(lobby),
-    "membership.list": ({ vault }) => (this.#vault(vault), []),
+    "membership.list": ({ vault }) => (this.#vault(vault), this.#membership.list()),
+    "membership.request": () => this.#membership.request(),
+    "membership.plan": (params) => (this.#vault(params.vault), this.#membership.plan(params)),
+    "membership.begin": ({ plan }) => this.#membership.begin(plan),
+    "membership.get": ({ id }) => this.#membership.get(id),
   };
 }

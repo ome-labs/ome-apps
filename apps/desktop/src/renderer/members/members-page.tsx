@@ -43,6 +43,10 @@ export function MembersPage() {
     () => void navigate({ to: "/vaults/$vault/health", params: { vault } }),
     [navigate, vault],
   );
+  const change = useCallback(
+    () => void navigate({ to: "/vaults/$vault/membership", params: { vault } }),
+    [navigate, vault],
+  );
   const close = useCallback((next: boolean) => {
     if (!next) setOpen(undefined);
   }, []);
@@ -66,9 +70,14 @@ export function MembersPage() {
         )
       }
       actions={
-        <Button icon="shield-check" onClick={health}>
-          Health
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button icon="shield-check" onClick={health}>
+            Health
+          </Button>
+          <Button icon="rotate" onClick={change}>
+            Change members
+          </Button>
+        </div>
       }
     >
       <div className="flex flex-col gap-4">

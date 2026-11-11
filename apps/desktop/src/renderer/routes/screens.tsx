@@ -10,6 +10,8 @@ import { AuditPage } from "../audit/audit-page.tsx";
 import { HomePage } from "../home/home-page.tsx";
 import { HealthPage } from "../members/health-page.tsx";
 import { MembersPage } from "../members/members-page.tsx";
+import { ChangeMembersPage } from "../membership/change-page.tsx";
+import { JoinRequestPage } from "../membership/join-request-page.tsx";
 import { OverviewPage } from "../overview/overview-page.tsx";
 import { NewProposalPage } from "../proposals/new-proposal-page.tsx";
 import { ProposalPage } from "../proposals/proposal-page.tsx";
@@ -23,7 +25,10 @@ import type { Page as PageEntry } from "./pages.ts";
 type Screen = () => ReactNode;
 
 /** App pages with screens (create, join and settings have routes of their own). */
-export const APP_SCREENS: Partial<Record<string, Screen>> = { "/home": HomePage };
+export const APP_SCREENS: Partial<Record<string, Screen>> = {
+  "/home": HomePage,
+  "/join-request": JoinRequestPage,
+};
 
 /** Vault pages with screens. */
 export const VAULT_SCREENS: Partial<Record<string, Screen>> = {
@@ -39,6 +44,7 @@ export const VAULT_SCREENS: Partial<Record<string, Screen>> = {
   "/counterparties": CounterpartiesPage,
   "/settings": VaultSettingsPage,
   "/audit": AuditPage,
+  "/membership": ChangeMembersPage,
 };
 
 /** App pages with their own routes, which count as built. */
