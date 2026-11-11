@@ -1,3 +1,4 @@
+export * from "./activity.ts";
 export * from "./address.ts";
 export * from "./amount.ts";
 export * from "./balance.ts";

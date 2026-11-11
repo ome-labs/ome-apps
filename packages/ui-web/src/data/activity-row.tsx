@@ -2,11 +2,11 @@ import type { ActivityEntry } from "@ome-labs/api";
 import {
   formatAbsoluteTime,
   formatCount,
-  formatTokenAmount,
   proposalSummary,
-  shortHex,
+  receivedText,
   shortProposalId,
   timeAgo,
+  voteProgress,
 } from "@ome-labs/format";
 import { Icon } from "@ome-labs/icons/web";
 
@@ -16,21 +16,48 @@ import { cn } from "../styling/class-names.ts";
 export type ActivityRowProps = {
   entry: ActivityEntry;
   now: number;
-  /** Names for senders this member knows (members' accounts), by address. */
+  /** Names for senders this member knows (members' accounts, aliases), by lower-case address. */
   names?: Record<string, string> | undefined;
+  /** Where a proposal row goes: the whole row is its link. */
+  href?: string | undefined;
+  /** Opens a received payment's details: the whole row is its button. */
+  onOpen?: (() => void) | undefined;
   className?: string | undefined;
 };
 
+const target =
+  "focus-ring rounded-xs text-left after:absolute after:inset-0 after:content-[''] focus-visible:outline-none";
+
 /**
  * Page 38's activity: transfers this member's daemon decrypted, and proposals. The vault is private, so this
- * is what this member can see, not a public history.
+ * is what this member can see, not a public history. With `href` or `onOpen` the row opens the entry.
  */
-export function ActivityRow({ entry, now, names, className }: ActivityRowProps) {
+export function ActivityRow({ entry, now, names, href, onOpen, className }: ActivityRowProps) {
   const received = entry.kind === "received";
-  const sender = received ? names?.[entry.from.toLowerCase()] : undefined;
+  const text = received
+    ? receivedText(entry, names?.[entry.from.toLowerCase()])
+    : `${proposalSummary(entry.proposal)} · ${shortProposalId(entry.proposal.id)}`;
+  const label = href ? (
+    <a href={href} className={target}>
+      {text}
+    </a>
+  ) : onOpen ? (
+    <button type="button" onClick={onOpen} className={target}>
+      {text}
+    </button>
+  ) : (
+    text
+  );
 
   return (
-    <li className={cn("flex items-center gap-3 px-4 py-3", className)}>
+    <li
+      className={cn(
+        "flex items-center gap-3 px-4 py-3",
+        (href || onOpen) &&
+          "relative transition-colors duration-fast ease-standard hover:bg-hover has-[:focus-visible]:bg-hover",
+        className,
+      )}
+    >
       <span
         className={cn(
           "flex size-7 shrink-0 items-center justify-center rounded-full inset-ring",
@@ -46,25 +73,18 @@ export function ActivityRow({ entry, now, names, className }: ActivityRowProps) 
           className="size-3.5"
         />
       </span>
+      <span className="flex min-w-0 flex-1 flex-col">
+        <span className="truncate type-body-s text-fg">{label}</span>
+        {received ? null : (
+          <span className="type-caption text-fg-subtle">
+            from {entry.proposal.proposer.name} · {voteProgress(entry.proposal).label}
+          </span>
+        )}
+      </span>
       {received ? (
-        <>
-          <span className="min-w-0 flex-1 type-body-s text-fg">
-            Received{" "}
-            <span className="font-mono font-medium">
-              {formatTokenAmount(entry.amount, entry.token)}
-            </span>{" "}
-            from {shortHex(entry.from)}
-            {sender ? ` (${sender})` : ""}
-          </span>
-          <span className="type-mono-s text-fg-subtle">block {formatCount(entry.block)}</span>
-        </>
+        <span className="type-mono-s text-fg-subtle">block {formatCount(entry.block)}</span>
       ) : (
-        <>
-          <span className="min-w-0 flex-1 truncate type-body-s text-fg">
-            {proposalSummary(entry.proposal)} · {shortProposalId(entry.proposal.id)}
-          </span>
-          <StatusBadge kind="proposal" status={entry.proposal.status} />
-        </>
+        <StatusBadge kind="proposal" status={entry.proposal.status} />
       )}
       <time
         dateTime={new Date(entry.at * 1000).toISOString()}
