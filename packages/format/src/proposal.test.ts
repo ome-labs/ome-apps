@@ -46,6 +46,10 @@ describe("proposal", () => {
         calls: [{ to: swap.to, toLabel: "AMM" } as never],
       }),
     ).toBe("Call swap on AMM");
+    const rotate = { to: `0x${"b".repeat(64)}` as const, fn: "rotate_membership", args: [] };
+    expect(proposalSummary({ intent: { ...calls, calls: [rotate] }, token: null })).toBe(
+      "Change the vault's members",
+    );
     expect(proposalSummary({ intent: { ...calls, calls: [swap, swap] }, token: null })).toBe(
       "Make 2 contract calls",
     );

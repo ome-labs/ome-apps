@@ -45,6 +45,8 @@ export function proposalSummary(
     case "calls": {
       const count = intent.calls.length;
       const [only] = intent.calls;
+      // A membership change is a call on the vault itself; its memo says what changes.
+      if (count === 1 && only?.fn === "rotate_membership") return "Change the vault's members";
       if (count === 1 && only) {
         const label = proposal.calls?.find((call) => call.to === only.to.toLowerCase())?.toLabel;
         return `Call ${only.fn} on ${label ?? shortHex(only.to)}`;

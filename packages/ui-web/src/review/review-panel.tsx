@@ -170,7 +170,9 @@ function WhatHappens({ review }: { review: Review }) {
       intent.kind === "cancel"
         ? `${proposalSummary(review.proposal)}, so it can never execute.`
         : intent.kind === "calls"
-          ? `${proposalSummary(review.proposal)} from the vault.`
+          ? intent.calls.length === 1 && intent.calls[0]?.fn === "rotate_membership"
+            ? "Change the vault's members and thresholds, as the memo says. Your daemon approves it only if it is exactly the change your keeper took part in."
+            : `${proposalSummary(review.proposal)} from the vault.`
           : intent.kind === "unknown"
             ? `${proposalSummary(review.proposal)}. Its calls below are what you sign.`
             : review.action || proposalSummary(review.proposal);
