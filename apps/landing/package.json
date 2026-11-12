@@ -1,0 +1,40 @@
+{
+  "name": "@ome-labs/landing",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ome.network: the website, prerendered with TanStack Start; one day on the lake from dawn to first light",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite dev --port 3002",
+    "preview": "vite preview --port 3002",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ome-labs/brand": "workspace:*",
+    "@ome-labs/icons": "workspace:*",
+    "@ome-labs/tokens": "workspace:*",
+    "@ome-labs/ui-web": "workspace:*",
+    "@tanstack/react-router": "catalog:",
+    "@tanstack/react-start": "1.169.5",
+    "motion": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "jsdom": "catalog:",
+    "klarity": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  }
+}

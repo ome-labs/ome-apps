@@ -1,0 +1,172 @@
+@import "@ome-labs/ui-web/styles.css";
+
+@source "./";
+
+/* The website's own colours, from the Figma website pages (63–69): the lake's light at each hour. They sit on the
+   painted sky, never on the app's surfaces, so they stay out of the token package. */
+@theme {
+  --color-amber: #f5c98a;
+  --color-haze-soft: #c4d3f6;
+  --color-ok: #4cc38a;
+  --color-ink: #06070a;
+  --color-deep: #0b0d13;
+  --color-lake-night: #1a2a66;
+  /* The token theme clears Tailwind's palette; the sky needs plain white for text and its tints. */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* The token theme sizes the app (tablet, desktop, wide) and its type roles. A marketing page also reflows for
+     phones, tablets and laptops, and sets running text on the plain scale, so the site adds both. */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --text-xs: 12px;
+  --text-xs--line-height: 1.5;
+  --text-sm: 14px;
+  --text-sm--line-height: 1.5;
+  --text-base: 16px;
+  --text-base--line-height: 1.5;
+  --text-lg: 18px;
+  --text-lg--line-height: 1.45;
+  --text-xl: 20px;
+  --text-xl--line-height: 1.4;
+}
+
+/* One logical pixel of the pixel art, in CSS pixels: the 320-wide scenes span the page on desktop and keep their
+   chunkiness on a phone. The sky sets the measured value; this is the guess before it runs. */
+:root {
+  --k: max(4.5px, calc(100vw / 320));
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-lake-night);
+    color: var(--color-brand-white);
+    scroll-padding-top: 96px;
+  }
+
+  body {
+    min-height: 100dvh;
+    overflow-x: clip;
+  }
+
+  /* Before the sky paints (or without script) each hour shows as its own flat colour. */
+  html:not(.sky-on) [data-hour] {
+    background-color: var(--hour-sky);
+  }
+
+  /* Once the canvas holds a scene's pixels, it draws the scene itself, dithered into the sky. */
+  [data-sky-scene][data-painted] > img {
+    visibility: hidden;
+  }
+
+  :where(a, button, summary, [tabindex]) {
+    outline: none;
+  }
+
+  :where(a, button, summary, [tabindex]):focus-visible {
+    box-shadow: 0 0 0 3px rgb(196 211 246 / 0.75);
+    border-radius: 999px;
+  }
+}
+
+/* Dark glass over the sky: the one surface the site draws text on, so every line keeps AA contrast whatever hour
+   is behind it. */
+@utility glass {
+  background-color: rgb(11 13 19 / 0.6);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  backdrop-filter: blur(24px) saturate(1.1);
+  box-shadow: 0 16px 48px rgb(5 8 20 / 0.35);
+}
+
+@utility glass-soft {
+  background-color: rgb(11 13 19 / 0.42);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  backdrop-filter: blur(20px);
+}
+
+/* Big type on the sky carries a soft shadow, as in Figma, so it holds against bright clouds. */
+@utility sky-text {
+  text-shadow:
+    0 1px 2px rgb(4 8 24 / 0.35),
+    0 6px 30px rgb(4 8 24 / 0.3);
+}
+
+/* A section's darker pool behind its heading, like the Figma scrims; heroes over bright scenes pool deeper. */
+@utility scrim {
+  background: radial-gradient(closest-side, rgb(8 13 36 / var(--scrim, 0.42)), rgb(8 13 36 / 0));
+}
+
+@utility pixelated {
+  image-rendering: pixelated;
+}
+
+/* Rise into view (motion/rise: 900 ms, emphasized ease, 24 px). Only with script, so the page reads without it. */
+@layer components {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 900ms var(--ease-emphasized),
+      transform 1000ms var(--ease-emphasized);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js [data-reveal][data-shown] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Lanterns breathe (motion/breathe: 4.8 s). */
+  .lantern-glow {
+    animation: breathe 4.8s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(0.92);
+    }
+    50% {
+      opacity: 0.9;
+      transform: scale(1.08);
+    }
+  }
+
+  /* The tour's progress bar fills over a tab's 6 s (motion/tab); its end moves to the next tab. */
+  .tab-progress {
+    width: 0;
+    animation: tab-progress 6s linear forwards;
+  }
+
+  @keyframes tab-progress {
+    to {
+      width: 100%;
+    }
+  }
+
+  /* The fallback fade for a scene before the canvas paints it: smooth, not dithered. */
+  .scene-fade {
+    mask-image: linear-gradient(to bottom, transparent, black 23%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .lantern-glow {
+      animation: none;
+      opacity: 0.6;
+    }
+
+    .tab-progress {
+      display: none;
+    }
+  }
+}

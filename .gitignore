@@ -3,8 +3,11 @@ node_modules/
 .pnpm-store/
 
 # Build output and caches
-# (generated TypeScript from @ome-labs/brand and others)
+# (generated TypeScript from @ome-labs/brand and others, and the website's route tree)
 packages/*/src/generated/
+apps/*/src/generated/
+# TanStack's router generator scratch space
+.tanstack/
 # Figma art masters downloaded by @ome-labs/brand's export script
 .masters/
 dist/

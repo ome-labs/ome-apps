@@ -14,7 +14,7 @@ TypeScript UI repo.
 ## Workflow
 
 - Commit after each coherent change with a [Conventional Commit](https://www.conventionalcommits.org/). Scopes:
-  `desktop`, `kit`, `tokens`, `brand`, `icons`, `format`, `ui-web`, `ui-native`, `repo`. Body lines are at most 100 characters.
+  `desktop`, `landing`, `kit`, `tokens`, `brand`, `icons`, `format`, `ui-web`, `ui-native`, `repo`. Body lines are at most 100 characters.
 - Run the narrowest check first (`pnpm --filter @ome-labs/format test`), then `pnpm check`, which formats, lints,
   typechecks and tests everything.
 - Stop and ask before adding a dependency that duplicates one already chosen, changing a token value away from Figma,
@@ -70,3 +70,4 @@ code and no tests of what types already guarantee.
 | `ui-web`    | Vitest + Testing Library       | keyboard, focus, copying, type-to-confirm, review gating, amounts; axe on each component domain     |
 | `ui-native` | jest-expo + RN Testing Library | presses, disabled states, copying, type-to-confirm, review gating, amounts                          |
 | `kit`       | Vitest                         | every example's code snippet is found in its source; search matching; contrast grading              |
+| `landing`   | Vitest + Testing Library       | every route has a search entry and head; the sky's palette, rows and dither; tabs, toggle and FAQ   |

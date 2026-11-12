@@ -4,14 +4,15 @@ Everything people see of [Ome](https://ome.network): the website, the desktop ap
 device), and the UI they share. Ome itself (the protocol, the member's daemon `omed`, the CLI and `@ome-labs/api`)
 lives in [`ome-labs/ome`](https://github.com/ome-labs/ome).
 
-This repo holds the shared foundations and the desktop app, which runs on sample data until it talks to the daemon.
-The website and the phone app come next.
+This repo holds the shared foundations, the website, and the desktop app, which runs on sample data until it talks to
+the daemon. The phone app comes next.
 
 ## Apps
 
 | App                                 | What it is                                                                                            |
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | [`@ome-labs/desktop`](apps/desktop) | The Electron desktop app, a client of the member's daemon; pages are placeholders on fixtures for now |
+| [`@ome-labs/landing`](apps/landing) | The website, ome.network: TanStack Start, prerendered to static pages under a dithered pixel sky      |
 
 ## Packages
 
@@ -50,6 +51,7 @@ Node 24 (see `.node-version`) and pnpm 12.
 pnpm install
 pnpm build        # generates the token theme and the brand components
 pnpm kit         # the brand and UI kit, http://localhost:3001
+pnpm --filter @ome-labs/landing dev   # the website, http://localhost:3002
 pnpm --filter @ome-labs/desktop dev   # the desktop app on fixtures
 pnpm check        # format, lint, typecheck and test
 ```
@@ -71,6 +73,7 @@ still missing or unverified:
   dither-dissolve `Scene`.
 - **Textures and pixel objects** ship in `@ome-labs/brand` with components, but no UI component uses them yet; they
   are for the website and marketing pages.
-- **Pages:** the desktop pages (Figma's desktop screens), the website and the phone app's screens; they come next.
+- **Pages:** the desktop pages (Figma's desktop screens) and the phone app's screens; they come next. The website is
+  built from Figma's website pages; its app screens are captured from the desktop app's browser mode.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the code rules.

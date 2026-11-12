@@ -33,6 +33,17 @@ export default defineConfig({
       },
     },
     {
+      // The website hands motion its targets inline (`animate={{ … }}`) and wires small handlers on plain elements;
+      // motion compares values itself and DOM elements don't memoise, so useMemo or useCallback would save nothing.
+      files: ["apps/landing/**"],
+      rules: {
+        "react-perf/jsx-no-new-object-as-prop": "off",
+        "react-perf/jsx-no-new-array-as-prop": "off",
+        "react-perf/jsx-no-new-function-as-prop": "off",
+        "react-perf/jsx-no-jsx-as-prop": "off",
+      },
+    },
+    {
       // Base UI composes through `render={<Element />}` and inline callbacks handed to primitives that aren't
       // memoised; wrapping each in useMemo or useCallback would add code and save no renders.
       files: ["packages/ui-web/**", "packages/ui-native/**"],
