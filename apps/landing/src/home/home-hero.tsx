@@ -9,6 +9,7 @@ export function HomeHero() {
     <Section
       hour="6:12 am"
       scene="hero-dawn"
+      plainSky
       labelledBy="hero-title"
       className="flex min-h-[calc(200*var(--k))] flex-col items-center pt-[130px] md:min-h-[calc(200*var(--k)+260px)] md:pt-[170px]"
     >

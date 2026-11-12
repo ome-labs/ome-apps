@@ -100,6 +100,7 @@ export function SkyCanvas({ page }: { page: string }) {
           width: sceneWidth,
           height: sceneHeight,
           pixels: art,
+          smoothTop: scene.smoothTop,
         });
         scene.element.dataset.painted = "";
       }
@@ -111,6 +112,7 @@ export function SkyCanvas({ page }: { page: string }) {
         noise,
         scenes,
         moons: layout.moons,
+        plain: layout.plain,
         drift,
       });
       context.putImageData(image, 0, 0);

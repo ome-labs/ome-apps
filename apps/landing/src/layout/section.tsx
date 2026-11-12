@@ -12,6 +12,8 @@ type SectionProps = {
   scene?: SkySceneId;
   /** The moon hangs over this section. */
   moon?: boolean;
+  /** Paint the sky above this section's scene smooth, without the dithered clouds: the top of every page. */
+  plainSky?: boolean;
   id?: string;
   labelledBy?: string;
   className?: string | undefined;
@@ -19,7 +21,16 @@ type SectionProps = {
 };
 
 /** One hour of the page's day. Its content sits above the sky; a scene, if any, is passed in as a child. */
-export function Section({ hour, scene, moon, id, labelledBy, className, children }: SectionProps) {
+export function Section({
+  hour,
+  scene,
+  moon,
+  plainSky,
+  id,
+  labelledBy,
+  className,
+  children,
+}: SectionProps) {
   const fallback = {
     "--hour-sky": scene ? sceneTopHex(scene) : rgbToHex(skyAt(hour).sky),
   } as CSSProperties;
@@ -30,6 +41,7 @@ export function Section({ hour, scene, moon, id, labelledBy, className, children
       aria-labelledby={labelledBy}
       data-hour={hour}
       data-moon={moon ? "" : undefined}
+      data-sky-plain={plainSky ? "" : undefined}
       style={fallback}
       className={cn("relative isolate px-4 md:px-8", className)}
     >

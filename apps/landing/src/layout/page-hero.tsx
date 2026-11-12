@@ -24,6 +24,7 @@ export function PageHero({ hour, label, scene, title, sub, actions, dim }: PageH
     <Section
       hour={hour}
       scene={scene}
+      plainSky
       labelledBy="page-title"
       className="flex min-h-[calc(200*var(--k))] flex-col items-center pt-[120px] md:min-h-[max(calc(200*var(--k)+180px),100svh)] md:pt-[180px]"
     >

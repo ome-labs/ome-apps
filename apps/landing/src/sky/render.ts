@@ -26,6 +26,8 @@ export type PaintedScene = {
   width: number;
   height: number;
   pixels: Uint8ClampedArray;
+  /** Rows at its top that blend smoothly out of the sky beneath; 0 dissolves them in through the dither. */
+  smoothTop: number;
 };
 
 export type Moon = { row: number; column: number; radius: number };
@@ -38,6 +40,8 @@ export type SkyFrame = {
   moons: readonly Moon[];
   /** Columns the clouds have drifted; wraps at the width. */
   drift: number;
+  /** Row ranges, [from, to), painted as the plain sky colour: no clouds, stars or dither. */
+  plain: readonly (readonly [number, number])[];
 };
 
 export function paintSky(target: ImageData, firstRow: number, frame: SkyFrame): void {
@@ -55,6 +59,17 @@ export function paintSky(target: ImageData, firstRow: number, frame: SkyFrame): 
     const cloudB = rows.cloud[r * 3 + 2] ?? 0;
     const cover = 1 - (rows.clouds[r] ?? 0) * 0.62;
     const starChance = (rows.stars[r] ?? 0) * 0.0022;
+
+    if (frame.plain.some(([from, to]) => row >= from && row < to)) {
+      for (let x = 0; x < target.width; x++) {
+        const i = (y * target.width + x) * 4;
+        out[i] = skyR;
+        out[i + 1] = skyG;
+        out[i + 2] = skyB;
+        out[i + 3] = 255;
+      }
+      continue;
+    }
 
     for (let x = 0; x < target.width; x++) {
       const v = noise[r * width + ((x + drift) % width)] ?? 0;
@@ -121,17 +136,23 @@ function pasteScene(target: ImageData, firstRow: number, scene: PaintedScene): v
     const row = firstRow + y;
     const sceneRow = row - scene.row;
     const opacity = sceneRow < fadeRows ? sceneRow / fadeRows : 1;
+    // Smoothstep, so the scene's dithered sky arrives gradually rather than as a line.
+    const blendT = scene.smoothTop > 0 ? Math.min(1, sceneRow / scene.smoothTop) : 1;
+    const blend = blendT * blendT * (3 - 2 * blendT);
 
     for (let x = 0; x < target.width; x++) {
       const sceneColumn = x - scene.column;
       if (sceneColumn < 0 || sceneColumn >= scene.width) continue;
-      if (opacity < 1 && threshold(row, x) >= opacity) continue;
+      if (scene.smoothTop === 0 && opacity < 1 && threshold(row, x) >= opacity) continue;
 
       const source = (sceneRow * scene.width + sceneColumn) * 4;
       const i = (y * target.width + x) * 4;
-      out[i] = scene.pixels[source] ?? 0;
-      out[i + 1] = scene.pixels[source + 1] ?? 0;
-      out[i + 2] = scene.pixels[source + 2] ?? 0;
+      const red = scene.pixels[source] ?? 0;
+      const green = scene.pixels[source + 1] ?? 0;
+      const blue = scene.pixels[source + 2] ?? 0;
+      out[i] = (out[i] ?? 0) + (red - (out[i] ?? 0)) * blend;
+      out[i + 1] = (out[i + 1] ?? 0) + (green - (out[i + 1] ?? 0)) * blend;
+      out[i + 2] = (out[i + 2] ?? 0) + (blue - (out[i + 2] ?? 0)) * blend;
     }
   }
 }
