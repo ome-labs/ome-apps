@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { cn } from "@ome-labs/ui-web";
 
 import { HourChip } from "./hour-chip.tsx";
-import { Reveal } from "./reveal.tsx";
 
 type HeadBlockProps = {
   hour: string;
@@ -32,7 +31,7 @@ export function HeadBlock({
   const centred = align === "center";
 
   return (
-    <Reveal
+    <div
       className={cn(
         "relative flex flex-col gap-4 md:gap-5",
         centred ? "items-center text-center" : "items-start",
@@ -47,7 +46,7 @@ export function HeadBlock({
       <h2
         id={id}
         className={cn(
-          "sky-text font-display tracking-[-0.01em] text-balance text-white [&_em]:text-brand-sun",
+          "sky-text font-display tracking-[-0.01em] text-balance text-white [&_em]:sun-text",
           // The line height follows the size: tailwind-merge drops a leading that comes before a text size.
           size === "l"
             ? "text-[clamp(2.75rem,6.4vw,5.5rem)] leading-[0.98]"
@@ -67,6 +66,6 @@ export function HeadBlock({
           {sub}
         </p>
       ) : null}
-    </Reveal>
+    </div>
   );
 }

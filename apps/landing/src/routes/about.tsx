@@ -2,12 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Chapter } from "../about/chapter.tsx";
 import { PillLink } from "../actions/pill-link.tsx";
-import { Closing } from "../heroes/closing.tsx";
-import { PageHero } from "../heroes/page-hero.tsx";
+import { Closing } from "../layout/closing.tsx";
 import { HeadBlock } from "../layout/head-block.tsx";
-import { Reveal } from "../layout/reveal.tsx";
+import { PageHero } from "../layout/page-hero.tsx";
 import { Section } from "../layout/section.tsx";
-import { pageHead } from "../site/head.ts";
+import { pageHead } from "../seo/head.ts";
 import { links } from "../site/links.ts";
 
 export const Route = createFileRoute("/about")({
@@ -86,7 +85,7 @@ function About() {
           label="Where it’s going"
           title="Slow, careful, in the open."
         />
-        <Reveal className="w-full">
+        <div className="w-full">
           <ol className="glass mx-auto w-full max-w-[1200px] rounded-[26px] px-5 py-2 md:px-9">
             {road.map(([when, what, detail]) => (
               <li
@@ -105,7 +104,7 @@ function About() {
               </li>
             ))}
           </ol>
-        </Reveal>
+        </div>
       </Section>
 
       <Section
@@ -120,11 +119,9 @@ function About() {
           title="Standing on good research."
           sub="Wonderland’s research on a multisig for Aztec mapped the problem: spending is easy to share, reading isn’t. Ome builds the threshold-sharing option and adds resharing."
         />
-        <Reveal delay={120}>
-          <PillLink to={links.research} kind="ghost">
-            Read “On an Aztec multisig”
-          </PillLink>
-        </Reveal>
+        <PillLink to={links.research} kind="ghost">
+          Read “On an Aztec multisig”
+        </PillLink>
       </Section>
 
       <Closing

@@ -6,18 +6,33 @@ import { Logo } from "@ome-labs/brand/web";
 import { Icon } from "@ome-labs/icons/web";
 import { cn } from "@ome-labs/ui-web";
 
-import { navItems } from "./nav-items.ts";
+import { socials } from "../actions/social-links.tsx";
+import type { PagePath } from "../seo/pages.ts";
+
+/** The header's pages, in order; Home is the logo, and the button is the code on GitHub. */
+const navItems: readonly { to: PagePath; label: string }[] = [
+  { to: "/product", label: "Product" },
+  { to: "/how-it-works", label: "How it works" },
+  { to: "/security", label: "Security" },
+  { to: "/about", label: "About" },
+];
+
+/** How far the page scrolls before the header gathers, and how far back up before it spreads out again. */
+const gatherAt = 140;
+const spreadAt = 60;
 
 /**
- * The header. At the top of a page it lies flat across the sky; once the page scrolls it gathers into a glass pill
- * (motion/base). On a phone the links move into a full-screen menu, a modal <dialog> so focus stays inside it.
+ * The header. At the top of a page it lies flat across the sky; once the reader has properly scrolled it gathers
+ * into a glass pill. The gap between the two thresholds keeps it from flickering around one scroll position. On a
+ * phone the links move into a full-screen menu, a modal <dialog> so focus stays inside it.
  */
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    const update = () => setScrolled(window.scrollY > 24);
+    const update = () =>
+      setScrolled((was) => (was ? window.scrollY > spreadAt : window.scrollY > gatherAt));
     update();
     window.addEventListener("scroll", update, { passive: true });
 
@@ -25,11 +40,11 @@ export function Nav() {
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 flex justify-center px-3 pt-2.5 md:pt-4">
+    <header className="site-header fixed inset-x-0 top-0 z-40 flex justify-center px-3 pt-2.5 md:pt-4">
       <nav
         aria-label="Main"
         className={cn(
-          "flex h-[52px] w-full items-center justify-between rounded-full pr-2 pl-4 transition-[max-width,background-color,border-color,box-shadow,backdrop-filter] duration-200 ease-standard md:h-14",
+          "flex h-[52px] w-full items-center justify-between rounded-full pr-2 pl-4 transition-[max-width,padding,background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-emphasized md:h-14",
           scrolled
             ? "glass max-w-[820px] md:pl-5"
             : "max-w-[1440px] border border-transparent md:px-9 md:pr-9",
@@ -40,11 +55,19 @@ export function Nav() {
             variant="lockup-horizontal"
             tone="dark"
             title=""
-            className={cn("w-auto transition-[height]", scrolled ? "h-6" : "h-6 md:h-7")}
+            className={cn(
+              "w-auto transition-[height] duration-500 ease-emphasized",
+              scrolled ? "h-6" : "h-6 md:h-7",
+            )}
           />
         </Link>
 
-        <ul className={cn("hidden items-center md:flex", scrolled ? "gap-6" : "gap-8")}>
+        <ul
+          className={cn(
+            "hidden items-center transition-[gap] duration-500 ease-emphasized md:flex",
+            scrolled ? "gap-6" : "gap-8",
+          )}
+        >
           {navItems.map((item) => (
             <li key={item.to}>
               <Link
@@ -58,13 +81,16 @@ export function Nav() {
         </ul>
 
         <div className="flex items-center gap-1.5">
-          <Link
-            to="/install"
-            className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2 text-[13px] font-medium text-brand-night shadow-[0_6px_18px_rgb(5_8_20/0.2)] transition-colors hover:bg-[#e3eafb] md:px-4 md:py-2.5 md:text-sm"
+          <a
+            href={socials[0].href}
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-2 text-[13px] font-medium text-brand-night shadow-[0_6px_18px_rgb(5_8_20/0.2)] transition-colors hover:bg-[#e3eafb] md:px-4 md:py-2.5 md:text-sm"
           >
-            Install
-            <Icon name="arrow-right" size={16} className="hidden md:block" />
-          </Link>
+            <svg aria-hidden viewBox="0 0 24 24" className="size-4 fill-current">
+              <path d={socials[0].path} />
+            </svg>
+            GitHub
+          </a>
           <button
             type="button"
             aria-label="Open the menu"
@@ -95,11 +121,7 @@ export function Nav() {
           </form>
         </div>
         <ul className="mt-6 flex flex-col px-4">
-          {[
-            { to: "/" as const, label: "Home" },
-            ...navItems,
-            { to: "/install" as const, label: "Install" },
-          ].map((item) => (
+          {[{ to: "/" as const, label: "Home" }, ...navItems].map((item) => (
             <li key={item.to} className="border-b border-white/10">
               <Link
                 to={item.to}

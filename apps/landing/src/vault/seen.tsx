@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Icon } from "@ome-labs/icons/web";
 import { cn } from "@ome-labs/ui-web";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 
 import { useInView } from "../motion/use-in-view.ts";
 import { useLoop } from "../motion/use-loop.ts";
@@ -44,42 +44,76 @@ const rows: readonly Row[] = [
 
 const noiseColours = ["#5B7FE0", "#9DB4F2", "#2C47B4", "#F5C98A", "#1A2A66", "#C4D3F6"];
 
-type Block = { at: number; colour: string; width: number; opacity: number };
+/** One block of the cover: its colour, and how long after a flip it lands or lifts. */
+type Block = { colour: string; delay: number };
 
-/** A row's random-looking blocks, seeded so they're the same on the server and in the browser. */
-function noiseBlocks(seed: number): Block[] {
+/**
+ * A value's cover: two rows of blocks about 8 px wide across its text, seeded so they're the same on the server
+ * and in the browser.
+ */
+function coverFor(seed: number, characters: number): { columns: number; blocks: Block[] } {
+  // The values are set in 13 px mono, about 7.8 px a character.
+  const columns = Math.max(4, Math.ceil((characters * 7.8) / 8));
   let state = seed * 9301 + 49297;
-  let at = 0;
 
-  return Array.from({ length: 6 + ((seed * 3) % 7) }, () => {
+  const blocks = Array.from({ length: columns * 2 }, () => {
     state = (state * 9301 + 49297) % 233280;
-    const block = {
-      at,
-      colour: noiseColours[state % noiseColours.length] ?? "#5B7FE0",
-      width: 6 + (state % 3) * 4,
-      opacity: 0.55 + (state % 4) * 0.1,
-    };
-    at += block.width;
 
-    return block;
+    return {
+      colour: noiseColours[state % noiseColours.length] ?? "#5B7FE0",
+      delay: Math.round((state / 233280) * 420),
+    };
   });
+
+  return { columns, blocks };
 }
 
-const noise = rows.map((_, index) => noiseBlocks(index + 1));
+const covers = rows.map((row, index) => coverFor(index + 1, row.member.length));
 
-/** What the network has instead of a value. */
-function Noise({ blocks }: { blocks: readonly Block[] }) {
+/**
+ * A private value under its cover of blocks. Flipping to the network drops the blocks over the text one at a time
+ * at random, and flipping back lifts them the same way, so the value is read out of the noise.
+ */
+function Covered({
+  value,
+  covered,
+  cover,
+}: {
+  value: string;
+  covered: boolean;
+  cover: ReturnType<typeof coverFor>;
+}) {
   return (
-    <span className="flex h-3.5 items-center">
-      <span className="sr-only">encrypted</span>
-      {blocks.map((block) => (
-        <span
-          key={block.at}
-          aria-hidden
-          className="h-3.5"
-          style={{ width: block.width, backgroundColor: block.colour, opacity: block.opacity }}
-        />
-      ))}
+    <span className="relative inline-flex h-5 items-center">
+      <span
+        aria-hidden={covered}
+        className={cn(
+          "font-mono text-[13px] transition-colors delay-200 duration-300",
+          covered ? "text-white" : "text-amber",
+        )}
+      >
+        {value}
+      </span>
+      {covered ? <span className="sr-only">encrypted</span> : null}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 grid grid-rows-2"
+        style={{ gridTemplateColumns: `repeat(${cover.columns}, 1fr)` }}
+      >
+        {cover.blocks.map((block, index) => (
+          <span
+            // The blocks never reorder; their place in the grid is who they are.
+            // oxlint-disable-next-line react/no-array-index-key
+            key={index}
+            className="transition-opacity duration-75 ease-linear motion-reduce:transition-none"
+            style={{
+              backgroundColor: block.colour,
+              opacity: covered ? 1 : 0,
+              transitionDelay: `${block.delay}ms`,
+            }}
+          />
+        ))}
+      </span>
     </span>
   );
 }
@@ -111,7 +145,7 @@ export function Seen() {
           />
           {network ? "What the network sees" : "What a member sees"}
         </h3>
-        <fieldset className="flex gap-1 rounded-full bg-white/8 p-1">
+        <fieldset className="isolate flex gap-1 rounded-full bg-white/8 p-1">
           <legend className="sr-only">Whose view</legend>
           {views.map((label, index) => (
             <button
@@ -120,10 +154,18 @@ export function Seen() {
               aria-pressed={view === index}
               onClick={() => setChosen(index)}
               className={cn(
-                "rounded-full px-3.5 py-[7px] text-[13px] font-medium transition-colors duration-200",
-                view === index ? "bg-white text-brand-night" : "text-white hover:bg-white/10",
+                "relative rounded-full px-3.5 py-[7px] text-[13px] font-medium transition-colors duration-200",
+                view === index ? "text-brand-night" : "text-white hover:bg-white/10",
               )}
             >
+              {view === index ? (
+                <motion.span
+                  aria-hidden
+                  layoutId="seen-view"
+                  transition={{ type: "spring", duration: 0.4, bounce: 0.15 }}
+                  className="absolute inset-0 -z-10 rounded-full bg-white"
+                />
+              ) : null}
               {label}
             </button>
           ))}
@@ -138,29 +180,15 @@ export function Seen() {
           >
             <dt className="text-sm font-medium">{row.what}</dt>
             <dd className="min-h-5">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={network && !row.public ? "hidden" : "shown"}
-                  initial={{ opacity: 0, filter: "blur(4px)" }}
-                  animate={{ opacity: 1, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, filter: "blur(4px)" }}
-                  transition={{ duration: 0.3, delay: index * 0.03 }}
-                  className="block"
-                >
-                  {network && !row.public ? (
-                    <Noise blocks={noise[index] ?? []} />
-                  ) : (
-                    <span
-                      className={cn(
-                        "font-mono text-[13px]",
-                        row.public ? "text-white/80" : network ? "text-white" : "text-amber",
-                      )}
-                    >
-                      {row.member}
-                    </span>
-                  )}
-                </motion.span>
-              </AnimatePresence>
+              {row.public ? (
+                <span className="font-mono text-[13px] text-white/80">{row.member}</span>
+              ) : (
+                <Covered
+                  value={row.member}
+                  covered={network}
+                  cover={covers[index] ?? coverFor(index + 1, row.member.length)}
+                />
+              )}
             </dd>
             <dd className="text-[13px] text-white/72 md:text-sm">{row.where}</dd>
           </div>

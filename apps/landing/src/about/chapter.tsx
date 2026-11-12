@@ -3,7 +3,6 @@ import { cn } from "@ome-labs/ui-web";
 import type { IllustrationArt } from "../art/art-files.ts";
 import { PixelArt } from "../art/pixel-art.tsx";
 import { HourChip } from "../layout/hour-chip.tsx";
-import { Reveal } from "../layout/reveal.tsx";
 import { Section } from "../layout/section.tsx";
 
 type ChapterProps = {
@@ -27,7 +26,7 @@ export function Chapter({ id, hour, label, title, body, art, alt, flip }: Chapte
           flip ? "lg:flex-row-reverse" : "lg:flex-row",
         )}
       >
-        <Reveal className="lg:w-[540px]">
+        <div className="lg:w-[540px]">
           <div className="glass-soft flex flex-col gap-4 rounded-[26px] p-5 md:p-[30px]">
             <HourChip hour={hour} label={label} />
             <h2 id={id} className="font-display text-[44px] leading-none md:text-[60px]">
@@ -35,8 +34,8 @@ export function Chapter({ id, hour, label, title, body, art, alt, flip }: Chapte
             </h2>
             <p className="text-base leading-[1.55] text-white/95 md:text-[17px]">{body}</p>
           </div>
-        </Reveal>
-        <Reveal delay={120} className="lg:w-[600px]">
+        </div>
+        <div className="lg:w-[600px]">
           <figure className="glass-soft rounded-[26px] p-2.5">
             <PixelArt
               illustration={art}
@@ -44,7 +43,7 @@ export function Chapter({ id, hour, label, title, body, art, alt, flip }: Chapte
               className="aspect-[8/5] h-auto w-full rounded-[18px]"
             />
           </figure>
-        </Reveal>
+        </div>
       </div>
     </Section>
   );

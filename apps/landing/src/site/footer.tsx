@@ -4,8 +4,8 @@ import { Link } from "@tanstack/react-router";
 
 import { Logo } from "@ome-labs/brand/web";
 
+import type { PagePath } from "../seo/pages.ts";
 import { links } from "./links.ts";
-import type { PagePath } from "./pages.ts";
 
 const product: { to: PagePath; label: string }[] = [
   { to: "/", label: "Home" },
@@ -77,7 +77,7 @@ export function Footer() {
       </div>
 
       <div className="mt-12 flex flex-col gap-2 border-t border-white/10 pt-6 font-mono text-xs text-white/60 md:mt-16 md:flex-row md:justify-between">
-        <p>Not launched yet. Testnet first, an audit before mainnet.</p>
+        <p>Coming to Aztec soon.</p>
         <p>© {year} Ome Labs</p>
       </div>
     </footer>

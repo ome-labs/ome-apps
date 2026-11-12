@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 
 import type { SceneArt } from "../art/art-files.ts";
 import { PixelArt } from "../art/pixel-art.tsx";
-import { Reveal } from "./reveal.tsx";
 
 type SceneCardProps = {
   scene: SceneArt;
@@ -10,13 +9,12 @@ type SceneCardProps = {
   body: string;
   /** A small amber label above the title: what it's called, or "planned". */
   tag?: string;
-  delay?: number;
 };
 
 /** A card with a window onto one of the app's scenes. Cards in a row share the tallest one's height. */
-export function SceneCard({ scene, title, body, tag, delay = 0 }: SceneCardProps) {
+export function SceneCard({ scene, title, body, tag }: SceneCardProps) {
   return (
-    <Reveal delay={delay} className="h-full">
+    <div className="h-full">
       <article className="glass-soft flex h-full flex-col gap-3.5 rounded-2xl p-3 md:p-3.5">
         <PixelArt
           scene={scene}
@@ -29,7 +27,7 @@ export function SceneCard({ scene, title, body, tag, delay = 0 }: SceneCardProps
           <p className="text-sm leading-[1.5] text-white/88 md:text-[15px]">{body}</p>
         </div>
       </article>
-    </Reveal>
+    </div>
   );
 }
 

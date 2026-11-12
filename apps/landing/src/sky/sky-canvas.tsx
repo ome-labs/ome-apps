@@ -105,7 +105,14 @@ export function SkyCanvas({ page }: { page: string }) {
       }
 
       const image = context.createImageData(width, visibleRows);
-      paintSky(image, firstRow, { width, rows, noise, scenes, moons: layout.moons, drift });
+      paintSky(image, firstRow, {
+        width,
+        rows,
+        noise,
+        scenes,
+        moons: layout.moons,
+        drift,
+      });
       context.putImageData(image, 0, 0);
       root.classList.add("sky-on");
     }

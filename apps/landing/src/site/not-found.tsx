@@ -1,5 +1,5 @@
 import { PillLink } from "../actions/pill-link.tsx";
-import { PageHero } from "../heroes/page-hero.tsx";
+import { PageHero } from "../layout/page-hero.tsx";
 
 /** A page that isn't there: the lake in mist, and the way home. */
 export function NotFound() {

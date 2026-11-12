@@ -3,7 +3,7 @@
 // forever by turning the columns.
 
 /** A small seeded generator (mulberry32): the same seed paints the same sky on every visit. */
-export function seededRandom(seed: number): () => number {
+function seededRandom(seed: number): () => number {
   let state = seed >>> 0;
 
   return () => {
@@ -19,11 +19,7 @@ export function seededRandom(seed: number): () => number {
 type Octaves = { seed: number; scaleX: number; scaleY: number; octaves: number };
 
 /** Noise in 0..1 for a `width` × `height` field, row by row. */
-export function valueNoise(
-  width: number,
-  height: number,
-  { seed, scaleX, scaleY, octaves }: Octaves,
-) {
+function valueNoise(width: number, height: number, { seed, scaleX, scaleY, octaves }: Octaves) {
   const out = new Float32Array(width * height);
   const random = seededRandom(seed);
   let amplitude = 1;

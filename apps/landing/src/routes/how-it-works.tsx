@@ -1,13 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { FlowPlayer } from "../flows/flow-player.tsx";
-import { flows } from "../flows/flows.ts";
-import { Closing } from "../heroes/closing.tsx";
-import { PageHero } from "../heroes/page-hero.tsx";
+import { FlowPlayer } from "../how-it-works/flow-player.tsx";
+import { flows } from "../how-it-works/flows.ts";
+import { Closing } from "../layout/closing.tsx";
 import { HeadBlock } from "../layout/head-block.tsx";
-import { Reveal } from "../layout/reveal.tsx";
+import { PageHero } from "../layout/page-hero.tsx";
 import { Section } from "../layout/section.tsx";
-import { pageHead } from "../site/head.ts";
+import { pageHead } from "../seo/head.ts";
 
 export const Route = createFileRoute("/how-it-works")({
   head: () => pageHead("/how-it-works"),
@@ -22,6 +21,7 @@ function HowItWorks() {
         hour="11:02 am"
         label="How it works"
         scene="chinampas"
+        dim
         title="How Ome works."
         sub="Alice, Bob and Charlie share a vault called Treasury. Here is how they found it, pay from it, read it and change who’s in it."
       />
@@ -40,9 +40,9 @@ function HowItWorks() {
             title={flow.title}
             sub={flow.sub}
           />
-          <Reveal delay={120} className="w-full">
+          <div className="w-full">
             <FlowPlayer flow={flow} />
-          </Reveal>
+          </div>
         </Section>
       ))}
 

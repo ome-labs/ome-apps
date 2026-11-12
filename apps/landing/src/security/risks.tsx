@@ -1,5 +1,3 @@
-import { Reveal } from "../layout/reveal.tsx";
-
 // The thresholds the app warns about. k is approvals to spend, t is keepers to read, n is members; these are the
 // CLI's own risk names, never a recommended setup.
 const risks = [
@@ -15,7 +13,7 @@ const risks = [
 /** The risky thresholds, named: a formula in amber and what it costs. */
 export function Risks() {
   return (
-    <Reveal className="w-full">
+    <div className="w-full">
       <dl className="glass mx-auto w-full max-w-[1200px] rounded-[26px] px-5 py-2 md:px-9">
         {risks.map(([formula, meaning]) => (
           <div
@@ -29,6 +27,6 @@ export function Risks() {
           </div>
         ))}
       </dl>
-    </Reveal>
+    </div>
   );
 }

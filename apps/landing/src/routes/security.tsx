@@ -1,14 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PillLink } from "../actions/pill-link.tsx";
-import { Closing } from "../heroes/closing.tsx";
-import { PageHero } from "../heroes/page-hero.tsx";
+import { Closing } from "../layout/closing.tsx";
 import { HeadBlock } from "../layout/head-block.tsx";
-import { Reveal } from "../layout/reveal.tsx";
+import { PageHero } from "../layout/page-hero.tsx";
 import { CardRow, SceneCard } from "../layout/scene-card.tsx";
 import { Section } from "../layout/section.tsx";
 import { Risks } from "../security/risks.tsx";
-import { pageHead } from "../site/head.ts";
+import { pageHead } from "../seo/head.ts";
 import { links } from "../site/links.ts";
 import { Seen } from "../vault/seen.tsx";
 
@@ -85,8 +84,8 @@ function Security() {
           title="Three keys, three jobs."
         />
         <CardRow columns={3}>
-          {keys.map((card, index) => (
-            <SceneCard key={card.title} {...card} delay={index * 80} />
+          {keys.map((card) => (
+            <SceneCard key={card.title} {...card} />
           ))}
         </CardRow>
       </Section>
@@ -107,9 +106,9 @@ function Security() {
           }
           sub="Signers, thresholds and the committee are never written to public storage. Fees are paid by a fee-paying contract, never by the vault in public."
         />
-        <Reveal delay={120} className="w-full">
+        <div className="w-full">
           <Seen />
-        </Reveal>
+        </div>
       </Section>
 
       <Section
@@ -139,8 +138,8 @@ function Security() {
           title="No share backups. Two ways back."
         />
         <CardRow columns={3}>
-          {recovery.map((card, index) => (
-            <SceneCard key={card.title} {...card} delay={index * 80} />
+          {recovery.map((card) => (
+            <SceneCard key={card.title} {...card} />
           ))}
         </CardRow>
       </Section>
@@ -157,9 +156,7 @@ function Security() {
           title="Testnet first. Audit before mainnet."
           sub="Ome launches on Aztec testnet and stays off mainnet until an external audit is done. Found a security issue? Report it privately through GitHub’s security advisories, never in a public issue."
         />
-        <Reveal delay={120}>
-          <PillLink to={links.advisories}>Report a vulnerability</PillLink>
-        </Reveal>
+        <PillLink to={links.advisories}>Report a vulnerability</PillLink>
       </Section>
 
       <Closing hour="5:41 am" label="First light" scene="starting" title="Read how it works." />

@@ -1,13 +1,25 @@
 {
-  "name": "Ome",
+  "id": "/",
+  "name": "Ome: the private multisig for Aztec",
   "short_name": "Ome",
-  "description": "The private multisig for Aztec.",
+  "description": "The private multisig for Aztec. Spend together. See together.",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["finance", "productivity", "security"],
   "start_url": "/",
   "display": "browser",
   "background_color": "#1a2a66",
   "theme_color": "#1a2a66",
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }

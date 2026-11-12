@@ -4,18 +4,17 @@ import { Icon } from "@ome-labs/icons/web";
 
 import { InstallLine } from "../actions/install-line.tsx";
 import { PillLink } from "../actions/pill-link.tsx";
-import { Closing } from "../heroes/closing.tsx";
-import { PageHero } from "../heroes/page-hero.tsx";
+import { PhoneApproval } from "../app-preview/phone-approval.tsx";
+import { Closing } from "../layout/closing.tsx";
 import { HeadBlock } from "../layout/head-block.tsx";
-import { Reveal } from "../layout/reveal.tsx";
+import { PageHero } from "../layout/page-hero.tsx";
 import { CardRow, SceneCard } from "../layout/scene-card.tsx";
 import { Section } from "../layout/section.tsx";
-import { PhoneApproval } from "../phone/phone-approval.tsx";
 import { AppFlow } from "../product/app-flow.tsx";
 import { FeatureRow, type Feature } from "../product/feature-row.tsx";
 import { Terminal } from "../product/terminal.tsx";
-import { pageHead } from "../site/head.ts";
-import { application } from "../site/structured-data.ts";
+import { pageHead } from "../seo/head.ts";
+import { application } from "../seo/structured-data.ts";
 
 export const Route = createFileRoute("/product")({
   head: () => pageHead("/product", [application]),
@@ -103,6 +102,7 @@ function Product() {
         hour="9:30 am"
         label="Product"
         scene="hero-day"
+        dim
         title={
           <>
             The private multisig, <em>built to be used.</em>
@@ -132,8 +132,8 @@ function Product() {
           sub="Your signing key never leaves your device. Your share of the viewing key never leaves your keeper."
         />
         <CardRow columns={4}>
-          {parts.map((part, index) => (
-            <SceneCard key={part.title} {...part} delay={index * 80} />
+          {parts.map((part) => (
+            <SceneCard key={part.title} {...part} />
           ))}
         </CardRow>
       </Section>
@@ -158,13 +158,13 @@ function Product() {
               title="Prefer a terminal? So does Ome."
               sub="Everything the app does, the CLI does too: found a vault, propose, approve and check its health. Same daemon underneath."
             />
-            <Reveal delay={80} className="max-w-full">
+            <div className="max-w-full">
               <InstallLine />
-            </Reveal>
+            </div>
           </div>
-          <Reveal delay={120} className="w-full lg:max-w-[680px]">
+          <div className="w-full lg:max-w-[680px]">
             <Terminal />
-          </Reveal>
+          </div>
         </div>
       </Section>
 
@@ -184,20 +184,18 @@ function Product() {
               title="Approve from your phone."
               sub="Move your signing key to your phone and approve from anywhere. It never holds your share of the viewing key: phones are great at one signature, not at staying awake at 3 am."
             />
-            <Reveal delay={80}>
-              <ul className="flex flex-col gap-2.5">
-                {phone.map((line) => (
-                  <li key={line} className="sky-text flex items-center gap-2.5 text-base">
-                    <Icon name="check" size={16} className="text-ok" />
-                    {line}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
+            <ul className="flex flex-col gap-2.5">
+              {phone.map((line) => (
+                <li key={line} className="sky-text flex items-center gap-2.5 text-base">
+                  <Icon name="check" size={16} className="text-ok" />
+                  {line}
+                </li>
+              ))}
+            </ul>
           </div>
-          <Reveal delay={120} className="flex justify-center lg:w-[520px]">
+          <div className="flex justify-center lg:w-[520px]">
             <PhoneApproval />
-          </Reveal>
+          </div>
         </div>
       </Section>
 

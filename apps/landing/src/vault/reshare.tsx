@@ -1,167 +1,231 @@
-import { Logo } from "@ome-labs/brand/web";
 import { Icon } from "@ome-labs/icons/web";
 import { cn } from "@ome-labs/ui-web";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
+import { BrandImage } from "../art/brand-image.tsx";
 import { useInView } from "../motion/use-in-view.ts";
 import { useLoop } from "../motion/use-loop.ts";
 import { people, type Person } from "./people.ts";
 
 const stages: readonly [Stage, ...Stage[]] = [
-  { name: "Epoch 1", caption: "Three members, three shares of one viewing key." },
-  { name: "Change", caption: "Charlie is removed. Dana is invited." },
-  { name: "Reshare", caption: "Alice and Bob re-split the same key for the new group." },
   {
-    name: "Epoch 2",
-    caption: "Same key, same address, new shares. Charlie’s old share combines with nothing.",
+    name: "Day 1",
+    caption: "Alice, Bob and Charlie each hold a piece of the key that reads the vault.",
+  },
+  {
+    name: "Charlie leaves",
+    caption: "The team removes Charlie and invites Dana, approved like any payment.",
+  },
+  {
+    name: "Re-split",
+    caption: "Alice and Bob gather their pieces and split the same key again for the new team.",
+  },
+  {
+    name: "After",
+    caption: "Dana holds a fresh piece. Charlie’s old one no longer opens anything.",
   },
 ];
 
-const radius = 108;
-const centre = { x: 300, y: 236 };
-
 type Stage = { name: string; caption: string };
 
-/** The ring's three shares, held by whoever is in the vault at that stage. */
-const slots = [0, 1, 2] as const;
+/** The drawing's own units; the box keeps this aspect, so percentages and the lines' units agree. */
+const width = 600;
+const height = 460;
+const centre = { x: 300, y: 250 };
+const ring = 165;
 
-/** Where each member stands around the ring at each stage: angle (degrees), distance from the ring, opacity. */
-function place(who: Person, stage: number): { angle: number; out: number; opacity: number } {
-  if (who === "charlie")
-    return {
-      angle: 150,
-      out: stage === 0 ? 0 : stage === 1 ? 40 : 90,
-      opacity: stage === 0 ? 1 : stage === 1 ? 0.35 : 0,
-    };
-  if (who === "dana")
-    return {
-      angle: stage === 0 ? 170 : stage === 1 ? 165 : 150,
-      out: stage === 0 ? 90 : stage === 1 ? 40 : 0,
-      opacity: stage === 0 ? 0 : stage === 1 ? 0.6 : 1,
-    };
-
-  return { angle: who === "alice" ? -90 : 30, out: 0, opacity: 1 };
-}
-
-function arc(start: number, end: number): string {
-  const point = (degrees: number) => {
-    const radians = (degrees * Math.PI) / 180;
-    return `${centre.x + Math.cos(radians) * radius} ${centre.y + Math.sin(radians) * radius}`;
-  };
-
-  return `M ${point(start)} A ${radius} ${radius} 0 0 1 ${point(end)}`;
-}
+type Spot = { angle: number; distance: number; opacity: number; tag?: string };
 
 /**
- * Resharing, as it plays in Figma: the ring of shares around the vault, Charlie drifting off, Dana arriving, the
- * shares turning as Alice and Bob deal new ones; the vault and its address never move. 2.4 s a stage, 3.2 s on
- * the last, while it's on screen; the stage pills choose a stage.
+ * Where each member stands around the vault at each stage. While the change is pending, Charlie steps out to the
+ * left and Dana waits below his place, far enough apart that neither covers the other's name.
+ */
+function spot(who: Person, stage: number): Spot {
+  if (who === "charlie") {
+    if (stage === 0) return { angle: 150, distance: ring, opacity: 1 };
+    if (stage === 1) return { angle: 180, distance: ring + 40, opacity: 0.5, tag: "leaves" };
+    return { angle: 190, distance: ring + 120, opacity: 0 };
+  }
+  if (who === "dana") {
+    if (stage === 0) return { angle: 130, distance: ring + 120, opacity: 0 };
+    if (stage === 1) return { angle: 130, distance: ring + 15, opacity: 0.8, tag: "joins" };
+    return { angle: 150, distance: ring, opacity: 1 };
+  }
+
+  return { angle: who === "alice" ? -90 : 30, distance: ring, opacity: 1 };
+}
+
+/** A point `along` the way from the vault out to a spot (1 is the spot itself). */
+function at({ angle, distance }: Spot, along = 1) {
+  const radians = (angle * Math.PI) / 180;
+
+  return {
+    x: centre.x + Math.cos(radians) * distance * along,
+    y: centre.y + Math.sin(radians) * distance * along,
+  };
+}
+
+const percent = ({ x, y }: { x: number; y: number }) => ({
+  left: `${(x / width) * 100}%`,
+  top: `${(y / height) * 100}%`,
+});
+
+const members: readonly Person[] = ["alice", "bob", "charlie", "dana"];
+const ease = [0.16, 1, 0.3, 1] as const;
+
+/**
+ * Resharing: the members around the vault, each holding a share. Charlie drifts off and Dana arrives; Alice and
+ * Bob's shares gather into the vault and come back out as new ones, dealt to the new group. The vault and its
+ * address never move. 2.6 s a stage while it's on screen; the stage pills choose a stage.
  */
 export function Reshare() {
   const [ref, inView] = useInView<HTMLDivElement>();
   const [stage, setStage] = useLoop(stages.length, 2600, inView);
-  const holders: readonly [Person, Person, Person] =
-    stage <= 1 ? ["alice", "bob", "charlie"] : ["alice", "bob", "dana"];
   const current = stages[stage] ?? stages[0];
+  const epoch = stage >= 3 ? 2 : 1;
+  const holders: readonly Person[] =
+    stage <= 1
+      ? ["alice", "bob", "charlie"]
+      : stage === 2
+        ? ["alice", "bob"]
+        : ["alice", "bob", "dana"];
 
   return (
     <div
       ref={ref}
-      className="glass relative mx-auto w-full max-w-[600px] overflow-hidden rounded-[28px]"
+      className="relative mx-auto w-full max-w-[600px] overflow-hidden rounded-[28px] border border-white/12 bg-[rgb(12_20_52/0.86)] shadow-[0_16px_48px_rgb(5_8_20/0.35)] backdrop-blur-xl"
     >
-      <p className="z-10 m-4 mb-0 inline-flex items-center gap-1.5 rounded-full bg-white/8 px-3 py-1.5 font-mono text-xs md:absolute md:top-5 md:left-5 md:m-0">
-        0x1f3a…9c2e
-        <Icon name="check" size={16} className="text-ok" />
-        <span className="text-ok">same address</span>
-      </p>
-
+      {/* Lake light pooled behind the vault, in place of whatever sky the glass would let through. */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 aspect-[600/460] bg-[radial-gradient(circle_at_50%_54%,rgb(91_127_224/0.28),transparent_62%)]"
+      />
       {/* The picture repeats the caption below it, which is the text a screen reader gets. */}
-      <svg viewBox="0 0 600 470" className="block h-auto w-full" aria-hidden>
-        {/* A CSS transition, not motion: an SVG group turns about a point in the drawing's own units only with
-            transform-box: view-box, which motion replaces with the group's bounding box. */}
-        <g
-          className="transition-transform duration-1000 ease-[cubic-bezier(0.65,0,0.35,1)] motion-reduce:transition-none"
-          style={{
-            transform: `rotate(${stage >= 2 ? 60 : 0}deg)`,
-            transformBox: "view-box",
-            transformOrigin: `${centre.x}px ${centre.y}px`,
-          }}
-        >
-          {slots.map((slot) => {
-            const who = holders[slot];
+      <div aria-hidden className="relative aspect-[600/460] w-full">
+        <svg viewBox={`0 0 ${width} ${height}`} className="absolute inset-0 size-full">
+          {members.map((who) => {
+            const place = spot(who, stage);
+            const end = at(place);
 
             return (
-              <motion.path
-                key={slot}
-                d={arc(slot * 120 + 4 - 90, (slot + 1) * 120 - 4 - 90)}
-                fill="none"
-                strokeWidth={radius * 0.22}
-                animate={{
-                  stroke: stage === 2 ? "#9DB4F2" : people[who].colour,
-                  opacity: stage === 1 && who === "charlie" ? 0.25 : stage === 2 ? 0.55 : 1,
-                }}
-                transition={{ duration: 0.8 }}
+              <motion.line
+                key={who}
+                x1={centre.x}
+                y1={centre.y}
+                initial={false}
+                animate={{ x2: end.x, y2: end.y, opacity: place.opacity * 0.5 }}
+                transition={{ duration: 0.9, ease }}
+                stroke="#c4d3f6"
+                strokeWidth={2}
+                strokeDasharray={place.tag ? "4 6" : undefined}
               />
             );
           })}
-        </g>
-        {stage === 2 ? (
-          <motion.rect
-            x={centre.x - 1}
-            width={2}
-            fill="#F5C98A"
-            initial={{ y: centre.y, height: 0, opacity: 0 }}
-            animate={{ y: centre.y - radius - 4, height: radius * 2 + 8, opacity: 0.9 }}
-            transition={{ duration: 0.9 }}
-          />
-        ) : null}
-        <circle
-          cx={centre.x}
-          cy={centre.y}
-          r={60}
-          fill="rgb(11 13 19 / 0.85)"
-          stroke="rgb(255 255 255 / 0.15)"
-        />
-        <foreignObject x={centre.x - 60} y={centre.y - 60} width={120} height={120}>
-          <div className="flex size-full flex-col items-center justify-center gap-1">
-            <Logo variant="mark" tone="dark" title="" className="h-[30px] w-auto" />
-            <span
-              className={cn("font-mono text-[11px]", stage === 2 ? "text-amber" : "text-white/85")}
-            >
-              {stage >= 3 ? "epoch 2" : stage === 2 ? "resharing" : "epoch 1"}
-            </span>
-          </div>
-        </foreignObject>
-        {(Object.keys(people) as Person[]).map((who) => {
-          const { angle, out, opacity } = place(who, stage);
-          const distance = radius + 58 + out;
-          const radians = (angle * Math.PI) / 180;
+        </svg>
+
+        {/* The vault, which never moves; a ring goes out from it while the key is reshared. */}
+        <div
+          className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2"
+          style={percent(centre)}
+        >
+          <span className="relative flex">
+            {stage === 2 ? (
+              <motion.span
+                className="absolute inset-0 rounded-2xl border-2 border-amber md:rounded-3xl"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 1.7, opacity: 0 }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: "easeOut" }}
+              />
+            ) : null}
+            <BrandImage
+              avatar="lantern-tower"
+              className={cn(
+                "relative size-14 rounded-2xl ring-2 transition-[box-shadow] duration-500 md:size-24 md:rounded-3xl",
+                stage === 2 ? "ring-amber shadow-[0_0_40px_rgb(245_201_138/0.5)]" : "ring-white/25",
+              )}
+            />
+          </span>
+          <span
+            className={cn(
+              "rounded-full bg-deep/80 px-2.5 py-0.5 text-xs font-medium",
+              stage === 2 ? "text-amber" : "text-white/85",
+            )}
+          >
+            {stage === 2 ? "re-splitting" : "Treasury"}
+          </span>
+        </div>
+
+        {/* Each holder's share, partway along their line; reshared ones gather in the vault and are dealt anew. */}
+        <AnimatePresence initial={false}>
+          {holders.map((who) => {
+            const place = spot(who, stage);
+            const position = stage === 2 ? centre : at(place, 0.58);
+
+            return (
+              <motion.span
+                key={`${who}-${epoch}`}
+                className="absolute -translate-x-1/2 -translate-y-1/2"
+                initial={{ ...percent(centre), opacity: 0, scale: 0.4 }}
+                animate={{
+                  ...percent(position),
+                  opacity: stage === 2 ? 0 : place.opacity,
+                  scale: 1,
+                }}
+                exit={{ opacity: 0, scale: 0.4 }}
+                transition={{ duration: 0.9, ease }}
+              >
+                <span
+                  className={cn(
+                    "flex rounded-full bg-deep p-1 ring-2",
+                    epoch === 2 ? "ring-amber" : "ring-white/30",
+                  )}
+                >
+                  <BrandImage object="share" className="size-5 md:size-7" />
+                </span>
+              </motion.span>
+            );
+          })}
+        </AnimatePresence>
+
+        {members.map((who) => {
+          const place = spot(who, stage);
 
           return (
-            <motion.g
+            <motion.div
               key={who}
+              className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5"
               initial={false}
-              animate={{
-                x: centre.x + Math.cos(radians) * distance,
-                y: centre.y + Math.sin(radians) * distance,
-                opacity,
-              }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              animate={{ ...percent(at(place)), opacity: place.opacity }}
+              transition={{ duration: 0.9, ease }}
             >
-              <circle r={23} fill={people[who].colour} />
-              <text y={8} textAnchor="middle" className="fill-brand-night font-display text-[22px]">
-                {people[who].initial}
-              </text>
-              <text y={42} textAnchor="middle" className="fill-white/90 text-xs font-medium">
+              <BrandImage
+                avatar={people[who].avatar}
+                className={cn(
+                  "size-11 rounded-full ring-2 md:size-16",
+                  place.tag ? "ring-white/45" : "ring-white/25",
+                )}
+              />
+              <span className="rounded-full bg-deep/85 px-2 text-xs font-medium text-white/92 md:text-[13px]">
                 {people[who].name}
-              </text>
-            </motion.g>
+                {place.tag ? (
+                  <span className={place.tag === "joins" ? "text-amber" : "text-white/60"}>
+                    {" "}
+                    {place.tag}
+                  </span>
+                ) : null}
+              </span>
+            </motion.div>
           );
         })}
-      </svg>
+      </div>
 
-      <div className="flex flex-col gap-2.5 px-6 pb-6">
-        <div className="flex flex-wrap gap-1.5">
+      <div className="relative flex flex-col items-center gap-3 px-6 pb-7 text-center">
+        <p className="inline-flex w-fit items-center gap-1.5 rounded-full bg-white/8 px-3 py-1.5 text-xs">
+          <Icon name="check" size={16} className="text-ok" />
+          <span className="text-ok">Same address the whole time</span>
+          <span className="font-mono text-white/60">0x1f3a…9c2e</span>
+        </p>
+        <div className="flex flex-wrap justify-center gap-1.5">
           {stages.map((item, index) => (
             <button
               key={item.name}
@@ -169,7 +233,7 @@ export function Reshare() {
               aria-pressed={index === stage}
               onClick={() => setStage(index)}
               className={cn(
-                "rounded-full px-2.5 py-1 font-mono text-[11px] transition-colors",
+                "rounded-full px-3 py-1 text-xs font-medium transition-colors",
                 index === stage
                   ? "bg-white text-brand-night"
                   : "bg-white/10 text-white/80 hover:bg-white/20",
@@ -179,7 +243,7 @@ export function Reshare() {
             </button>
           ))}
         </div>
-        <p className="min-h-[3em] text-sm leading-[1.5] text-white/92 md:text-[15px]">
+        <p className="min-h-[3em] max-w-[440px] text-sm leading-[1.5] text-pretty text-white/92 md:text-[15px]">
           {current.caption}
         </p>
       </div>

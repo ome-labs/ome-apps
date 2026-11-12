@@ -10,11 +10,11 @@ import {
 
 import displayFont from "@ome-labs/brand/fonts/instrument-serif/InstrumentSerif-Regular.woff2?url";
 
+import { organization, website } from "../seo/structured-data.ts";
 import { LakeClock } from "../site/clock.tsx";
 import { Footer } from "../site/footer.tsx";
 import { Nav } from "../site/nav.tsx";
 import { NotFound } from "../site/not-found.tsx";
-import { organization, website } from "../site/structured-data.ts";
 import { SkyCanvas } from "../sky/sky-canvas.tsx";
 
 import styles from "../styles.css?url";
@@ -24,11 +24,15 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       // A page's own title replaces this; it's what a path with no page (served 404.html) keeps.
-      { title: "Not found · Ome" },
+      { title: "Not found | Ome" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: "#1a2a66" },
       { name: "color-scheme", content: "dark" },
       { name: "application-name", content: "Ome" },
+      { name: "apple-mobile-web-app-title", content: "Ome" },
+      { name: "author", content: "Ome Labs" },
+      { name: "publisher", content: "Ome Labs" },
+      { name: "format-detection", content: "telephone=no" },
     ],
     links: [
       { rel: "stylesheet", href: styles },
@@ -47,8 +51,6 @@ export const Route = createRootRoute({
       { rel: "manifest", href: "/site.webmanifest" },
     ],
     scripts: [
-      // Before first paint: marks the page as scripted, so reveal-on-scroll may hide what it will animate in.
-      { children: "document.documentElement.classList.add('js')" },
       { type: "application/ld+json", children: JSON.stringify(organization) },
       { type: "application/ld+json", children: JSON.stringify(website) },
     ],

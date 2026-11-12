@@ -3,17 +3,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Icon } from "@ome-labs/icons/web";
 
 import { PillLink } from "../actions/pill-link.tsx";
-import { AppTour } from "../app-tour/app-tour.tsx";
-import { Closing } from "../heroes/closing.tsx";
-import { HomeHero } from "../heroes/home-hero.tsx";
+import { AppTour } from "../home/app-tour.tsx";
+import { FaqList } from "../home/faq-list.tsx";
+import { faq } from "../home/faq.ts";
+import { HomeHero } from "../home/home-hero.tsx";
+import { Closing } from "../layout/closing.tsx";
 import { HeadBlock } from "../layout/head-block.tsx";
-import { Reveal } from "../layout/reveal.tsx";
 import { LanternGlow, SceneBackdrop, nightLanterns } from "../layout/scene-backdrop.tsx";
 import { Section } from "../layout/section.tsx";
-import { pageHead } from "../site/head.ts";
-import { application, faqPage } from "../site/structured-data.ts";
-import { FaqList } from "../vault/faq-list.tsx";
-import { faq } from "../vault/faq.ts";
+import { pageHead } from "../seo/head.ts";
+import { application, faqPage } from "../seo/structured-data.ts";
 import { PaymentSteps } from "../vault/payment-steps.tsx";
 import { Questions } from "../vault/questions.tsx";
 import { Reshare } from "../vault/reshare.tsx";
@@ -106,20 +105,18 @@ function Home() {
               title="Members change. The vault stays."
               sub="When someone leaves, the members who stay re-split the same viewing key among themselves. The address never changes and funds never move. The contract checks the new committee on chain."
             />
-            <Reveal delay={120}>
-              <ul className="flex flex-col gap-2.5">
-                {membership.map((line) => (
-                  <li key={line} className="sky-text flex items-center gap-2.5 text-base">
-                    <Icon name="check" size={16} className="text-ok" />
-                    {line}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
+            <ul className="flex flex-col gap-2.5">
+              {membership.map((line) => (
+                <li key={line} className="sky-text flex items-center gap-2.5 text-base">
+                  <Icon name="check" size={16} className="text-ok" />
+                  {line}
+                </li>
+              ))}
+            </ul>
           </div>
-          <Reveal delay={160} className="w-full lg:w-[600px]">
+          <div className="w-full lg:w-[600px]">
             <Reshare />
-          </Reveal>
+          </div>
         </div>
       </Section>
 
@@ -136,19 +133,17 @@ function Home() {
           title="The day ends. Your keepers keep watch."
           sub="Teams are rarely online together. Proposals and votes wait in sealed mailboxes at relays, and every member’s keeper syncs every minute."
         />
-        <Reveal delay={120}>
-          <ul className="flex flex-wrap justify-center gap-2 md:gap-3">
-            {watch.map(([value, what]) => (
-              <li
-                key={value}
-                className="glass-soft flex gap-2 rounded-full px-4 py-2 font-mono text-[13px]"
-              >
-                <span className="text-amber">{value}</span>
-                <span className="text-white/92">{what}</span>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
+        <ul className="flex flex-wrap justify-center gap-2 md:gap-3">
+          {watch.map(([value, what]) => (
+            <li
+              key={value}
+              className="glass-soft flex gap-2 rounded-full px-4 py-2 font-mono text-[13px]"
+            >
+              <span className="text-amber">{value}</span>
+              <span className="text-white/92">{what}</span>
+            </li>
+          ))}
+        </ul>
         <SceneBackdrop id="hero-night">
           {nightLanterns.map(([x, y], index) => (
             <LanternGlow key={x} x={x} y={y} delay={index * 700} />
@@ -173,9 +168,9 @@ function Home() {
           }
           sub="Flip the view. Members, thresholds, balances and proposals stay encrypted. The chain sees proofs and random-looking hashes."
         />
-        <Reveal delay={120} className="w-full">
+        <div className="w-full">
           <Seen />
-        </Reveal>
+        </div>
       </Section>
 
       <Section hour="3:20 am" labelledBy="faq-title" className="pt-20 pb-24 md:pt-[120px] md:pb-40">
@@ -190,13 +185,13 @@ function Home() {
               title="Questions people ask."
               sub="Short answers here. The long ones arrive with the launch."
             />
-            <Reveal delay={80} className="max-lg:hidden">
+            <div className="max-lg:hidden">
               <PillLink to="/how-it-works">Read how it works</PillLink>
-            </Reveal>
+            </div>
           </div>
-          <Reveal delay={120} className="w-full lg:w-[760px]">
+          <div className="w-full lg:w-[760px]">
             <FaqList />
-          </Reveal>
+          </div>
         </div>
       </Section>
 
@@ -204,8 +199,12 @@ function Home() {
         hour="5:41 am"
         label="First light"
         scene="starting"
-        title="Found a vault together."
-        sub="Ome is coming to Aztec testnet. Get it the moment it lands."
+        title={
+          <>
+            Your team’s treasury, <em>finally private.</em>
+          </>
+        }
+        sub="Ome is coming to Aztec testnet. Follow along to hear when it lands."
       />
     </>
   );

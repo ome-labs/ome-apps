@@ -9,6 +9,8 @@ export function getRouter() {
     // Pages are prerendered and small, so following a hovered link early costs little.
     defaultPreload: "intent",
     scrollRestoration: true,
+    // Moving between pages cross-fades through a blur (styles.css), where the browser supports view transitions.
+    defaultViewTransition: true,
     defaultNotFoundComponent: NotFound,
   });
 }

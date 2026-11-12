@@ -4,8 +4,6 @@ import { Logo } from "@ome-labs/brand/web";
 import { Icon } from "@ome-labs/icons/web";
 import { CheckRow, StatusBadge } from "@ome-labs/ui-web";
 
-import { Reveal } from "../layout/reveal.tsx";
-
 function AppCard({ title, children }: { title: string; children: ReactNode }) {
   return (
     <article
@@ -29,10 +27,8 @@ function Amount({ label, value }: { label: string; value: string }) {
 const steps = [
   <AppCard key="request" title="An Aztec app">
     <div className="flex items-center justify-between">
-      <span className="type-heading-m">Lagoon Swap</span>
-      <span className="rounded-full bg-sunken px-2 py-0.5 type-label-s text-fg-muted">
-        an Aztec app
-      </span>
+      <span className="type-heading-m">Nemi</span>
+      <span className="rounded-full bg-sunken px-2 py-0.5 type-label-s text-fg-muted">nemi.fi</span>
     </div>
     <Amount label="You pay" value="500 USDC" />
     <Amount label="You receive" value="0.14 ETH" />
@@ -46,7 +42,7 @@ const steps = [
       <span className="type-overline text-fg-subtle">New proposal</span>
       <StatusBadge kind="proposal" status="collecting" />
     </div>
-    <span className="type-heading-l">Swap on Lagoon Swap</span>
+    <span className="type-heading-l">Swap on Nemi</span>
     <p className="type-body-s text-fg-muted">
       Requested by an app. The full call is shown to every member before they sign.
     </p>
@@ -89,9 +85,7 @@ export function AppFlow() {
             </li>
           ) : null}
           <li className="flex w-full max-w-[420px] lg:w-auto">
-            <Reveal delay={index * 100} className="flex w-full">
-              {card}
-            </Reveal>
+            <div className="flex w-full">{card}</div>
           </li>
         </Fragment>
       ))}

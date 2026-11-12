@@ -1,9 +1,12 @@
-/** The members in the site's stories, with their avatar colours from the brand's warm and lake tones. */
+import type { AvatarArt } from "../art/art-files.ts";
+
+/** The members in the site's stories, each with one of the kit's profile avatars. */
 export const people = {
-  alice: { name: "Alice", initial: "A", colour: "#FCEFD6" },
-  bob: { name: "Bob", initial: "B", colour: "#C4D3F6" },
-  charlie: { name: "Charlie", initial: "C", colour: "#F5C98A" },
-  dana: { name: "Dana", initial: "D", colour: "#9DB4F2" },
-} as const;
+  alice: { name: "Alice", avatar: "heron" },
+  bob: { name: "Bob", avatar: "axolotl" },
+  charlie: { name: "Charlie", avatar: "fox" },
+  dana: { name: "Dana", avatar: "owl" },
+  eve: { name: "Eve", avatar: "jaguar" },
+} as const satisfies Record<string, { name: string; avatar: AvatarArt }>;
 
 export type Person = keyof typeof people;

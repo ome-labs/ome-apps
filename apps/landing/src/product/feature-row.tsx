@@ -1,10 +1,9 @@
 import { Icon } from "@ome-labs/icons/web";
 import { cn } from "@ome-labs/ui-web";
 
+import { AppScreen, type ScreenId } from "../app-preview/app-screen.tsx";
 import { HourChip } from "../layout/hour-chip.tsx";
-import { Reveal } from "../layout/reveal.tsx";
 import { Section } from "../layout/section.tsx";
-import { AppScreen, type ScreenId } from "../screens/app-screen.tsx";
 
 export type Feature = {
   hour: string;
@@ -27,7 +26,7 @@ export function FeatureRow({ feature, id }: { feature: Feature; id: string }) {
           feature.flip ? "lg:flex-row-reverse" : "lg:flex-row",
         )}
       >
-        <Reveal className="lg:w-[456px] lg:shrink-0">
+        <div className="lg:w-[456px] lg:shrink-0">
           <div className="flex flex-col gap-4 lg:glass-soft lg:rounded-[26px] lg:p-7">
             <HourChip hour={feature.hour} label={feature.label} />
             <h2
@@ -50,10 +49,10 @@ export function FeatureRow({ feature, id }: { feature: Feature; id: string }) {
               </ul>
             ) : null}
           </div>
-        </Reveal>
-        <Reveal delay={120} className="w-full lg:max-w-[680px]">
+        </div>
+        <div className="w-full lg:max-w-[680px]">
           <AppScreen id={feature.screen} sizes="(min-width: 1024px) 680px, 100vw" />
-        </Reveal>
+        </div>
       </div>
     </Section>
   );

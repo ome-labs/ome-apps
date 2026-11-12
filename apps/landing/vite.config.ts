@@ -8,7 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
 
-import { pages, siteUrl } from "./src/site/pages.ts";
+import { pages, shareImage, siteUrl } from "./src/seo/pages.ts";
 
 // Browsers, the web manifest and search engines ask for icons at fixed root paths (/favicon.ico, /icon-512.png),
 // so the brand's web icons are served there instead of under hashed asset names, without copying them into the app.
@@ -74,7 +74,13 @@ export default defineConfig({
       pages: [
         ...pages.map((page) => ({
           path: page.path,
-          sitemap: { priority: page.priority, changefreq: "weekly" as const },
+          sitemap: {
+            priority: page.priority,
+            changefreq: "weekly" as const,
+            // Every page is rebuilt together, so the build's date is each page's last change.
+            lastmod: new Date(),
+            images: [{ loc: `${siteUrl}${shareImage.path}`, title: shareImage.alt }],
+          },
         })),
         // Static hosts serve /404.html for a path they don't have.
         { path: "/404", sitemap: { exclude: true }, prerender: { outputPath: "/404.html" } },

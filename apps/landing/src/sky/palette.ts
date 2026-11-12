@@ -57,7 +57,7 @@ export function mixRgb(from: Rgb, to: Rgb, t: number): Rgb {
 }
 
 /** "6:12 am", "12:10 pm", "3:20 am" → hours on the 5..30 axis, so 3:20 am is 27.33, after the evening. */
-export function hourOnAxis(clock: string): number {
+function hourOnAxis(clock: string): number {
   const match = /^(\d{1,2}):(\d{2})\s*(am|pm)$/i.exec(clock.trim());
   if (!match) throw new Error(`Not a clock time: ${clock}`);
 
