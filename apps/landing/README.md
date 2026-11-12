@@ -18,6 +18,16 @@ pnpm --filter @ome-labs/landing preview    # serves the build
 `dist/client` is the whole site: static HTML for each page (with `404.html`), the scripts, styles and images,
 `sitemap.xml`, `robots.txt` and the icons. Any static host serves it; there is no server.
 
+## Deploy
+
+Vercel, from this folder: set the project's **Root Directory** to `apps/landing` and leave the framework preset at
+"Other"; `vercel.json` does the rest. It installs only this app and the packages it imports, with pnpm 12 (pinned,
+since Vercel's own pnpm is older) and `--ignore-scripts`: the root's `lefthook install` fails without a git checkout,
+and nothing the site builds needs an install script. It then builds them (`pnpm --filter "@ome-labs/landing..." run
+build`) and
+publishes `dist/client` with clean URLs, long-lived caching for the hashed `assets/` and security headers. Node 24
+comes from `engines` in `package.json`. Vercel serves `404.html` for a path the site doesn't have.
+
 ## Where things are
 
 ```text
