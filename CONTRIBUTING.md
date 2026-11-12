@@ -59,7 +59,8 @@ it's needed.
 ## Tests
 
 The smallest set that would catch a real regression, through each package's public API, with no mocks of our own
-code and no tests of what types already guarantee.
+code and no tests of what types already guarantee. The website has none: it is checked by its typecheck, lint and
+build, and by looking at it.
 
 | Package     | Runner                         | Covers                                                                                              |
 | ----------- | ------------------------------ | --------------------------------------------------------------------------------------------------- |
@@ -70,4 +71,3 @@ code and no tests of what types already guarantee.
 | `ui-web`    | Vitest + Testing Library       | keyboard, focus, copying, type-to-confirm, review gating, amounts; axe on each component domain     |
 | `ui-native` | jest-expo + RN Testing Library | presses, disabled states, copying, type-to-confirm, review gating, amounts                          |
 | `kit`       | Vitest                         | every example's code snippet is found in its source; search matching; contrast grading              |
-| `landing`   | Vitest + Testing Library       | every route has a search entry and head; the sky's palette, rows and dither; tabs, toggle and FAQ   |
