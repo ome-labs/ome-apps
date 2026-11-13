@@ -94,6 +94,13 @@ export default defineConfig({
     brandWithoutSideEffects(),
   ],
   resolve: { alias: { "@brand-assets": brandAssets } },
+  // Where the build runs decides whether the site sends analytics (production only), and which commit it reports.
+  define: {
+    "import.meta.env.VITE_VERCEL_ENV": JSON.stringify(process.env.VERCEL_ENV ?? "development"),
+    "import.meta.env.VITE_SITE_VERSION": JSON.stringify(
+      process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "dev",
+    ),
+  },
   build: {
     // Pixel art stays a file of its own even when it's tiny: inlined into the script, every page would carry it.
     assetsInlineLimit: (file) => (file.endsWith(".webp") ? false : undefined),

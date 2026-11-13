@@ -42,7 +42,12 @@ export function PillLink({ to, kind = "light", children, className }: PillLinkPr
 
   if (external || anchor) {
     return (
-      <a href={to} className={classes} rel={external ? "noreferrer" : undefined}>
+      <a
+        href={to}
+        className={classes}
+        rel={external ? "noreferrer" : undefined}
+        data-cta={external ? undefined : ""}
+      >
         {children}
         {arrow}
       </a>
@@ -50,7 +55,7 @@ export function PillLink({ to, kind = "light", children, className }: PillLinkPr
   }
 
   return (
-    <Link to={to as PagePath} className={classes}>
+    <Link to={to as PagePath} className={classes} data-cta="">
       {children}
       {arrow}
     </Link>

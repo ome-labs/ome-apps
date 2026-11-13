@@ -19,6 +19,7 @@
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-start": "1.169.5",
     "motion": "catalog:",
+    "posthog-js": "1.447.12",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

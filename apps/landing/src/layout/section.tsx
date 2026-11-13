@@ -40,6 +40,9 @@ export function Section({
       id={id}
       aria-labelledby={labelledBy}
       data-hour={hour}
+      // The section's name for analytics, from its heading's id: "questions-title" is "questions", and a page's
+      // own title is its hero.
+      data-section={labelledBy?.replace(/^page-title$/, "hero").replace(/-title$/, "")}
       data-moon={moon ? "" : undefined}
       data-sky-plain={plainSky ? "" : undefined}
       style={fallback}

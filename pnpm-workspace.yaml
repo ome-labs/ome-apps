@@ -37,6 +37,8 @@ allowBuilds:
   electron: true
   # electron-builder's Windows installer; no Windows builds.
   electron-winstaller: false
+  # core-js's install script only prints a funding message; posthog-js pulls it in.
+  core-js: false
   # esbuild checks its platform binary after install; Vite pulls it in.
   esbuild: true
   lefthook: true

@@ -10,6 +10,7 @@ import {
 
 import displayFont from "@ome-labs/brand/fonts/instrument-serif/InstrumentSerif-Regular.woff2?url";
 
+import { useAnalytics } from "../analytics/use-analytics.ts";
 import { organization, website } from "../seo/structured-data.ts";
 import { LakeClock } from "../site/clock.tsx";
 import { Footer } from "../site/footer.tsx";
@@ -77,6 +78,7 @@ function Document({ children }: { children: ReactNode }) {
 
 function Layout() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  useAnalytics(pathname);
 
   return (
     <>
