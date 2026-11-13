@@ -16,10 +16,14 @@ function fakeDaemon(dir: string): Promise<{ server: Server; sockets: Socket[] }>
   const sockets: Socket[] = [];
   const server = createServer((socket) => {
     sockets.push(socket);
+    // A client hanging up can reset the socket on Linux; the stand-in only cares about the lines it gets.
+    socket.on("error", () => {});
     let authed = false;
     const reply = (id: number, body: object) =>
       socket.write(`${JSON.stringify({ jsonrpc: "2.0", id, ...body })}\n`);
-    createInterface({ input: socket }).on("line", (line) => {
+    const lines = createInterface({ input: socket });
+    lines.on("error", () => {});
+    lines.on("line", (line) => {
       const { id, method, params } = JSON.parse(line) as {
         id: number;
         method: string;

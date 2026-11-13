@@ -33,7 +33,13 @@ export class DaemonConnection {
 
   private constructor(socket: Socket) {
     this.#socket = socket;
-    createInterface({ input: socket }).on("line", (line) => this.#receive(line));
+    // A daemon that goes away resets the socket on Linux, and readline re-emits the socket's error on its own
+    // interface. Unheard, either would crash the main process; the close that follows already fails every
+    // waiting call, so the error itself has nothing left to say.
+    socket.on("error", () => {});
+    createInterface({ input: socket })
+      .on("line", (line) => this.#receive(line))
+      .on("error", () => {});
     this.#closed = new Promise((resolve) =>
       socket.on("close", () => {
         for (const { reject } of this.#pending.values()) {
