@@ -32,6 +32,43 @@ comes from `engines` in `package.json`. Vercel serves `404.html` for a path the 
 `curl -fsSL https://ome.network/install.sh | sh`. That repository owns it: when it changes there, copy it here again
 (it must match the script attached to the release).
 
+## Analytics
+
+PostHog, anonymous and cookieless, through the managed proxy at `t.envoy1084.xyz` into the US project. It loads
+on the production deployment only, never in dev or previews, and only when Vercel has `VITE_POSTHOG_TOKEN` (the
+project's public token). No cookies or local storage, no person profiles, no IPs kept; Do Not Track and Global
+Privacy Control turn it off. `/privacy` says the same to visitors, so change both together. The code is in
+`src/analytics`; `events.ts` lists every event and its properties.
+
+| Event                                                                                                                                   | Sent when                                                                |
+| --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `$pageview`, `$pageleave`                                                                                                               | every route change, and leaving a page                                   |
+| `section_viewed` (`section`)                                                                                                            | a section crosses the middle of the screen, once per page view           |
+| `outbound_clicked` (`target`, `placement`, `url`)                                                                                       | a link off the site: GitHub, the security advisories, X, the Aztec forum |
+| `cta_clicked` (`label`, `placement`, `destination`)                                                                                     | one of the site's pill buttons                                           |
+| `install_command_copied`                                                                                                                | the install line's copy button                                           |
+| `app_tour_tab_selected`, `privacy_view_switched`, `reshare_stage_selected`, `payment_step_selected`, `faq_opened`, `flow_step_selected` | the page's demos                                                         |
+| `menu_opened`, `not_found_viewed` (`path`)                                                                                              | the phone menu; a missing page                                           |
+| `$web_vitals`, `$exception`                                                                                                             | page speed, and errors in the site's own code                            |
+
+Every event carries `page_type`, `site_version` (the build's commit) and `viewport` (phone, tablet, desktop).
+Visit any page with `?internal=1` to stop counting your own browser, and `?internal=0` to undo it.
+
+### Campaign links
+
+Tag every link to the site that we post, so reports can say where visitors came from. Lowercase snake_case, and only
+these values; a new one goes in this table first. The site takes the tags out of the address bar once counted.
+
+| Parameter      | Values                                                                                                                                     |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `utm_source`   | `x`, `github`, `aztec_forum`, `discord`, `telegram`, `farcaster`, `hn`, `reddit`, `newsletter`, `cli`, `desktop`, `docs`, `partner_<name>` |
+| `utm_medium`   | `social`, `community`, `readme`, `release`, `email`, `referral`, `in_product`, `talk`                                                      |
+| `utm_campaign` | `testnet_launch`, `brand_reveal`, `audit_report`, `release_<version>`, `event_<name>`                                                      |
+| `utm_content`  | the post or placement: `<post-slug>`, `bio`, `pinned`, `cta_top`, `cta_bottom`                                                             |
+
+For example, the X bio links to `https://ome.network/?utm_source=x&utm_medium=social&utm_content=bio`, the README to
+`?utm_source=github&utm_medium=readme`, and `ome --help` to `?utm_source=cli&utm_medium=in_product`.
+
 ## Where things are
 
 ```text
