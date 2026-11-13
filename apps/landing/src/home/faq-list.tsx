@@ -4,6 +4,7 @@ import { Icon } from "@ome-labs/icons/web";
 import { cn } from "@ome-labs/ui-web";
 import { motion } from "motion/react";
 
+import { track } from "../analytics/client.ts";
 import { faq } from "./faq.ts";
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -29,7 +30,10 @@ export function FaqList() {
                 id={`${id}-q${index}`}
                 aria-expanded={expanded}
                 aria-controls={`${id}-a${index}`}
-                onClick={() => setOpen(expanded ? undefined : index)}
+                onClick={() => {
+                  setOpen(expanded ? undefined : index);
+                  if (!expanded) track("faq_opened", { question: slug(item.question) });
+                }}
                 className="flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg py-5 text-left text-[17px] font-semibold md:py-[22px] md:text-lg"
               >
                 {item.question}
@@ -61,4 +65,12 @@ export function FaqList() {
       })}
     </div>
   );
+}
+
+/** "What is a keeper?" is "what-is-a-keeper": a stable name for the question in reports. */
+function slug(question: string): string {
+  return question
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }

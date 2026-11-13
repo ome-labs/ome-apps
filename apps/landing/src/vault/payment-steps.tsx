@@ -1,5 +1,6 @@
 import { cn } from "@ome-labs/ui-web";
 
+import { track } from "../analytics/client.ts";
 import { PixelArt } from "../art/pixel-art.tsx";
 import { useInView } from "../motion/use-in-view.ts";
 import { useLoop } from "../motion/use-loop.ts";
@@ -66,7 +67,10 @@ export function PaymentSteps() {
               <button
                 type="button"
                 aria-current={on ? "step" : undefined}
-                onClick={() => setActive(index)}
+                onClick={() => {
+                  setActive(index);
+                  track("payment_step_selected", { step: step.title.toLowerCase() });
+                }}
                 className={cn(
                   "flex h-full w-full flex-col gap-3 rounded-[20px] border p-2.5 text-left backdrop-blur-xl transition-[background-color,border-color,transform,box-shadow] duration-500 ease-emphasized md:p-3",
                   on

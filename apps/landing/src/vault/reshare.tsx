@@ -2,6 +2,7 @@ import { Icon } from "@ome-labs/icons/web";
 import { cn } from "@ome-labs/ui-web";
 import { AnimatePresence, motion } from "motion/react";
 
+import { track } from "../analytics/client.ts";
 import { BrandImage } from "../art/brand-image.tsx";
 import { useInView } from "../motion/use-in-view.ts";
 import { useLoop } from "../motion/use-loop.ts";
@@ -231,7 +232,10 @@ export function Reshare() {
               key={item.name}
               type="button"
               aria-pressed={index === stage}
-              onClick={() => setStage(index)}
+              onClick={() => {
+                setStage(index);
+                track("reshare_stage_selected", { stage: item.name });
+              }}
               className={cn(
                 "rounded-full px-3 py-1 text-xs font-medium transition-colors",
                 index === stage

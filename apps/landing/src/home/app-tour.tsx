@@ -3,6 +3,7 @@ import { useId, useRef, useState, type KeyboardEvent } from "react";
 import { cn } from "@ome-labs/ui-web";
 import { AnimatePresence, motion } from "motion/react";
 
+import { track } from "../analytics/client.ts";
 import { AppScreen } from "../app-preview/app-screen.tsx";
 import { tour } from "./tour.ts";
 
@@ -33,6 +34,7 @@ export function AppTour() {
   const stop = tour[active] ?? tour[0];
 
   function choose(index: number, focus = false) {
+    track("app_tour_tab_selected", { tab: tour[index]?.tab.toLowerCase() ?? String(index) });
     setActive(index);
     if (focus) tabs.current[index]?.focus();
   }

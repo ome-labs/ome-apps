@@ -1,5 +1,6 @@
 import { cn } from "@ome-labs/ui-web";
 
+import { track } from "../analytics/client.ts";
 import { PixelArt } from "../art/pixel-art.tsx";
 import { useInView } from "../motion/use-in-view.ts";
 import { useLoop } from "../motion/use-loop.ts";
@@ -44,7 +45,10 @@ export function FlowPlayer({ flow }: { flow: Flow }) {
               <button
                 type="button"
                 aria-current={on ? "step" : undefined}
-                onClick={() => setActive(index)}
+                onClick={() => {
+                  setActive(index);
+                  track("flow_step_selected", { flow: flow.key, step: index + 1 });
+                }}
                 className={cn(
                   "flex w-full gap-3.5 rounded-2xl px-3 py-2.5 text-left transition-colors duration-300 lg:px-4 lg:py-3.5",
                   on ? "bg-white/12" : "hover:bg-white/6",

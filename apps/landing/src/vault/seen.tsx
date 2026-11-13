@@ -4,6 +4,7 @@ import { Icon } from "@ome-labs/icons/web";
 import { cn } from "@ome-labs/ui-web";
 import { motion } from "motion/react";
 
+import { track } from "../analytics/client.ts";
 import { useInView } from "../motion/use-in-view.ts";
 import { useLoop } from "../motion/use-loop.ts";
 
@@ -152,7 +153,10 @@ export function Seen() {
               key={label}
               type="button"
               aria-pressed={view === index}
-              onClick={() => setChosen(index)}
+              onClick={() => {
+                setChosen(index);
+                track("privacy_view_switched", { view: index === 0 ? "network" : "member" });
+              }}
               className={cn(
                 "relative rounded-full px-3.5 py-[7px] text-[13px] font-medium transition-colors duration-200",
                 view === index ? "text-brand-night" : "text-white hover:bg-white/10",

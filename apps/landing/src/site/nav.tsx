@@ -7,6 +7,7 @@ import { Icon } from "@ome-labs/icons/web";
 import { cn } from "@ome-labs/ui-web";
 
 import { socials } from "../actions/social-links.tsx";
+import { track } from "../analytics/client.ts";
 import type { PagePath } from "../seo/pages.ts";
 
 /** The header's pages, in order; Home is the logo, and the button is the code on GitHub. */
@@ -95,7 +96,10 @@ export function Nav() {
             type="button"
             aria-label="Open the menu"
             aria-haspopup="dialog"
-            onClick={() => menuRef.current?.showModal()}
+            onClick={() => {
+              menuRef.current?.showModal();
+              track("menu_opened", {});
+            }}
             className="glass-soft grid size-9 place-items-center rounded-full text-white md:hidden"
           >
             <Icon name="menu" size={20} />

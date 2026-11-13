@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Icon } from "@ome-labs/icons/web";
 import { cn } from "@ome-labs/ui-web";
 
+import { track } from "../analytics/client.ts";
 import { installCommand } from "../site/links.ts";
 
 /** The one-line install with a copy button that turns green for 1.6 s once it has copied (motion/fast). */
@@ -20,6 +21,7 @@ export function InstallLine({ className }: { className?: string | undefined }) {
     try {
       await navigator.clipboard.writeText(installCommand);
       setCopied(true);
+      track("install_command_copied", {});
     } catch {
       // Without clipboard access the command is still selectable text.
     }
