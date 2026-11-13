@@ -91,10 +91,11 @@ const sections: readonly LegalSection[] = [
           stays with your keeper, and we never receive a key, a share, a balance or a payment.
         </p>
         <p>
-          For Aztec testnet we run one relay, which keepers on different networks use to reach each
-          other. Like any server it sees the network address of whoever connects, their peer ids,
-          and the size and timing of the encrypted messages it forwards and keeps in sealed
-          mailboxes. It can’t read them. You can run your own relay instead.
+          When Ome launches on Aztec testnet we will run one relay, which keepers on different
+          networks use to reach each other. Like any server it will see the network address of
+          whoever connects, their peer ids, and the size and timing of the encrypted messages it
+          forwards and keeps in sealed mailboxes. It can’t read them. You can run your own relay
+          instead.
         </p>
         <p>
           If the desktop or phone app ever offers usage statistics, they will be off until you turn

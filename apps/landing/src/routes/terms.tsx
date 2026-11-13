@@ -15,8 +15,8 @@ const sections: readonly LegalSection[] = [
     title: "What these terms cover",
     body: (
       <p>
-        These terms cover this website, ome.network, and the relay Ome Labs runs for Aztec testnet.
-        The Ome software itself is open source under the{" "}
+        These terms cover this website, ome.network, and the relay Ome Labs will run for Aztec
+        testnet. The Ome software itself is open source under the{" "}
         <a href="https://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer">
           Apache License 2.0
         </a>
@@ -81,9 +81,10 @@ const sections: readonly LegalSection[] = [
     title: "The testnet relay",
     body: (
       <p>
-        The relay is offered as is, for free, for testing. It may be slow, go down, change or close
-        at any time, without notice, and messages waiting in it may be lost. Run your own relay if
-        you depend on one being there.
+        The relay isn’t running yet; it opens with the testnet launch. Once it does, it is offered
+        as is, for free, for testing. It may be slow, go down, change or close at any time, without
+        notice, and messages waiting in it may be lost. Run your own relay if you depend on one
+        being there.
       </p>
     ),
   },

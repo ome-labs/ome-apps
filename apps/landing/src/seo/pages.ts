@@ -144,7 +144,7 @@ export const pages: readonly Page[] = [
     path: "/terms",
     title: "Terms",
     description:
-      "The terms for ome.network and Ome Labs' Aztec testnet relay: testnet only and not yet audited, self-custodial, no advice, and no warranty.",
+      "The terms for ome.network and the Aztec testnet relay Ome Labs will run: testnet only and not yet audited, self-custodial, no advice, and no warranty.",
     priority: 0.3,
     label: "Terms",
     keywords: ["terms of use", "self-custody", "testnet", "Apache 2.0", "open source"],
