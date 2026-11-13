@@ -63,6 +63,16 @@ export function Footer() {
                 Report a vulnerability
               </a>
             </li>
+            <li>
+              <Link to="/privacy" className={linkClass}>
+                Privacy
+              </Link>
+            </li>
+            <li>
+              <Link to="/terms" className={linkClass}>
+                Terms
+              </Link>
+            </li>
           </FooterColumn>
           <FooterColumn title="Elsewhere">
             {elsewhere.map((item) => (

@@ -196,6 +196,35 @@
     view-transition-name: site-header;
   }
 
+  /* Running text on the legal pages: bulleted lists, and links you can see are links. */
+  .legal-prose ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+
+  .legal-prose li::marker {
+    color: var(--color-haze-soft);
+  }
+
+  .legal-prose a {
+    color: var(--color-white);
+    text-decoration: underline;
+    text-decoration-color: rgb(196 211 246 / 0.5);
+    text-underline-offset: 3px;
+  }
+
+  .legal-prose a:hover {
+    text-decoration-color: var(--color-white);
+  }
+
+  .legal-prose code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
   /* The fallback fade for a scene before the canvas paints it: smooth, not dithered. */
   .scene-fade {
     mask-image: linear-gradient(to bottom, transparent, black 23%);

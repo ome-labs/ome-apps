@@ -18,7 +18,15 @@ export const siteKeywords = [
   "zero-knowledge",
 ];
 
-export type PagePath = "/" | "/product" | "/how-it-works" | "/security" | "/about" | "/install";
+export type PagePath =
+  | "/"
+  | "/product"
+  | "/how-it-works"
+  | "/security"
+  | "/about"
+  | "/install"
+  | "/privacy"
+  | "/terms";
 
 export type Page = {
   path: PagePath;
@@ -116,6 +124,30 @@ export const pages: readonly Page[] = [
     priority: 0.9,
     label: "Install",
     keywords: ["install Ome", "Mac", "Linux", "Aztec testnet", "keeper server"],
+  },
+  {
+    path: "/privacy",
+    title: "Privacy",
+    description:
+      "How ome.network counts visits without cookies, profiles or IP addresses, how to opt out, and why the Ome software reports nothing to Ome Labs.",
+    priority: 0.3,
+    label: "Privacy",
+    keywords: [
+      "privacy policy",
+      "cookieless analytics",
+      "PostHog",
+      "Do Not Track",
+      "Global Privacy Control",
+    ],
+  },
+  {
+    path: "/terms",
+    title: "Terms",
+    description:
+      "The terms for ome.network and Ome Labs' Aztec testnet relay: testnet only and not yet audited, self-custodial, no advice, and no warranty.",
+    priority: 0.3,
+    label: "Terms",
+    keywords: ["terms of use", "self-custody", "testnet", "Apache 2.0", "open source"],
   },
 ];
 
