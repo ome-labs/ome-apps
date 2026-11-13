@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { Logo } from "@ome-labs/brand/web";
-import { Icon } from "@ome-labs/icons/web";
 
-import { InstallLine } from "../actions/install-line.tsx";
+import { ComingSoon } from "../actions/coming-soon.tsx";
 import { PillLink } from "../actions/pill-link.tsx";
 import { AppScreen } from "../app-preview/app-screen.tsx";
 import { Closing } from "../layout/closing.tsx";
@@ -19,7 +18,10 @@ export const Route = createFileRoute("/install")({
   component: Install,
 });
 
-/** Install, desktop app first: it's how most teams will use Ome. The command line and a keeper come with it. */
+/**
+ * What there will be to install, desktop app first: it's how most teams will use Ome. Until the testnet launch,
+ * each part says it's coming and the page points to where the launch will be announced.
+ */
 function Install() {
   return (
     <>
@@ -27,11 +29,11 @@ function Install() {
         hour="5:58 am"
         label="Install"
         scene="welcome"
-        title="Install Ome."
-        sub="The desktop app is how most teams will use Ome. The command line and a keeper for your server come with it."
+        title="Almost here."
+        sub="Ome is coming to Aztec testnet: a desktop app for your team, with the command line and a keeper for your server alongside it."
         actions={
           <>
-            <PillLink to="#desktop-app-title">Get the desktop app</PillLink>
+            <PillLink to={links.x}>Follow {links.xHandle} for launch</PillLink>
             <PillLink to="/how-it-works" kind="ghost">
               How it works
             </PillLink>
@@ -74,10 +76,7 @@ function Install() {
                 on one calm screen. Installs the daemon and your keeper too.
               </p>
               {/* No download until there is a build: the launch is on testnet, announced on X. */}
-              <p className="inline-flex items-center gap-2.5 self-start rounded-full bg-amber/14 py-2 pr-4 pl-2.5 text-[15px] font-medium text-amber">
-                <Icon name="clock" size={16} />
-                Coming soon to Aztec testnet
-              </p>
+              <ComingSoon />
               <PillLink to={links.x} kind="ghost" className="self-start px-3.5 py-[7px] text-sm">
                 Hear when it’s out: {links.xHandle}
               </PillLink>
@@ -108,9 +107,9 @@ function Install() {
               <span className="font-mono text-xs text-amber">command line</span>
               <h3 className="text-[22px] font-semibold">Prefer a terminal?</h3>
               <p className="text-base leading-[1.5] text-white/92">
-                One line installs ome, the daemon and your keeper on Mac or Linux.
+                One line will install ome, the daemon and your keeper on Mac or Linux.
               </p>
-              <InstallLine className="mt-auto self-start" />
+              <ComingSoon className="mt-auto" />
             </article>
           </div>
           <div className="h-full">
@@ -119,7 +118,7 @@ function Install() {
               <h3 className="text-[22px] font-semibold">Keep your keeper awake.</h3>
               <p className="text-base leading-[1.5] text-white/92">
                 Run your keeper on a home server or a small machine that stays on, so the vault can
-                read even when your laptop sleeps.
+                read even when your laptop sleeps. A server image comes with the launch.
               </p>
               <PillLink to="/product" kind="ghost" className="mt-auto self-start">
                 What a keeper does

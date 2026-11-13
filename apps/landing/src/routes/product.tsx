@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Icon } from "@ome-labs/icons/web";
 
-import { InstallLine } from "../actions/install-line.tsx";
+import { ComingSoon } from "../actions/coming-soon.tsx";
 import { PillLink } from "../actions/pill-link.tsx";
 import { PhoneApproval } from "../app-preview/phone-approval.tsx";
 import { Closing } from "../layout/closing.tsx";
@@ -15,6 +15,7 @@ import { FeatureRow, type Feature } from "../product/feature-row.tsx";
 import { Terminal } from "../product/terminal.tsx";
 import { pageHead } from "../seo/head.ts";
 import { application } from "../seo/structured-data.ts";
+import { links } from "../site/links.ts";
 
 export const Route = createFileRoute("/product")({
   head: () => pageHead("/product", [application]),
@@ -111,7 +112,7 @@ function Product() {
         sub="A calm desktop app for your team, a command line for the terminal, and keepers and relays doing the private work underneath."
         actions={
           <>
-            <PillLink to="/install">Get the desktop app</PillLink>
+            <PillLink to={links.x}>Follow {links.xHandle} for launch</PillLink>
             <PillLink to="/how-it-works" kind="ghost">
               How it works
             </PillLink>
@@ -158,9 +159,7 @@ function Product() {
               title="Prefer a terminal? So does Ome."
               sub="Everything the app does, the CLI does too: found a vault, propose, approve and check its health. Same daemon underneath."
             />
-            <div className="max-w-full">
-              <InstallLine />
-            </div>
+            <ComingSoon />
           </div>
           <div className="w-full lg:max-w-[680px]">
             <Terminal />

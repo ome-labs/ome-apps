@@ -120,7 +120,7 @@ export const pages: readonly Page[] = [
     path: "/install",
     title: "Install",
     description:
-      "Install Ome: the desktop app for your team, the command line for your terminal, and a keeper for a server that stays awake. Coming to Aztec testnet.",
+      "What there will be to install: the Ome desktop app for your team, the command line for your terminal, and a keeper for a server that stays awake. Coming to Aztec testnet.",
     priority: 0.9,
     label: "Install",
     keywords: ["install Ome", "Mac", "Linux", "Aztec testnet", "keeper server"],

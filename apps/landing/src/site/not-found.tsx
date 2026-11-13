@@ -24,8 +24,8 @@ export function NotFound() {
       actions={
         <>
           <PillLink to="/">Back home</PillLink>
-          <PillLink to="/install" kind="ghost">
-            Install
+          <PillLink to="/how-it-works" kind="ghost">
+            How it works
           </PillLink>
         </>
       }
