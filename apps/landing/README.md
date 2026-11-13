@@ -28,6 +28,10 @@ build`) and
 publishes `dist/client` with clean URLs, long-lived caching for the hashed `assets/` and security headers. Node 24
 comes from `engines` in `package.json`. Vercel serves `404.html` for a path the site doesn't have.
 
+`public/install.sh` is a copy of `ome`'s `scripts/install.sh`, served as plain text with a five-minute cache for
+`curl -fsSL https://ome.network/install.sh | sh`. That repository owns it: when it changes there, copy it here again
+(it must match the script attached to the release).
+
 ## Where things are
 
 ```text
